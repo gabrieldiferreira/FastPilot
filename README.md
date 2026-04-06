@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="https://via.placeholder.com/150?text=FastPilot+Logo" alt="FastPilot Logo" width="150" height="150" />
 
   # 🏎️ FastPilot
 
@@ -38,21 +37,25 @@ By leveraging a robust **Offline-First MVI Architecture**, FastPilot guarantees 
 <div align="center">
   <table>
     <tr>
+      <td align="center"><b>Splash Screen</b></td>
+      <td align="center"><b>Login</b></td>
       <td align="center"><b>Dashboard</b></td>
       <td align="center"><b>Live Telemetry</b></td>
-      <td align="center"><b>Driver Duel</b></td>
     </tr>
     <tr>
+      <td><img src="https://github.com/user-attachments/assets/b5691e0c-40c7-418e-afec-c03395807ff9" alt="Dashboard" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/2d51373a-af64-4718-94ef-4eb9df1199bc" alt="Dashboard" width="250"/></td>
       <td><img src="https://github.com/user-attachments/assets/e3e9f1ba-11f5-4e2b-be1a-128b03d8e8a6" alt="Dashboard" width="250"/></td>
       <td><img src="https://github.com/user-attachments/assets/3ca2053c-bdc3-4589-bcde-e7c64e60d736" alt="Telemetry" width="250"/></td>
-      <td><img src="https://github.com/user-attachments/assets/1e0a3075-8b02-4026-ae96-e6403c986724" alt="Driver Duels" width="250"/></td>
     </tr>
     <tr>
+      <td align="center"><b>Driver Duel</b></td>
       <td align="center"><b>Strategy</b></td>
       <td align="center"><b>Team Radio</b></td>
       <td align="center"><b>Weather</b></td>
     </tr>
     <tr>
+      <td><img src="https://github.com/user-attachments/assets/1e0a3075-8b02-4026-ae96-e6403c986724" alt="Driver Duels" width="250"/></td>
       <td><img src="https://github.com/user-attachments/assets/7d3c8e46-8319-4bc1-a8c8-5fb720001ff0" alt="Weather and Strategy" width="250"/></td>
       <td><img src="https://github.com/user-attachments/assets/a50e3587-8fcc-4d5d-87b3-79e408b607df" alt="Team Radio" width="250"/></td>
       <td><img src="https://github.com/user-attachments/assets/1ebe2c89-da0b-4db6-ab51-ea6bf11aad51" alt="Splash/Auth" width="250"/></td>
