@@ -34,12 +34,14 @@ class StrategyViewModel(
     private fun loadSessions() {
         viewModelScope.launch {
             try {
-                val s2024 = try { sessionRepo.getSessions(2024) } catch (_: Exception) { emptyList() }
-                val s2025 = try { sessionRepo.getSessions(2025) } catch (_: Exception) { emptyList() }
+                val s2024 = try { sessionRepo.getSessions(2024) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
+                val s2025 = try { sessionRepo.getSessions(2025) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
                 val all = s2025 + s2024
                 _uiState.value = _uiState.value.copy(sessions = all, isLoading = false)
                 val auto = all.firstOrNull { it.sessionType == "Race" } ?: all.firstOrNull()
                 auto?.let { selectSession(it) }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
             }
@@ -55,13 +57,15 @@ class StrategyViewModel(
             try {
                 val drivers = driverRepo.getDriversBySession(session.sessionKey)
                 val allStints = stintRepo.getAllStints(session.sessionKey)
-                val pitStops = try { pitStopRepo.getPitStops(session.sessionKey) } catch (_: Exception) { emptyList() }
+                val pitStops = try { pitStopRepo.getPitStops(session.sessionKey) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
                 _uiState.value = _uiState.value.copy(
                     drivers = drivers,
                     stintsByDriver = allStints.groupBy { it.driverNumber },
                     pitStops = pitStops,
                     isLoading = false
                 )
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = "Erro: ${e.message}")
             }

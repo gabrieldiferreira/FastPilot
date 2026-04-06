@@ -1,5 +1,6 @@
 package com.fastpilot.ui.screens.dashboard
 
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,7 +50,8 @@ fun DashboardScreen(
         LiveTimingHeader(
             sessionName = uiState.currentSession?.sessionName ?: "Carregando...",
             circuitName = uiState.currentSession?.circuitShortName ?: "",
-            countryName = uiState.currentSession?.countryName ?: ""
+            countryName = uiState.currentSession?.countryName ?: "",
+            isLive = uiState.isLive
         )
 
         Spacer(Modifier.height(12.dp))
@@ -109,7 +112,23 @@ fun DashboardScreen(
 }
 
 @Composable
-private fun LiveTimingHeader(sessionName: String, circuitName: String, countryName: String) {
+private fun LiveTimingHeader(sessionName: String, circuitName: String, countryName: String, isLive: Boolean) {
+    // Pulsing animation for the live indicator dot
+    val infiniteTransition = rememberInfiniteTransition(label = "live_pulse")
+    val pulseAlpha by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0.3f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(800, easing = EaseInOutCubic),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "pulse_alpha"
+    )
+
+    val dotColor = if (isLive) DRSGreen else TextTertiary
+    val labelText = if (isLive) "AO VIVO" else "HISTÓRICO"
+    val labelColor = if (isLive) DRSGreen else TextTertiary
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = CardSurface),
@@ -120,10 +139,14 @@ private fun LiveTimingHeader(sessionName: String, circuitName: String, countryNa
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
-                modifier = Modifier.size(10.dp).clip(CircleShape).background(F1Red)
+                modifier = Modifier
+                    .size(10.dp)
+                    .clip(CircleShape)
+                    .graphicsLayer { alpha = if (isLive) pulseAlpha else 1f }
+                    .background(dotColor)
             )
             Spacer(Modifier.width(8.dp))
-            Text("AO VIVO", color = F1Red, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Text(labelText, color = labelColor, fontSize = 12.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(sessionName, style = MaterialTheme.typography.titleMedium, color = TextPrimary, fontWeight = FontWeight.Bold)

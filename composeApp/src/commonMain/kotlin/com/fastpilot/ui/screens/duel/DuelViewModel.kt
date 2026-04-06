@@ -38,12 +38,14 @@ class DuelViewModel(
     private fun loadSessions() {
         viewModelScope.launch {
             try {
-                val s2024 = try { sessionRepo.getSessions(2024) } catch (_: Exception) { emptyList() }
-                val s2025 = try { sessionRepo.getSessions(2025) } catch (_: Exception) { emptyList() }
+                val s2024 = try { sessionRepo.getSessions(2024) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
+                val s2025 = try { sessionRepo.getSessions(2025) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
                 val all = s2025 + s2024
                 _uiState.value = _uiState.value.copy(sessions = all, isLoading = false)
                 val auto = all.firstOrNull { it.sessionType == "Race" } ?: all.firstOrNull()
                 auto?.let { selectSession(it) }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
             }
@@ -59,6 +61,8 @@ class DuelViewModel(
             try {
                 val drivers = driverRepo.getDriversBySession(session.sessionKey)
                 _uiState.value = _uiState.value.copy(drivers = drivers, isLoading = false)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
             }
@@ -86,6 +90,8 @@ class DuelViewModel(
             try {
                 val duelData = duelUseCase.invoke(sessionKey, d1.driverNumber, d2.driverNumber)
                 _uiState.value = _uiState.value.copy(duelData = duelData, isComputing = false)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isComputing = false,
