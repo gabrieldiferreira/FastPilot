@@ -33,7 +33,7 @@ By leveraging a robust **Offline-First MVI Architecture**, FastPilot guarantees 
 
 ## 📸 Gallery
 
-> *Add your screenshots here! Replace the image URLs with your actual screenshots.*
+> *Salve as suas screenshots capturadas na pasta `screenshots/` localizada na raiz do seu projeto com os nomes listados abaixo para que elas apareçam automaticamente no GitHub.*
 
 <div align="center">
   <table>
@@ -43,9 +43,9 @@ By leveraging a robust **Offline-First MVI Architecture**, FastPilot guarantees 
       <td align="center"><b>Driver Duel</b></td>
     </tr>
     <tr>
-      <td><img src="https://via.placeholder.com/250x500?text=Dashboard+Screenshot" alt="Dashboard" width="250"/></td>
-      <td><img src="https://via.placeholder.com/250x500?text=Telemetry+Screenshot" alt="Telemetry" width="250"/></td>
-      <td><img src="https://via.placeholder.com/250x500?text=Duel+Screenshot" alt="Driver Duels" width="250"/></td>
+      <td><img src="./screenshots/dashboard.png" alt="Dashboard" width="250"/></td>
+      <td><img src="./screenshots/telemetria.png" alt="Telemetry" width="250"/></td>
+      <td><img src="./screenshots/duelo.png" alt="Driver Duels" width="250"/></td>
     </tr>
     <tr>
       <td align="center"><b>Weather & Strategy</b></td>
@@ -53,9 +53,9 @@ By leveraging a robust **Offline-First MVI Architecture**, FastPilot guarantees 
       <td align="center"><b>Splash & Auth</b></td>
     </tr>
     <tr>
-      <td><img src="https://via.placeholder.com/250x500?text=Weather+Screenshot" alt="Weather" width="250"/></td>
-      <td><img src="https://via.placeholder.com/250x500?text=Radio+Screenshot" alt="Team Radio" width="250"/></td>
-      <td><img src="https://via.placeholder.com/250x500?text=Auth+Screenshot" alt="Splash/Auth" width="250"/></td>
+      <td><img src="./screenshots/estrategia.png" alt="Weather and Strategy" width="250"/></td>
+      <td><img src="./screenshots/radio.png" alt="Team Radio" width="250"/></td>
+      <td><img src="./screenshots/splash.png" alt="Splash/Auth" width="250"/></td>
     </tr>
   </table>
 </div>
