@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">175607825703-ut4dnpbhr53fiq8al078pm9dcv4t17tl.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">175607825703</string>
+    <string name="google_api_key" translatable="false">AIzaSyAuVRDfkJgpvetydd42pVSYAXs7z0JtfUU</string>
+    <string name="google_app_id" translatable="false">1:175607825703:android:172f9feec38ac95f669502</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAuVRDfkJgpvetydd42pVSYAXs7z0JtfUU</string>
+    <string name="google_storage_bucket" translatable="false">fastpilot.firebasestorage.app</string>
+    <string name="project_id" translatable="false">fastpilot</string>
+    <style name="Theme.FastPilot" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:statusBarColor">@android:color/black</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+    </style>
+</resources>

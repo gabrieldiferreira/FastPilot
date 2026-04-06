@@ -1,0 +1,4 @@
+com.fastpilot.app.test.composeApp-androidTest-0 /var/home/gabrielferreira/FastPilot/composeApp/build/generated/res/resValues/androidTest/debug
+com.fastpilot.app.test.composeApp-mergeDebugAndroidTestResources-1 /var/home/gabrielferreira/FastPilot/composeApp/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.fastpilot.app.test.composeApp-mergeDebugAndroidTestResources-2 /var/home/gabrielferreira/FastPilot/composeApp/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.fastpilot.app.test.composeApp-debugAndroidTest-3 /var/home/gabrielferreira/FastPilot/composeApp/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources
