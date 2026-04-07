@@ -32,8 +32,6 @@ By leveraging a robust **Offline-First MVI Architecture**, FastPilot guarantees 
 
 ## 📸 Gallery
 
-> *Salve as suas screenshots capturadas na pasta `screenshots/` localizada na raiz do seu projeto com os nomes listados abaixo para que elas apareçam automaticamente no GitHub.*
-
 <div align="center">
   <table>
     <tr>
