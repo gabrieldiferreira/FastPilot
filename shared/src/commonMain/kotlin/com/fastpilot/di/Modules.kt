@@ -28,6 +28,7 @@ val repositoryModule = module {
     single { TeamRadioRepository(get()) }
     single { PitStopRepository(get()) }
     single { MeetingRepository(get()) }
+    single { LocationRepository(get()) }
     single { StandingsRepository(get(), getOrNull()) }
 }
 
@@ -39,6 +40,8 @@ val useCaseModule = module {
     factory { GetLiveTelemetryUseCase(get()) }
     factory { GetLivePositionsUseCase(get(), get()) }
     factory { GetDriverDuelUseCase(get()) }
+    factory { CalculateLapDeltaUseCase() }
+    factory { GetLapDeltaUseCase(get(), get()) }
     factory { CalculateCleanPaceUseCase() }
     factory { CalculateTheoreticalBestUseCase() }
     factory { GetTyreDegradationUseCase() }

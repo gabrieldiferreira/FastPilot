@@ -9,18 +9,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fastpilot.domain.usecase.DeltaPoint
+import com.fastpilot.domain.usecase.LapDelta
+import com.fastpilot.domain.usecase.LapDeltaPoint
 import com.fastpilot.model.Driver
 import com.fastpilot.ui.components.DriverSelector
 import com.fastpilot.ui.components.SessionPicker
 import com.fastpilot.ui.theme.*
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.math.roundToInt
 
 @Composable
 fun DuelScreen(
@@ -126,6 +131,17 @@ fun DuelScreen(
 
                 Spacer(Modifier.height(16.dp))
 
+                // Where time is gained or lost within the fastest laps (TCC I §4.7)
+                LapDeltaCard(
+                    lapDelta = uiState.lapDelta,
+                    isComputing = uiState.isComputingLapDelta,
+                    unavailable = uiState.lapDeltaUnavailable,
+                    driver1 = uiState.driver1,
+                    driver2 = uiState.driver2
+                )
+
+                Spacer(Modifier.height(16.dp))
+
                 // Stats comparison
                 val avg1 = duel.lapsDriver1.mapNotNull { it.lapDuration }.let { if (it.isEmpty()) 0.0 else it.average() }
                 val avg2 = duel.lapsDriver2.mapNotNull { it.lapDuration }.let { if (it.isEmpty()) 0.0 else it.average() }
@@ -179,6 +195,102 @@ private fun DeltaChart(deltas: List<DeltaPoint>, modifier: Modifier = Modifier) 
         }
         drawPath(path, DRSGreen, style = Stroke(width = 2.5f))
     }
+}
+
+@Composable
+private fun LapDeltaCard(lapDelta: LapDelta?, isComputing: Boolean, unavailable: Boolean, driver1: Driver?, driver2: Driver?) {
+    if (lapDelta == null && !isComputing && !unavailable) return
+    val name1 = driver1?.nameAcronym ?: "D1"
+    val name2 = driver2?.nameAcronym ?: "D2"
+    val color1 = driver1?.teamColour?.let { TeamColors.fromHex(it) } ?: DRSGreen
+    val color2 = driver2?.teamColour?.let { TeamColors.fromHex(it) } ?: F1Red
+
+    Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
+        shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.padding(16.dp)) {
+            Text("Delta na Volta Mais Rápida", color = TextSecondary, fontSize = 13.sp)
+            Spacer(Modifier.height(4.dp))
+            if (lapDelta == null) {
+                Box(Modifier.fillMaxWidth().height(120.dp), contentAlignment = Alignment.Center) {
+                    if (unavailable) Text("Dados de posição indisponíveis para estas voltas", color = TextTertiary, fontSize = 12.sp)
+                    else CircularProgressIndicator(color = F1Red, modifier = Modifier.size(24.dp))
+                }
+                return@Column
+            }
+            Text(
+                "Volta ${lapDelta.referenceLapNumber} de $name1 vs volta ${lapDelta.comparedLapNumber} de $name2 " +
+                    "• acima de 0 = $name1 à frente",
+                fontSize = 11.sp, color = TextTertiary
+            )
+            Spacer(Modifier.height(12.dp))
+            LapDeltaChart(lapDelta, color1, color2, Modifier.fillMaxWidth().height(180.dp))
+            Spacer(Modifier.height(4.dp))
+            Row(Modifier.fillMaxWidth()) {
+                Text("0 m", color = TextTertiary, fontSize = 10.sp)
+                Spacer(Modifier.weight(1f))
+                Text("${lapDelta.lapLength.toInt()} m", color = TextTertiary, fontSize = 10.sp)
+            }
+            Spacer(Modifier.height(8.dp))
+            val gap = lapDelta.finalGap
+            Text(
+                when {
+                    gap > 0 -> "$name1 mais rápido por ${formatGap(gap)}"
+                    gap < 0 -> "$name2 mais rápido por ${formatGap(-gap)}"
+                    else -> "Mesmo tempo de volta"
+                },
+                color = TextPrimary, fontWeight = FontWeight.SemiBold, fontSize = 13.sp
+            )
+        }
+    }
+}
+
+/**
+ * Delta along the lap distance; area above zero in driver 1's colour, below in driver 2's.
+ * The drawn line is smoothed over 5 samples (~1.3 s) to hide position-sampling jitter;
+ * the endpoints keep their exact values (0 at the line, official gap at the end).
+ */
+@Composable
+private fun LapDeltaChart(lapDelta: LapDelta, color1: Color, color2: Color, modifier: Modifier = Modifier) {
+    val points = remember(lapDelta) { smooth(lapDelta.points, window = 5) }
+    val maxAbs = points.maxOf { kotlin.math.abs(it.delta) }.toFloat().coerceAtLeast(0.05f)
+
+    Canvas(modifier = modifier.clip(RoundedCornerShape(8.dp))) {
+        val w = size.width; val h = size.height; val midY = h / 2
+        fun x(distance: Double) = (distance / lapDelta.lapLength).toFloat() * w
+        fun y(delta: Double) = midY - (delta.toFloat() / maxAbs * midY * 0.9f)
+
+        val line = Path()
+        points.forEachIndexed { i, p -> if (i == 0) line.moveTo(x(p.distance), y(p.delta)) else line.lineTo(x(p.distance), y(p.delta)) }
+
+        val area = Path().apply {
+            addPath(line)
+            lineTo(x(points.last().distance), midY)
+            lineTo(x(points.first().distance), midY)
+            close()
+        }
+        clipRect(bottom = midY) { drawPath(area, color1.copy(alpha = 0.25f)) }
+        clipRect(top = midY) { drawPath(area, color2.copy(alpha = 0.25f)) }
+
+        drawLine(DividerColor, Offset(0f, midY), Offset(w, midY), strokeWidth = 1f)
+        drawPath(line, TextPrimary, style = Stroke(width = 2f))
+    }
+}
+
+private fun smooth(points: List<LapDeltaPoint>, window: Int): List<LapDeltaPoint> {
+    val half = window / 2
+    return points.mapIndexed { i, p ->
+        if (i == 0 || i == points.lastIndex) p
+        else {
+            val from = maxOf(1, i - half)
+            val to = minOf(points.lastIndex - 1, i + half)
+            p.copy(delta = (from..to).sumOf { points[it].delta } / (to - from + 1))
+        }
+    }
+}
+
+private fun formatGap(seconds: Double): String {
+    val millis = (seconds * 1000).roundToInt()
+    return "${millis / 1000}.${(millis % 1000).toString().padStart(3, '0')}s"
 }
 
 @Composable

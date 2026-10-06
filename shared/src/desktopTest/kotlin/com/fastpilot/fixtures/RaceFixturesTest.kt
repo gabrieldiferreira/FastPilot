@@ -2,12 +2,14 @@ package com.fastpilot.fixtures
 
 import com.fastpilot.data.repository.LapRepository
 import com.fastpilot.domain.usecase.CalculateCleanPaceUseCase
+import com.fastpilot.domain.usecase.CalculateLapDeltaUseCase
 import com.fastpilot.domain.usecase.CalculateTheoreticalBestUseCase
 import com.fastpilot.domain.usecase.GetDriverDuelUseCase
 import com.fastpilot.domain.usecase.GetTyreDegradationUseCase
 import com.fastpilot.model.Driver
 import com.fastpilot.model.Interval
 import com.fastpilot.model.Lap
+import com.fastpilot.model.Location
 import com.fastpilot.model.PitStop
 import com.fastpilot.model.RaceControlMessage
 import com.fastpilot.model.Session
@@ -113,6 +115,49 @@ class RaceFixturesTest {
             val result = duel.calculate(p1, p2, laps.filter { it.driverNumber == p1 }, laps.filter { it.driverNumber == p2 })
 
             assertTrue(result.cumulativeDelta.size > 20, "$race common laps: ${result.cumulativeDelta.size}")
+        }
+    }
+
+    /** Official circuit lengths (metres) for the fixture races. */
+    private val circuitLength = mapOf(
+        "2023_bahrain" to 5412.0, "2023_belgium" to 7004.0, "2023_singapore" to 4928.0,
+        "2024_monaco" to 3337.0, "2024_brazil" to 4309.0
+    )
+
+    @Test
+    fun `lap delta between the two fastest finishers is consistent with official lap times`() {
+        val calculate = CalculateLapDeltaUseCase()
+        for (race in races) {
+            val laps = openF1<Lap>(race, "laps")
+            val locationFiles = File(root, "$race/openf1").listFiles { f -> f.name.startsWith("location_") }!!
+            fun fastestLapAndLocations(driver: Int): Pair<Lap, List<Location>> {
+                val file = locationFiles.single { it.name.startsWith("location_${driver}_") }
+                val lapNumber = file.name.substringAfter("_lap").removeSuffix(".json").toInt()
+                return laps.single { it.driverNumber == driver && it.lapNumber == lapNumber } to
+                    json.decodeFromString<List<Location>>(file.readText())
+            }
+            val results = json.decodeFromString<JolpicaResponse<RaceTable>>(
+                File(root, "$race/jolpica/results.json").readText()
+            ).mrData!!.raceTable!!.races.single().results
+            val (p1, p2) = results.take(2).map { it.number!!.toInt() }
+            val (lap1, loc1) = fastestLapAndLocations(p1)
+            val (lap2, loc2) = fastestLapAndLocations(p2)
+
+            val delta = calculate(lap1, loc1, lap2, loc2)!!
+
+            val lengthError = (delta.lapLength - circuitLength.getValue(race)) / circuitLength.getValue(race)
+            val lastComputed = delta.points[delta.points.size - 2]
+            val closingError = lastComputed.delta - delta.finalGap
+            println(
+                "$race #$p1 L${lap1.lapNumber} vs #$p2 L${lap2.lapNumber}: traced %.0f m (%+.1f%%), ".format(delta.lapLength, lengthError * 100) +
+                    "official gap %+.3f s, curve at %.0f m %+.3f s (closing error %+.3f s), range %+.2f..%+.2f s, %d points".format(
+                        delta.finalGap, lastComputed.distance, lastComputed.delta, closingError,
+                        delta.points.minOf { it.delta }, delta.points.maxOf { it.delta }, delta.points.size
+                    )
+            )
+            assertTrue(kotlin.math.abs(lengthError) < 0.05, "$race traced length ${delta.lapLength}")
+            assertTrue(delta.points.size > 200, "$race points ${delta.points.size}")
+            assertTrue(kotlin.math.abs(closingError) < 0.3, "$race closing error $closingError")
         }
     }
 }

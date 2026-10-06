@@ -21,13 +21,19 @@ data class DuelUiState(
     val driver2: Driver? = null,
     val duelData: DuelData? = null,
     val isComputing: Boolean = false,
+    /** Where driver 2 gains/loses time against driver 1 over their fastest laps. */
+    val lapDelta: LapDelta? = null,
+    val isComputingLapDelta: Boolean = false,
+    /** Position data could not be loaded (e.g. OpenF1 rate limit); lap-by-lap comparison still shown. */
+    val lapDeltaUnavailable: Boolean = false,
     val error: String? = null
 )
 
 class DuelViewModel(
     private val sessionRepo: SessionRepository,
     private val driverRepo: DriverRepository,
-    private val duelUseCase: GetDriverDuelUseCase
+    private val duelUseCase: GetDriverDuelUseCase,
+    private val lapDeltaUseCase: GetLapDeltaUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DuelUiState())
@@ -55,7 +61,7 @@ class DuelViewModel(
     fun selectSession(session: Session) {
         _uiState.value = _uiState.value.copy(
             selectedSession = session, isLoading = true,
-            drivers = emptyList(), driver1 = null, driver2 = null, duelData = null, error = null
+            drivers = emptyList(), driver1 = null, driver2 = null, duelData = null, lapDelta = null, lapDeltaUnavailable = false, error = null
         )
         viewModelScope.launch {
             try {
@@ -70,12 +76,12 @@ class DuelViewModel(
     }
 
     fun selectDriver1(driver: Driver) {
-        _uiState.value = _uiState.value.copy(driver1 = driver, duelData = null)
+        _uiState.value = _uiState.value.copy(driver1 = driver, duelData = null, lapDelta = null, lapDeltaUnavailable = false)
         tryComputeDuel()
     }
 
     fun selectDriver2(driver: Driver) {
-        _uiState.value = _uiState.value.copy(driver2 = driver, duelData = null)
+        _uiState.value = _uiState.value.copy(driver2 = driver, duelData = null, lapDelta = null, lapDeltaUnavailable = false)
         tryComputeDuel()
     }
 
@@ -90,6 +96,7 @@ class DuelViewModel(
             try {
                 val duelData = duelUseCase.invoke(sessionKey, d1.driverNumber, d2.driverNumber)
                 _uiState.value = _uiState.value.copy(duelData = duelData, isComputing = false)
+                computeLapDelta(sessionKey, duelData)
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -98,6 +105,24 @@ class DuelViewModel(
                     error = "Erro ao comparar pilotos: ${e.message}"
                 )
             }
+        }
+    }
+
+    private suspend fun computeLapDelta(sessionKey: Int, duel: DuelData) {
+        val fastest1 = duel.lapsDriver1.minByOrNull { it.lapDuration!! } ?: return
+        val fastest2 = duel.lapsDriver2.minByOrNull { it.lapDuration!! } ?: return
+
+        _uiState.value = _uiState.value.copy(isComputingLapDelta = true, lapDeltaUnavailable = false)
+        try {
+            val lapDelta = lapDeltaUseCase(sessionKey, fastest1, fastest2)
+            _uiState.value = _uiState.value.copy(
+                lapDelta = lapDelta, isComputingLapDelta = false, lapDeltaUnavailable = lapDelta == null
+            )
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            // The lap-by-lap comparison is still useful without position data
+            _uiState.value = _uiState.value.copy(isComputingLapDelta = false, lapDeltaUnavailable = true)
         }
     }
 }

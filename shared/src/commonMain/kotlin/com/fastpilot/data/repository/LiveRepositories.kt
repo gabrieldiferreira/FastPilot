@@ -2,6 +2,8 @@ package com.fastpilot.data.repository
 
 import com.fastpilot.model.CarData
 import com.fastpilot.model.Interval
+import com.fastpilot.model.Lap
+import com.fastpilot.model.Location
 import com.fastpilot.model.Position
 import com.fastpilot.model.RaceControlMessage
 import com.fastpilot.model.Weather
@@ -9,6 +11,9 @@ import com.fastpilot.model.TeamRadio
 import com.fastpilot.model.PitStop
 import com.fastpilot.model.Meeting
 import com.fastpilot.network.OpenF1Api
+import kotlinx.datetime.Instant
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Repository for telemetry data (car_data endpoint).
@@ -111,4 +116,18 @@ class MeetingRepository(private val api: OpenF1Api) {
 
     suspend fun getMeeting(meetingKey: Int): Meeting? =
         api.getMeetings(meetingKey = meetingKey).firstOrNull()
+}
+
+/**
+ * Repository for car positions on track (location endpoint).
+ * No local cache — only the samples of the requested lap are fetched (~350 per lap).
+ */
+class LocationRepository(private val api: OpenF1Api) {
+
+    suspend fun getLapLocations(sessionKey: Int, lap: Lap): List<Location> {
+        val start = lap.dateStart?.let(Instant::parse) ?: return emptyList()
+        val duration = lap.lapDuration ?: return emptyList()
+        val end = start + (duration * 1000).toLong().milliseconds + 1.seconds
+        return api.getLocation(sessionKey, lap.driverNumber, dateGte = start.toString(), dateLte = end.toString())
+    }
 }

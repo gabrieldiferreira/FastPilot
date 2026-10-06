@@ -15,7 +15,7 @@ val viewModelModule = module {
     viewModel { DashboardViewModel(get(), get(), get(), get(), get()) }
     viewModel { TelemetryViewModel(get(), get(), get(), get()) }
     viewModel { StrategyViewModel(get(), get(), get(), get()) }
-    viewModel { DuelViewModel(get(), get(), get()) }
+    viewModel { DuelViewModel(get(), get(), get(), get()) }
     viewModel { RadioViewModel(get(), get(), get()) }
     viewModel { WeatherViewModel(get(), get()) }
     viewModel { StandingsViewModel(get(), get()) }

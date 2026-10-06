@@ -10,6 +10,7 @@ Usage: python3 scripts/fetch_fixtures.py [--force]
 """
 import json
 import sys
+from datetime import datetime, timedelta
 import time
 import urllib.error
 import urllib.request
@@ -28,7 +29,7 @@ RACES = [
     ("2024_brazil", 9636, 2024, 21),      # rain + varied strategy
 ]
 
-# Everything the four metrics need; car_data/location are left out (tens of MB per race)
+# Everything the four metrics need; full car_data/location are left out (tens of MB per race)
 OPENF1_ENDPOINTS = ["sessions", "drivers", "laps", "stints", "pit", "race_control", "weather", "intervals"]
 
 REQUEST_INTERVAL_S = 0.6  # stay below OpenF1's rate limit
@@ -95,6 +96,22 @@ def save(path: Path, url: str, force: bool, fetcher=fetch):
     time.sleep(REQUEST_INTERVAL_S)
 
 
+def save_fastest_lap_locations(base: Path, session_key: int, force: bool, top: int = 3):
+    """/location samples of the fastest lap of each of the top finishers (lap delta, TCC I §4.7)."""
+    results = json.loads((base / "jolpica" / "results.json").read_text())
+    finishers = results["MRData"]["RaceTable"]["Races"][0]["Results"][:top]
+    laps = json.loads((base / "openf1" / "laps.json").read_text())
+    for result in finishers:
+        driver = int(result["number"])
+        valid = [l for l in laps if l["driver_number"] == driver and l["lap_duration"] and not l["is_pit_out_lap"]]
+        fastest = min(valid, key=lambda l: l["lap_duration"])
+        start = datetime.fromisoformat(fastest["date_start"])
+        end = start + timedelta(seconds=fastest["lap_duration"] + 1)
+        url = (f"{OPENF1}/location?session_key={session_key}&driver_number={driver}"
+               f"&date%3E={start.isoformat()}&date%3C={end.isoformat()}").replace("+", "%2B")
+        save(base / "openf1" / f"location_{driver}_lap{fastest['lap_number']}.json", url, force)
+
+
 def main():
     force = "--force" in sys.argv
     for folder, session_key, season, rnd in RACES:
@@ -104,6 +121,7 @@ def main():
             save(base / "openf1" / f"{endpoint}.json", f"{OPENF1}/{endpoint}?session_key={session_key}", force)
         save(base / "jolpica" / "results.json", f"{JOLPICA}/{season}/{rnd}/results.json", force)
         save(base / "jolpica" / "laps.json", f"{JOLPICA}/{season}/{rnd}/laps.json", force, fetch_jolpica_laps)
+        save_fastest_lap_locations(base, session_key, force)
 
 
 if __name__ == "__main__":
