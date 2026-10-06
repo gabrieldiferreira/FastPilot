@@ -1,6 +1,7 @@
 package com.fastpilot.domain.usecase
 
 import com.fastpilot.model.Lap
+import com.fastpilot.model.RaceControlMessage
 import com.fastpilot.model.Stint
 
 /**
@@ -24,14 +25,16 @@ class GetTyreDegradationUseCase {
         val lapTime: Double
     )
 
-    fun invoke(laps: List<Lap>, stints: List<Stint>, driverNumber: Int): List<DegradationCurve> {
+    fun invoke(
+        laps: List<Lap>,
+        stints: List<Stint>,
+        driverNumber: Int,
+        raceControlMessages: List<RaceControlMessage> = emptyList()
+    ): List<DegradationCurve> {
         val driverStints = stints.filter { it.driverNumber == driverNumber }
-        val driverLaps = laps.filter {
-            it.driverNumber == driverNumber &&
-            !it.isPitOutLap &&
-            it.lapDuration != null &&
-            it.lapDuration > 0
-        }.associateBy { it.lapNumber }
+        // Excludes pit in/out laps and safety car / VSC / red flag laps (TCC I §4.7)
+        val driverLaps = LapFilters.representativeLaps(laps, driverNumber, raceControlMessages)
+            .associateBy { it.lapNumber }
 
         return driverStints.mapNotNull { stint ->
             val lapRange = (stint.lapStart ?: return@mapNotNull null)..(stint.lapEnd ?: return@mapNotNull null)

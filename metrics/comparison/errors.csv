@@ -1,0 +1,616 @@
+race,metric,item,fastpilot,fastf1,abs_error,ape_percent
+2023_bahrain,clean_pace_mean,#1,97.471,97.47096,4e-05,4e-05
+2023_bahrain,clean_pace_median,#1,97.5765,97.5765,0.0,0.0
+2023_bahrain,theoretical_best,#1,95.978,95.978,0.0,0.0
+2023_bahrain,best_lap,#1,96.236,96.236,0.0,0.0
+2023_bahrain,degradation_slope,#1 stint 1 SOFT,0.05972,0.05972,0.0,0.00632
+2023_bahrain,degradation_slope,#1 stint 2 SOFT,0.00074,0.00074,0.0,0.22403
+2023_bahrain,degradation_slope,#1 stint 3 HARD,0.01267,0.01267,0.0,0.01281
+2023_bahrain,clean_pace_mean,#2,98.8956,98.89556,4e-05,4e-05
+2023_bahrain,clean_pace_median,#2,99.033,99.033,0.0,0.0
+2023_bahrain,theoretical_best,#2,96.037,96.037,0.0,0.0
+2023_bahrain,best_lap,#2,96.037,96.037,0.0,0.0
+2023_bahrain,degradation_slope,#2 stint 1 SOFT,0.09935,0.09935,0.0,0.00458
+2023_bahrain,degradation_slope,#2 stint 2 SOFT,0.06759,0.06759,0.0,0.00044
+2023_bahrain,degradation_slope,#2 stint 3 HARD,0.03269,0.03269,0.0,0.00146
+2023_bahrain,degradation_slope,#2 stint 4 SOFT,0.12648,0.12648,0.0,0.00169
+2023_bahrain,clean_pace_mean,#4,98.4549,98.45489,1e-05,1e-05
+2023_bahrain,clean_pace_median,#4,98.345,98.345,0.0,0.0
+2023_bahrain,theoretical_best,#4,95.257,95.257,0.0,0.0
+2023_bahrain,best_lap,#4,95.257,95.257,0.0,0.0
+2023_bahrain,degradation_slope,#4 stint 1 SOFT,0.0402,0.0402,0.0,0.00592
+2023_bahrain,degradation_slope,#4 stint 2 HARD,-0.1548,-0.1548,0.0,0.0
+2023_bahrain,degradation_slope,#4 stint 3 SOFT,0.05248,0.05248,0.0,0.00726
+2023_bahrain,degradation_slope,#4 stint 4 MEDIUM,0.23539,0.23539,0.0,0.00121
+2023_bahrain,degradation_slope,#4 stint 5 HARD,-0.03394,-0.03394,0.0,0.00435
+2023_bahrain,degradation_slope,#4 stint 6 SOFT,-0.4265,-0.4265,0.0,0.0
+2023_bahrain,clean_pace_mean,#10,98.3102,98.31015,5e-05,5e-05
+2023_bahrain,clean_pace_median,#10,98.14,98.14,0.0,0.0
+2023_bahrain,theoretical_best,#10,94.927,94.927,0.0,0.0
+2023_bahrain,best_lap,#10,95.068,95.068,0.0,0.0
+2023_bahrain,degradation_slope,#10 stint 1 SOFT,0.12154,0.12154,0.0,0.00353
+2023_bahrain,degradation_slope,#10 stint 2 HARD,0.04772,0.04772,0.0,0.00184
+2023_bahrain,degradation_slope,#10 stint 3 HARD,0.01423,0.01423,0.0,0.03322
+2023_bahrain,degradation_slope,#10 stint 4 SOFT,0.16273,0.16273,0.0,0.00127
+2023_bahrain,clean_pace_mean,#11,97.6847,97.68467,3e-05,3e-05
+2023_bahrain,clean_pace_median,#11,97.3935,97.3935,0.0,0.0
+2023_bahrain,theoretical_best,#11,96.071,96.071,0.0,0.0
+2023_bahrain,best_lap,#11,96.344,96.344,0.0,0.0
+2023_bahrain,degradation_slope,#11 stint 1 SOFT,0.01392,0.01392,0.0,0.0154
+2023_bahrain,degradation_slope,#11 stint 2 SOFT,0.02645,0.02645,0.0,0.0135
+2023_bahrain,degradation_slope,#11 stint 3 HARD,0.02213,0.02213,0.0,0.0049
+2023_bahrain,clean_pace_mean,#14,98.1029,98.10294,4e-05,4e-05
+2023_bahrain,clean_pace_median,#14,97.931,97.931,0.0,0.0
+2023_bahrain,theoretical_best,#14,95.859,95.859,0.0,0.0
+2023_bahrain,best_lap,#14,96.156,96.156,0.0,0.0
+2023_bahrain,degradation_slope,#14 stint 1 SOFT,0.13453,0.13453,0.0,0.00109
+2023_bahrain,degradation_slope,#14 stint 2 HARD,0.00162,0.00162,0.0,0.30543
+2023_bahrain,degradation_slope,#14 stint 3 HARD,0.02197,0.02197,0.0,0.00099
+2023_bahrain,clean_pace_mean,#16,98.3911,98.35662,0.03448,0.03505
+2023_bahrain,clean_pace_median,#16,98.541,98.509,0.032,0.03248
+2023_bahrain,theoretical_best,#16,96.923,96.864,0.059,0.06091
+2023_bahrain,best_lap,#16,97.17,97.17,0.0,0.0
+2023_bahrain,degradation_slope,#16 stint 1 SOFT,0.06386,0.06386,0.0,0.00569
+2023_bahrain,degradation_slope,#16 stint 2 HARD,0.0593,0.0593,0.0,0.0047
+2023_bahrain,degradation_slope,#16 stint 3 HARD,-0.2852,-0.1715,0.1137,66.29738
+2023_bahrain,clean_pace_mean,#18,98.3635,98.36354,4e-05,4e-05
+2023_bahrain,clean_pace_median,#18,98.1185,98.1185,0.0,0.0
+2023_bahrain,theoretical_best,#18,96.512,96.512,0.0,0.0
+2023_bahrain,best_lap,#18,96.546,96.546,0.0,0.0
+2023_bahrain,degradation_slope,#18 stint 1 SOFT,0.1086,0.1086,0.0,0.00101
+2023_bahrain,degradation_slope,#18 stint 2 HARD,0.07125,0.07125,0.0,0.00386
+2023_bahrain,degradation_slope,#18 stint 3 HARD,0.03034,0.03034,0.0,0.01184
+2023_bahrain,clean_pace_mean,#20,99.0741,99.07411,1e-05,1e-05
+2023_bahrain,clean_pace_median,#20,98.779,98.779,0.0,0.0
+2023_bahrain,theoretical_best,#20,96.407,96.407,0.0,0.0
+2023_bahrain,best_lap,#20,96.471,96.471,0.0,0.0
+2023_bahrain,degradation_slope,#20 stint 1 HARD,0.02771,0.02771,0.0,0.00436
+2023_bahrain,degradation_slope,#20 stint 2 HARD,0.09591,0.09591,0.0,0.0027
+2023_bahrain,degradation_slope,#20 stint 3 SOFT,0.06635,0.06635,0.0,0.0
+2023_bahrain,degradation_slope,#20 stint 4 SOFT,0.16716,0.16716,0.0,0.00043
+2023_bahrain,clean_pace_mean,#21,99.4114,99.41136,4e-05,4e-05
+2023_bahrain,clean_pace_median,#21,99.15,99.15,0.0,0.0
+2023_bahrain,theoretical_best,#21,97.638,97.638,0.0,0.0
+2023_bahrain,best_lap,#21,97.709,97.709,0.0,0.0
+2023_bahrain,degradation_slope,#21 stint 1 SOFT,0.09558,0.09558,0.0,0.00349
+2023_bahrain,degradation_slope,#21 stint 2 HARD,0.11073,0.11073,0.0,0.00169
+2023_bahrain,degradation_slope,#21 stint 3 HARD,0.06997,0.06997,0.0,0.00399
+2023_bahrain,clean_pace_mean,#22,98.6256,98.62557,3e-05,4e-05
+2023_bahrain,clean_pace_median,#22,98.155,98.155,0.0,0.0
+2023_bahrain,theoretical_best,#22,96.363,96.363,0.0,0.0
+2023_bahrain,best_lap,#22,96.637,96.637,0.0,0.0
+2023_bahrain,degradation_slope,#22 stint 1 SOFT,0.08318,0.08318,0.0,0.00172
+2023_bahrain,degradation_slope,#22 stint 2 HARD,0.06173,0.06173,0.0,0.00409
+2023_bahrain,degradation_slope,#22 stint 3 HARD,0.03668,0.03668,0.0,0.00458
+2023_bahrain,degradation_slope,#22 stint 4 SOFT,0.0886,0.0886,0.0,0.00166
+2023_bahrain,clean_pace_mean,#23,98.6718,98.67185,5e-05,5e-05
+2023_bahrain,clean_pace_median,#23,98.1675,98.1675,0.0,0.0
+2023_bahrain,theoretical_best,#23,96.916,96.916,0.0,0.0
+2023_bahrain,best_lap,#23,97.144,97.144,0.0,0.0
+2023_bahrain,degradation_slope,#23 stint 1 SOFT,0.12647,0.12647,0.0,0.00264
+2023_bahrain,degradation_slope,#23 stint 2 SOFT,0.10447,0.10447,0.0,0.00284
+2023_bahrain,degradation_slope,#23 stint 3 HARD,0.04287,0.04287,0.0,0.00147
+2023_bahrain,degradation_slope,#23 stint 4 SOFT,0.05591,0.05591,0.0,0.00737
+2023_bahrain,clean_pace_mean,#24,99.2956,99.29563,3e-05,3e-05
+2023_bahrain,clean_pace_median,#24,99.143,99.143,0.0,0.0
+2023_bahrain,theoretical_best,#24,93.996,93.996,0.0,0.0
+2023_bahrain,best_lap,#24,93.996,93.996,0.0,0.0
+2023_bahrain,degradation_slope,#24 stint 1 SOFT,0.1315,0.1315,0.0,0.0023
+2023_bahrain,degradation_slope,#24 stint 2 HARD,0.02733,0.02733,0.0,0.00464
+2023_bahrain,degradation_slope,#24 stint 3 SOFT,0.07066,0.07066,0.0,0.00504
+2023_bahrain,clean_pace_mean,#27,98.8385,98.83847,3e-05,3e-05
+2023_bahrain,clean_pace_median,#27,98.564,98.564,0.0,0.0
+2023_bahrain,theoretical_best,#27,96.46,96.46,0.0,0.0
+2023_bahrain,best_lap,#27,96.616,96.616,0.0,0.0
+2023_bahrain,degradation_slope,#27 stint 1 SOFT,0.16928,0.16928,0.0,0.00197
+2023_bahrain,degradation_slope,#27 stint 2 HARD,0.08863,0.08863,0.0,0.00409
+2023_bahrain,degradation_slope,#27 stint 3 HARD,0.09291,0.09291,0.0,0.00098
+2023_bahrain,degradation_slope,#27 stint 4 SOFT,0.12025,0.12025,0.0,0.00297
+2023_bahrain,clean_pace_mean,#31,99.3395,99.3395,0.0,0.0
+2023_bahrain,clean_pace_median,#31,99.532,99.532,0.0,0.0
+2023_bahrain,theoretical_best,#31,96.751,96.751,0.0,0.0
+2023_bahrain,best_lap,#31,96.797,96.797,0.0,0.0
+2023_bahrain,degradation_slope,#31 stint 1 SOFT,0.11896,0.11896,0.0,0.00204
+2023_bahrain,degradation_slope,#31 stint 3 HARD,0.1104,0.1104,0.0,0.00323
+2023_bahrain,degradation_slope,#31 stint 4 HARD,0.12457,0.12457,0.0,0.00115
+2023_bahrain,clean_pace_mean,#44,98.3253,98.3253,0.0,0.0
+2023_bahrain,clean_pace_median,#44,98.304,98.304,0.0,0.0
+2023_bahrain,theoretical_best,#44,96.411,96.411,0.0,0.0
+2023_bahrain,best_lap,#44,96.546,96.546,0.0,0.0
+2023_bahrain,degradation_slope,#44 stint 1 SOFT,0.1829,0.1829,0.0,0.00166
+2023_bahrain,degradation_slope,#44 stint 2 HARD,-0.0193,-0.0193,0.0,0.02285
+2023_bahrain,degradation_slope,#44 stint 3 HARD,0.0329,0.0329,0.0,0.00733
+2023_bahrain,clean_pace_mean,#55,98.28,98.28,0.0,0.0
+2023_bahrain,clean_pace_median,#55,98.21,98.21,0.0,0.0
+2023_bahrain,theoretical_best,#55,96.984,96.984,0.0,0.0
+2023_bahrain,best_lap,#55,97.13,97.13,0.0,0.0
+2023_bahrain,degradation_slope,#55 stint 1 SOFT,0.16985,0.16985,0.0,0.00268
+2023_bahrain,degradation_slope,#55 stint 2 HARD,0.02796,0.02796,0.0,0.01683
+2023_bahrain,degradation_slope,#55 stint 3 HARD,0.02093,0.02093,0.0,0.01985
+2023_bahrain,clean_pace_mean,#63,98.3354,98.33537,3e-05,3e-05
+2023_bahrain,clean_pace_median,#63,98.175,98.175,0.0,0.0
+2023_bahrain,theoretical_best,#63,96.723,96.723,0.0,0.0
+2023_bahrain,best_lap,#63,97.035,97.035,0.0,0.0
+2023_bahrain,degradation_slope,#63 stint 1 SOFT,0.19955,0.19955,0.0,0.00228
+2023_bahrain,degradation_slope,#63 stint 2 HARD,0.04197,0.04197,0.0,0.00841
+2023_bahrain,degradation_slope,#63 stint 3 HARD,0.01453,0.01453,0.0,0.00936
+2023_bahrain,clean_pace_mean,#77,98.6774,98.67737,3e-05,3e-05
+2023_bahrain,clean_pace_median,#77,98.129,98.129,0.0,0.0
+2023_bahrain,theoretical_best,#77,97.175,97.175,0.0,0.0
+2023_bahrain,best_lap,#77,97.379,97.379,0.0,0.0
+2023_bahrain,degradation_slope,#77 stint 1 SOFT,0.10288,0.10288,0.0,0.00324
+2023_bahrain,degradation_slope,#77 stint 2 HARD,0.05349,0.05349,0.0,0.00055
+2023_bahrain,degradation_slope,#77 stint 3 HARD,0.01262,0.01262,0.0,0.00711
+2023_bahrain,clean_pace_mean,#81,101.1182,101.11818,2e-05,2e-05
+2023_bahrain,clean_pace_median,#81,101.156,101.156,0.0,0.0
+2023_bahrain,theoretical_best,#81,100.31,100.31,0.0,0.0
+2023_bahrain,best_lap,#81,100.691,100.691,0.0,0.0
+2023_bahrain,degradation_slope,#81 stint 1 SOFT,0.07636,0.07636,0.0,0.00476
+2023_bahrain,lap_delta_curve,#1 L44 vs #11 L37,,,0.10484,
+2023_bahrain,lap_delta_final,#1 L44 vs #11 L37,0.108,0.108,0.0,
+2023_bahrain,lap_delta_curve,#1 L44 vs #14 L36,,,0.11217,
+2023_bahrain,lap_delta_final,#1 L44 vs #14 L36,-0.08,-0.08,0.0,
+2023_bahrain,lap_delta_curve,#11 L37 vs #14 L36,,,0.13343,
+2023_bahrain,lap_delta_final,#11 L37 vs #14 L36,-0.188,-0.188,0.0,
+2023_belgium,clean_pace_mean,#1,111.6086,111.60857,3e-05,3e-05
+2023_belgium,clean_pace_median,#1,111.472,111.472,0.0,0.0
+2023_belgium,theoretical_best,#1,108.156,108.156,0.0,0.0
+2023_belgium,best_lap,#1,108.922,108.922,0.0,0.0
+2023_belgium,degradation_slope,#1 stint 1 SOFT,-0.00097,-0.00097,0.0,0.20863
+2023_belgium,degradation_slope,#1 stint 2 MEDIUM,-0.03701,-0.03701,0.0,0.00861
+2023_belgium,degradation_slope,#1 stint 3 SOFT,0.01599,0.01599,0.0,0.02817
+2023_belgium,clean_pace_mean,#2,113.5662,113.56623,3e-05,3e-05
+2023_belgium,clean_pace_median,#2,113.822,113.822,0.0,0.0
+2023_belgium,theoretical_best,#2,110.123,110.123,0.0,0.0
+2023_belgium,best_lap,#2,110.236,110.236,0.0,0.0
+2023_belgium,degradation_slope,#2 stint 1 SOFT,0.1162,0.1162,0.0,0.0
+2023_belgium,degradation_slope,#2 stint 2 MEDIUM,0.06475,0.06475,0.0,0.00255
+2023_belgium,degradation_slope,#2 stint 3 MEDIUM,0.33935,0.33935,0.0,0.0014
+2023_belgium,degradation_slope,#2 stint 4 SOFT,0.24735,0.24735,0.0,0.0
+2023_belgium,clean_pace_mean,#3,113.4842,113.48416,4e-05,3e-05
+2023_belgium,clean_pace_median,#3,113.369,113.369,0.0,0.0
+2023_belgium,theoretical_best,#3,110.994,110.994,0.0,0.0
+2023_belgium,best_lap,#3,110.994,110.994,0.0,0.0
+2023_belgium,degradation_slope,#3 stint 1 SOFT,-0.5975,-0.5975,0.0,0.0
+2023_belgium,degradation_slope,#3 stint 2 MEDIUM,0.26159,0.26159,0.0,0.00164
+2023_belgium,degradation_slope,#3 stint 3 MEDIUM,0.12281,0.12281,0.0,0.00074
+2023_belgium,clean_pace_mean,#4,113.035,113.03497,3e-05,2e-05
+2023_belgium,clean_pace_median,#4,112.659,112.659,0.0,0.0
+2023_belgium,theoretical_best,#4,111.081,111.081,0.0,0.0
+2023_belgium,best_lap,#4,111.682,111.682,0.0,0.0
+2023_belgium,degradation_slope,#4 stint 1 MEDIUM,0.87,0.87,0.0,0.0
+2023_belgium,degradation_slope,#4 stint 2 HARD,0.26513,0.26513,0.0,0.00103
+2023_belgium,degradation_slope,#4 stint 3 SOFT,-0.0011,-0.0011,0.0,0.23364
+2023_belgium,clean_pace_mean,#10,113.6092,113.60916,4e-05,3e-05
+2023_belgium,clean_pace_median,#10,113.43,113.43,0.0,0.0
+2023_belgium,theoretical_best,#10,110.627,110.627,0.0,0.0
+2023_belgium,best_lap,#10,110.911,110.911,0.0,0.0
+2023_belgium,degradation_slope,#10 stint 1 SOFT,0.07275,0.07275,0.0,0.00625
+2023_belgium,degradation_slope,#10 stint 2 MEDIUM,0.02947,0.02947,0.0,0.00026
+2023_belgium,clean_pace_mean,#11,112.1012,112.10124,4e-05,4e-05
+2023_belgium,clean_pace_median,#11,112.153,112.153,0.0,0.0
+2023_belgium,theoretical_best,#11,110.201,110.201,0.0,0.0
+2023_belgium,best_lap,#11,110.308,110.308,0.0,0.0
+2023_belgium,degradation_slope,#11 stint 1 SOFT,0.0616,0.0616,0.0,0.0
+2023_belgium,degradation_slope,#11 stint 2 MEDIUM,-0.01229,-0.01229,0.0,0.03488
+2023_belgium,degradation_slope,#11 stint 3 SOFT,0.0231,0.0231,0.0,0.00476
+2023_belgium,clean_pace_mean,#14,112.6911,112.69114,4e-05,3e-05
+2023_belgium,clean_pace_median,#14,112.505,112.505,0.0,0.0
+2023_belgium,theoretical_best,#14,110.218,110.218,0.0,0.0
+2023_belgium,best_lap,#14,110.938,110.938,0.0,0.0
+2023_belgium,degradation_slope,#14 stint 1 MEDIUM,-0.13074,-0.13074,0.0,0.00146
+2023_belgium,degradation_slope,#14 stint 2 MEDIUM,0.05227,0.05227,0.0,0.00863
+2023_belgium,degradation_slope,#14 stint 3 SOFT,-0.04422,-0.04422,0.0,0.00447
+2023_belgium,clean_pace_mean,#16,112.3775,112.37754,4e-05,4e-05
+2023_belgium,clean_pace_median,#16,112.243,112.243,0.0,0.0
+2023_belgium,theoretical_best,#16,110.313,110.436,0.123,0.11138
+2023_belgium,best_lap,#16,110.436,110.436,0.0,0.0
+2023_belgium,degradation_slope,#16 stint 1 SOFT,0.11303,0.11303,0.0,0.00241
+2023_belgium,degradation_slope,#16 stint 2 MEDIUM,-0.01507,-0.01507,0.0,0.00948
+2023_belgium,degradation_slope,#16 stint 3 SOFT,0.13521,0.13521,0.0,0.00317
+2023_belgium,clean_pace_mean,#18,113.4154,113.41538,2e-05,2e-05
+2023_belgium,clean_pace_median,#18,112.884,112.884,0.0,0.0
+2023_belgium,theoretical_best,#18,110.818,110.818,0.0,0.0
+2023_belgium,best_lap,#18,111.297,111.297,0.0,0.0
+2023_belgium,degradation_slope,#18 stint 1 MEDIUM,0.05433,0.05433,0.0,0.00526
+2023_belgium,degradation_slope,#18 stint 2 SOFT,0.02026,0.02026,0.0,0.01522
+2023_belgium,clean_pace_mean,#20,113.8044,113.80438,2e-05,2e-05
+2023_belgium,clean_pace_median,#20,113.819,113.819,0.0,0.0
+2023_belgium,theoretical_best,#20,110.858,110.858,0.0,0.0
+2023_belgium,best_lap,#20,110.993,110.993,0.0,0.0
+2023_belgium,degradation_slope,#20 stint 1 SOFT,-0.4785,-0.4785,0.0,0.0
+2023_belgium,degradation_slope,#20 stint 2 MEDIUM,0.17399,0.17399,0.0,0.00219
+2023_belgium,degradation_slope,#20 stint 3 MEDIUM,0.16283,0.16283,0.0,0.00173
+2023_belgium,clean_pace_mean,#22,113.3214,113.32135,5e-05,4e-05
+2023_belgium,clean_pace_median,#22,112.554,112.554,0.0,0.0
+2023_belgium,theoretical_best,#22,111.08,111.08,0.0,0.0
+2023_belgium,best_lap,#22,111.394,111.394,0.0,0.0
+2023_belgium,degradation_slope,#22 stint 1 MEDIUM,-0.15357,-0.15357,0.0,0.00093
+2023_belgium,degradation_slope,#22 stint 2 MEDIUM,0.34764,0.34764,0.0,0.00082
+2023_belgium,degradation_slope,#22 stint 3 SOFT,0.04221,0.04221,0.0,0.01122
+2023_belgium,clean_pace_mean,#23,113.2952,113.29523,3e-05,3e-05
+2023_belgium,clean_pace_median,#23,113.203,113.203,0.0,0.0
+2023_belgium,theoretical_best,#23,109.785,109.785,0.0,0.0
+2023_belgium,best_lap,#23,109.841,109.841,0.0,0.0
+2023_belgium,degradation_slope,#23 stint 1 SOFT,0.0722,0.0722,0.0,0.0
+2023_belgium,degradation_slope,#23 stint 2 MEDIUM,0.29393,0.29393,0.0,0.00086
+2023_belgium,degradation_slope,#23 stint 3 MEDIUM,0.36331,0.36331,0.0,0.00013
+2023_belgium,degradation_slope,#23 stint 4 SOFT,0.16542,0.16542,0.0,0.0011
+2023_belgium,clean_pace_mean,#24,113.6183,113.61832,2e-05,2e-05
+2023_belgium,clean_pace_median,#24,113.303,113.303,0.0,0.0
+2023_belgium,theoretical_best,#24,109.942,109.942,0.0,0.0
+2023_belgium,best_lap,#24,110.188,110.188,0.0,0.0
+2023_belgium,degradation_slope,#24 stint 1 SOFT,0.0788,0.0788,0.0,0.0
+2023_belgium,degradation_slope,#24 stint 2 MEDIUM,0.2446,0.2446,0.0,0.0012
+2023_belgium,degradation_slope,#24 stint 3 SOFT,0.05336,0.05336,0.0,0.00418
+2023_belgium,clean_pace_mean,#27,114.0137,114.01368,2e-05,2e-05
+2023_belgium,clean_pace_median,#27,113.91,113.91,0.0,0.0
+2023_belgium,theoretical_best,#27,109.907,109.907,0.0,0.0
+2023_belgium,best_lap,#27,109.907,109.907,0.0,0.0
+2023_belgium,degradation_slope,#27 stint 1 MEDIUM,-0.09554,-0.09554,0.0,0.00063
+2023_belgium,degradation_slope,#27 stint 2 SOFT,0.16562,0.16562,0.0,0.00256
+2023_belgium,degradation_slope,#27 stint 3 SOFT,0.26292,0.26292,0.0,0.00093
+2023_belgium,clean_pace_mean,#31,113.1495,113.14951,1e-05,1e-05
+2023_belgium,clean_pace_median,#31,112.727,112.727,0.0,0.0
+2023_belgium,theoretical_best,#31,109.858,109.858,0.0,0.0
+2023_belgium,best_lap,#31,110.439,110.439,0.0,0.0
+2023_belgium,degradation_slope,#31 stint 1 SOFT,0.2503,0.2503,0.0,0.0
+2023_belgium,degradation_slope,#31 stint 2 MEDIUM,0.22496,0.22496,0.0,0.00074
+2023_belgium,degradation_slope,#31 stint 3 SOFT,0.02669,0.02669,0.0,0.01783
+2023_belgium,clean_pace_mean,#44,112.3611,112.36109,1e-05,1e-05
+2023_belgium,clean_pace_median,#44,112.215,112.215,0.0,0.0
+2023_belgium,theoretical_best,#44,107.305,107.305,0.0,0.0
+2023_belgium,best_lap,#44,107.305,107.305,0.0,0.0
+2023_belgium,degradation_slope,#44 stint 1 SOFT,0.13388,0.13388,0.0,0.00091
+2023_belgium,degradation_slope,#44 stint 2 MEDIUM,0.08199,0.08199,0.0,0.00549
+2023_belgium,degradation_slope,#44 stint 3 SOFT,0.09708,0.09708,0.0,0.00249
+2023_belgium,clean_pace_mean,#55,116.0266,116.02658,2e-05,2e-05
+2023_belgium,clean_pace_median,#55,116.062,116.062,0.0,0.0
+2023_belgium,theoretical_best,#55,113.092,113.092,0.0,0.0
+2023_belgium,best_lap,#55,113.138,113.138,0.0,0.0
+2023_belgium,degradation_slope,#55 stint 1 SOFT,0.8282,0.8282,0.0,0.0
+2023_belgium,degradation_slope,#55 stint 2 MEDIUM,0.37518,0.37518,0.0,6e-05
+2023_belgium,clean_pace_mean,#63,113.1306,113.13062,2e-05,2e-05
+2023_belgium,clean_pace_median,#63,112.221,112.221,0.0,0.0
+2023_belgium,theoretical_best,#63,110.253,110.253,0.0,0.0
+2023_belgium,best_lap,#63,110.603,110.603,0.0,0.0
+2023_belgium,degradation_slope,#63 stint 1 MEDIUM,0.0476,0.0476,0.0,0.00158
+2023_belgium,degradation_slope,#63 stint 2 SOFT,0.04324,0.04324,0.0,0.00661
+2023_belgium,clean_pace_mean,#77,113.4344,113.43435,5e-05,4e-05
+2023_belgium,clean_pace_median,#77,113.411,113.411,0.0,0.0
+2023_belgium,theoretical_best,#77,110.131,110.131,0.0,0.0
+2023_belgium,best_lap,#77,110.515,110.515,0.0,0.0
+2023_belgium,degradation_slope,#77 stint 1 SOFT,0.071,0.071,0.0,0.0
+2023_belgium,degradation_slope,#77 stint 2 MEDIUM,0.19716,0.19716,0.0,0.00239
+2023_belgium,degradation_slope,#77 stint 3 MEDIUM,0.05759,0.05759,0.0,0.00396
+2023_belgium,lap_delta_curve,#1 L32 vs #11 L31,,,0.104,
+2023_belgium,lap_delta_final,#1 L32 vs #11 L31,1.386,1.386,0.0,
+2023_belgium,lap_delta_curve,#1 L32 vs #16 L30,,,0.07655,
+2023_belgium,lap_delta_final,#1 L32 vs #16 L30,1.514,1.514,0.0,
+2023_belgium,lap_delta_curve,#11 L31 vs #16 L30,,,0.06397,
+2023_belgium,lap_delta_final,#11 L31 vs #16 L30,0.128,0.128,0.0,
+2023_singapore,clean_pace_mean,#1,99.6567,99.65665,5e-05,5e-05
+2023_singapore,clean_pace_median,#1,100.266,100.266,0.0,0.0
+2023_singapore,theoretical_best,#1,96.507,96.507,0.0,0.0
+2023_singapore,best_lap,#1,96.575,96.575,0.0,0.0
+2023_singapore,degradation_slope,#1 stint 1 HARD,-0.01177,-0.01177,0.0,0.03596
+2023_singapore,degradation_slope,#1 stint 2 MEDIUM,-0.03563,-0.03563,0.0,0.00371
+2023_singapore,clean_pace_mean,#2,100.1695,100.16949,1e-05,1e-05
+2023_singapore,clean_pace_median,#2,99.972,99.972,0.0,0.0
+2023_singapore,theoretical_best,#2,98.319,98.319,0.0,0.0
+2023_singapore,best_lap,#2,98.531,98.531,0.0,0.0
+2023_singapore,degradation_slope,#2 stint 1 MEDIUM,-0.06534,-0.06534,0.0,0.00645
+2023_singapore,degradation_slope,#2 stint 2 HARD,0.00603,0.00603,0.0,0.02618
+2023_singapore,degradation_slope,#2 stint 3 MEDIUM,0.19201,0.19201,0.0,0.00091
+2023_singapore,clean_pace_mean,#4,99.6314,99.63002,0.00138,0.00139
+2023_singapore,clean_pace_median,#4,99.701,99.697,0.004,0.00401
+2023_singapore,theoretical_best,#4,97.605,97.605,0.0,0.0
+2023_singapore,best_lap,#4,98.046,98.046,0.0,0.0
+2023_singapore,degradation_slope,#4 stint 1 MEDIUM,-0.07042,-0.07042,0.0,0.00443
+2023_singapore,degradation_slope,#4 stint 2 HARD,-0.04367,-0.04364,3e-05,0.06896
+2023_singapore,clean_pace_mean,#10,100.4683,100.46833,3e-05,3e-05
+2023_singapore,clean_pace_median,#10,100.602,100.602,0.0,0.0
+2023_singapore,theoretical_best,#10,98.142,98.142,0.0,0.0
+2023_singapore,best_lap,#10,98.277,98.277,0.0,0.0
+2023_singapore,degradation_slope,#10 stint 1 MEDIUM,-0.06233,-0.06233,0.0,0.00204
+2023_singapore,degradation_slope,#10 stint 2 HARD,-0.06083,-0.06083,0.0,0.00628
+2023_singapore,clean_pace_mean,#11,100.3122,100.31216,4e-05,4e-05
+2023_singapore,clean_pace_median,#11,100.595,100.595,0.0,0.0
+2023_singapore,theoretical_best,#11,96.813,96.813,0.0,0.0
+2023_singapore,best_lap,#11,97.108,97.108,0.0,0.0
+2023_singapore,degradation_slope,#11 stint 1 HARD,-0.00698,-0.00698,0.0,0.06589
+2023_singapore,degradation_slope,#11 stint 2 MEDIUM,0.0636,0.0636,0.0,0.00452
+2023_singapore,clean_pace_mean,#14,100.3498,100.34984,4e-05,4e-05
+2023_singapore,clean_pace_median,#14,100.346,100.346,0.0,0.0
+2023_singapore,theoretical_best,#14,96.422,96.422,0.0,0.0
+2023_singapore,best_lap,#14,96.456,96.456,0.0,0.0
+2023_singapore,degradation_slope,#14 stint 1 MEDIUM,-0.08038,-0.08038,0.0,0.00157
+2023_singapore,degradation_slope,#14 stint 2 HARD,-0.05191,-0.05191,0.0,0.00478
+2023_singapore,degradation_slope,#14 stint 3 SOFT,-0.10071,-0.10071,0.0,0.00409
+2023_singapore,clean_pace_mean,#16,99.944,99.94396,4e-05,4e-05
+2023_singapore,clean_pace_median,#16,99.892,99.892,0.0,0.0
+2023_singapore,theoretical_best,#16,98.182,98.182,0.0,0.0
+2023_singapore,best_lap,#16,98.275,98.275,0.0,0.0
+2023_singapore,degradation_slope,#16 stint 1 SOFT,-0.05126,-0.05126,0.0,0.00012
+2023_singapore,degradation_slope,#16 stint 2 HARD,-0.00936,-0.00936,0.0,0.04152
+2023_singapore,clean_pace_mean,#20,100.5782,100.57825,5e-05,5e-05
+2023_singapore,clean_pace_median,#20,100.7665,100.7665,0.0,0.0
+2023_singapore,theoretical_best,#20,97.982,97.982,0.0,0.0
+2023_singapore,best_lap,#20,98.107,98.107,0.0,0.0
+2023_singapore,degradation_slope,#20 stint 1 MEDIUM,-0.0697,-0.0697,0.0,0.00696
+2023_singapore,degradation_slope,#20 stint 2 HARD,0.0297,0.0297,0.0,0.01266
+2023_singapore,degradation_slope,#20 stint 3 SOFT,0.02071,0.02071,0.0,0.00493
+2023_singapore,clean_pace_mean,#23,100.5644,100.56439,1e-05,1e-05
+2023_singapore,clean_pace_median,#23,100.775,100.775,0.0,0.0
+2023_singapore,theoretical_best,#23,97.251,97.251,0.0,0.0
+2023_singapore,best_lap,#23,97.342,97.342,0.0,0.0
+2023_singapore,degradation_slope,#23 stint 1 MEDIUM,-0.07635,-0.07635,0.0,0.0025
+2023_singapore,degradation_slope,#23 stint 2 HARD,-0.06737,-0.06737,0.0,0.00324
+2023_singapore,degradation_slope,#23 stint 3 MEDIUM,0.32125,0.32125,0.0,0.00076
+2023_singapore,clean_pace_mean,#24,101.027,101.02704,4e-05,4e-05
+2023_singapore,clean_pace_median,#24,100.806,100.806,0.0,0.0
+2023_singapore,theoretical_best,#24,99.067,99.067,0.0,0.0
+2023_singapore,best_lap,#24,99.316,99.316,0.0,0.0
+2023_singapore,degradation_slope,#24 stint 2 HARD,0.03413,0.03413,0.0,0.00689
+2023_singapore,degradation_slope,#24 stint 3 MEDIUM,0.00966,0.00966,0.0,0.01417
+2023_singapore,clean_pace_mean,#27,101.2291,101.22912,2e-05,2e-05
+2023_singapore,clean_pace_median,#27,101.038,101.038,0.0,0.0
+2023_singapore,theoretical_best,#27,99.48,99.48,0.0,0.0
+2023_singapore,best_lap,#27,99.923,99.923,0.0,0.0
+2023_singapore,degradation_slope,#27 stint 1 MEDIUM,-0.06844,-0.06844,0.0,0.00054
+2023_singapore,degradation_slope,#27 stint 2 HARD,0.02762,0.02762,0.0,0.01457
+2023_singapore,clean_pace_mean,#31,100.8185,100.79558,0.02292,0.02274
+2023_singapore,clean_pace_median,#31,100.562,100.5515,0.0105,0.01044
+2023_singapore,theoretical_best,#31,99.47,99.47,0.0,0.0
+2023_singapore,best_lap,#31,99.93,99.93,0.0,0.0
+2023_singapore,degradation_slope,#31 stint 1 MEDIUM,-0.07491,-0.07491,0.0,0.00029
+2023_singapore,degradation_slope,#31 stint 2 HARD,-0.07922,-0.08226,0.00304,3.69842
+2023_singapore,clean_pace_mean,#40,100.9439,100.94392,2e-05,2e-05
+2023_singapore,clean_pace_median,#40,100.953,100.953,0.0,0.0
+2023_singapore,theoretical_best,#40,98.995,98.995,0.0,0.0
+2023_singapore,best_lap,#40,99.028,99.028,0.0,0.0
+2023_singapore,degradation_slope,#40 stint 1 MEDIUM,-0.05067,-0.05067,0.0,0.00454
+2023_singapore,degradation_slope,#40 stint 2 HARD,-0.01337,-0.01337,0.0,0.01039
+2023_singapore,clean_pace_mean,#44,99.3578,99.35782,2e-05,2e-05
+2023_singapore,clean_pace_median,#44,99.686,99.686,0.0,0.0
+2023_singapore,theoretical_best,#44,95.594,95.594,0.0,0.0
+2023_singapore,best_lap,#44,95.867,95.867,0.0,0.0
+2023_singapore,degradation_slope,#44 stint 1 MEDIUM,-0.09828,-0.09828,0.0,0.00349
+2023_singapore,degradation_slope,#44 stint 2 HARD,-0.07299,-0.07299,0.0,0.00484
+2023_singapore,degradation_slope,#44 stint 3 MEDIUM,0.22206,0.22206,0.0,0.00057
+2023_singapore,clean_pace_mean,#55,99.589,99.58896,4e-05,4e-05
+2023_singapore,clean_pace_median,#55,99.6295,99.6295,0.0,0.0
+2023_singapore,theoretical_best,#55,97.533,97.533,0.0,0.0
+2023_singapore,best_lap,#55,97.666,97.666,0.0,0.0
+2023_singapore,degradation_slope,#55 stint 1 MEDIUM,-0.09815,-0.09815,0.0,0.00142
+2023_singapore,degradation_slope,#55 stint 2 HARD,-0.04113,-0.04113,0.0,0.01147
+2023_singapore,clean_pace_mean,#63,99.4017,99.39998,0.00172,0.00173
+2023_singapore,clean_pace_median,#63,99.7895,99.776,0.0135,0.01353
+2023_singapore,theoretical_best,#63,96.191,96.191,0.0,0.0
+2023_singapore,best_lap,#63,96.273,96.273,0.0,0.0
+2023_singapore,degradation_slope,#63 stint 1 MEDIUM,-0.05529,-0.05529,0.0,0.00562
+2023_singapore,degradation_slope,#63 stint 2 HARD,-0.05076,-0.05076,0.0,0.00819
+2023_singapore,degradation_slope,#63 stint 3 MEDIUM,0.2103,0.21291,0.00261,1.22601
+2023_singapore,clean_pace_mean,#77,101.1237,101.05369,0.07001,0.06928
+2023_singapore,clean_pace_median,#77,101.279,101.27,0.009,0.00889
+2023_singapore,theoretical_best,#77,97.983,97.983,0.0,0.0
+2023_singapore,best_lap,#77,98.075,98.075,0.0,0.0
+2023_singapore,degradation_slope,#77 stint 1 HARD,-0.00136,-0.00136,0.0,0.36337
+2023_singapore,degradation_slope,#77 stint 2 MEDIUM,-0.04493,-0.06742,0.02249,33.35407
+2023_singapore,clean_pace_mean,#81,100.5177,100.51775,5e-05,4e-05
+2023_singapore,clean_pace_median,#81,100.553,100.553,0.0,0.0
+2023_singapore,theoretical_best,#81,98.239,98.239,0.0,0.0
+2023_singapore,best_lap,#81,98.492,98.492,0.0,0.0
+2023_singapore,degradation_slope,#81 stint 1 MEDIUM,-0.07508,-0.07508,0.0,0.00071
+2023_singapore,degradation_slope,#81 stint 2 HARD,-0.06681,-0.06681,0.0,0.00054
+2023_singapore,lap_delta_curve,#55 L47 vs #4 L46,,,0.12822,
+2023_singapore,lap_delta_final,#55 L47 vs #4 L46,0.38,0.38,0.0,
+2023_singapore,lap_delta_curve,#55 L47 vs #44 L47,,,0.11643,
+2023_singapore,lap_delta_final,#55 L47 vs #44 L47,-1.799,-1.799,0.0,
+2023_singapore,lap_delta_curve,#4 L46 vs #44 L47,,,0.06043,
+2023_singapore,lap_delta_final,#4 L46 vs #44 L47,-2.179,-2.179,0.0,
+2024_monaco,clean_pace_mean,#1,78.2797,78.27974,4e-05,5e-05
+2024_monaco,clean_pace_median,#1,78.5505,78.5505,0.0,0.0
+2024_monaco,theoretical_best,#1,74.548,74.548,0.0,0.0
+2024_monaco,best_lap,#1,74.569,74.569,0.0,0.0
+2024_monaco,degradation_slope,#1 stint 2 MEDIUM,-0.09506,-0.09506,0.0,0.00408
+2024_monaco,degradation_slope,#1 stint 3 HARD,0.00786,0.00786,0.0,0.0
+2024_monaco,clean_pace_mean,#2,80.3613,80.36133,3e-05,4e-05
+2024_monaco,clean_pace_median,#2,80.851,80.851,0.0,0.0
+2024_monaco,theoretical_best,#2,75.328,75.328,0.0,0.0
+2024_monaco,best_lap,#2,75.525,75.525,0.0,0.0
+2024_monaco,degradation_slope,#2 stint 2 HARD,-0.0347,-0.0347,0.0,0.00027
+2024_monaco,degradation_slope,#2 stint 3 MEDIUM,0.03879,0.03879,0.0,0.00662
+2024_monaco,clean_pace_mean,#3,80.4447,80.44474,4e-05,4e-05
+2024_monaco,clean_pace_median,#3,80.8445,80.8445,0.0,0.0
+2024_monaco,theoretical_best,#3,77.025,77.025,0.0,0.0
+2024_monaco,best_lap,#3,77.172,77.172,0.0,0.0
+2024_monaco,degradation_slope,#3 stint 2 HARD,-0.06127,-0.06127,0.0,0.00057
+2024_monaco,clean_pace_mean,#4,78.4343,78.4343,0.0,0.0
+2024_monaco,clean_pace_median,#4,78.3995,78.3995,0.0,0.0
+2024_monaco,theoretical_best,#4,75.66,75.66,0.0,0.0
+2024_monaco,best_lap,#4,75.742,75.742,0.0,0.0
+2024_monaco,degradation_slope,#4 stint 2 HARD,-0.06749,-0.06749,0.0,0.00386
+2024_monaco,clean_pace_mean,#10,80.1809,80.1809,0.0,0.0
+2024_monaco,clean_pace_median,#10,80.229,80.229,0.0,0.0
+2024_monaco,theoretical_best,#10,75.625,75.625,0.0,0.0
+2024_monaco,best_lap,#10,75.625,75.625,0.0,0.0
+2024_monaco,degradation_slope,#10 stint 2 MEDIUM,-0.0598,-0.0598,0.0,0.00452
+2024_monaco,clean_pace_mean,#14,80.456,80.456,0.0,0.0
+2024_monaco,clean_pace_median,#14,80.639,80.639,0.0,0.0
+2024_monaco,theoretical_best,#14,77.768,77.768,0.0,0.0
+2024_monaco,best_lap,#14,77.939,77.939,0.0,0.0
+2024_monaco,degradation_slope,#14 stint 2 MEDIUM,-0.06022,-0.06022,0.0,0.00122
+2024_monaco,clean_pace_mean,#16,78.3692,78.36924,4e-05,5e-05
+2024_monaco,clean_pace_median,#16,78.5,78.5,0.0,0.0
+2024_monaco,theoretical_best,#16,75.159,75.159,0.0,0.0
+2024_monaco,best_lap,#16,75.162,75.162,0.0,0.0
+2024_monaco,degradation_slope,#16 stint 2 HARD,-0.06758,-0.06758,0.0,0.00303
+2024_monaco,clean_pace_mean,#18,79.8434,79.84339,1e-05,1e-05
+2024_monaco,clean_pace_median,#18,79.828,79.828,0.0,0.0
+2024_monaco,theoretical_best,#18,76.398,76.398,0.0,0.0
+2024_monaco,best_lap,#18,76.71,76.71,0.0,0.0
+2024_monaco,degradation_slope,#18 stint 2 MEDIUM,-0.09522,-0.09522,0.0,0.00089
+2024_monaco,degradation_slope,#18 stint 3 HARD,-0.1977,-0.1977,0.0,0.0
+2024_monaco,degradation_slope,#18 stint 4 SOFT,0.01964,0.01964,0.0,0.00099
+2024_monaco,clean_pace_mean,#22,79.948,79.948,0.0,0.0
+2024_monaco,clean_pace_median,#22,80.144,80.144,0.0,0.0
+2024_monaco,theoretical_best,#22,74.72,74.72,0.0,0.0
+2024_monaco,best_lap,#22,74.72,74.72,0.0,0.0
+2024_monaco,degradation_slope,#22 stint 2 HARD,-0.06677,-0.06677,0.0,0.00441
+2024_monaco,clean_pace_mean,#23,80.0875,80.08749,1e-05,1e-05
+2024_monaco,clean_pace_median,#23,80.222,80.222,0.0,0.0
+2024_monaco,theoretical_best,#23,77.06,77.06,0.0,0.0
+2024_monaco,best_lap,#23,77.06,77.06,0.0,0.0
+2024_monaco,degradation_slope,#23 stint 2 HARD,-0.05465,-0.05465,0.0,0.00341
+2024_monaco,clean_pace_mean,#24,80.8868,80.88683,3e-05,4e-05
+2024_monaco,clean_pace_median,#24,80.954,80.954,0.0,0.0
+2024_monaco,theoretical_best,#24,74.718,74.718,0.0,0.0
+2024_monaco,best_lap,#24,74.718,74.718,0.0,0.0
+2024_monaco,degradation_slope,#24 stint 2 HARD,-0.04067,-0.04067,0.0,0.00688
+2024_monaco,degradation_slope,#24 stint 3 SOFT,-0.7339,-0.7339,0.0,0.0
+2024_monaco,clean_pace_mean,#44,78.2657,78.26572,2e-05,3e-05
+2024_monaco,clean_pace_median,#44,78.51,78.51,0.0,0.0
+2024_monaco,theoretical_best,#44,74.027,74.027,0.0,0.0
+2024_monaco,best_lap,#44,74.165,74.165,0.0,0.0
+2024_monaco,degradation_slope,#44 stint 2 MEDIUM,-0.10739,-0.10739,0.0,7e-05
+2024_monaco,degradation_slope,#44 stint 3 HARD,-0.02357,-0.02357,0.0,0.01849
+2024_monaco,clean_pace_mean,#55,78.4815,78.48154,4e-05,5e-05
+2024_monaco,clean_pace_median,#55,78.5565,78.5565,0.0,0.0
+2024_monaco,theoretical_best,#55,74.645,74.645,0.0,0.0
+2024_monaco,best_lap,#55,74.726,74.726,0.0,0.0
+2024_monaco,degradation_slope,#55 stint 2 HARD,-0.06669,-0.06669,0.0,0.00386
+2024_monaco,clean_pace_mean,#63,78.5083,78.50831,1e-05,2e-05
+2024_monaco,clean_pace_median,#63,78.6375,78.6375,0.0,0.0
+2024_monaco,theoretical_best,#63,75.154,75.154,0.0,0.0
+2024_monaco,best_lap,#63,75.228,75.228,0.0,0.0
+2024_monaco,degradation_slope,#63 stint 2 MEDIUM,-0.08788,-0.08788,0.0,0.00562
+2024_monaco,clean_pace_mean,#77,80.2534,80.25341,1e-05,1e-05
+2024_monaco,clean_pace_median,#77,80.4935,80.4935,0.0,0.0
+2024_monaco,theoretical_best,#77,76.32,76.32,0.0,0.0
+2024_monaco,best_lap,#77,76.561,76.561,0.0,0.0
+2024_monaco,degradation_slope,#77 stint 2 MEDIUM,-0.47659,-0.47659,0.0,0.00092
+2024_monaco,degradation_slope,#77 stint 3 HARD,-0.03338,-0.03338,0.0,0.00606
+2024_monaco,clean_pace_mean,#81,78.4217,78.42173,3e-05,4e-05
+2024_monaco,clean_pace_median,#81,78.486,78.486,0.0,0.0
+2024_monaco,theoretical_best,#81,76.195,76.195,0.0,0.0
+2024_monaco,best_lap,#81,76.281,76.281,0.0,0.0
+2024_monaco,degradation_slope,#81 stint 2 HARD,-0.06392,-0.06392,0.0,0.0019
+2024_monaco,lap_delta_curve,#16 L71 vs #81 L73,,,0.08568,
+2024_monaco,lap_delta_final,#16 L71 vs #81 L73,1.119,1.119,0.0,
+2024_monaco,lap_delta_curve,#16 L71 vs #55 L62,,,0.07433,
+2024_monaco,lap_delta_final,#16 L71 vs #55 L62,-0.436,-0.436,0.0,
+2024_monaco,lap_delta_curve,#81 L73 vs #55 L62,,,0.06888,
+2024_monaco,lap_delta_final,#81 L73 vs #55 L62,-1.555,-1.555,0.0,
+2024_brazil,clean_pace_mean,#1,83.6332,83.63322,2e-05,3e-05
+2024_brazil,clean_pace_median,#1,84.0855,84.0855,0.0,0.0
+2024_brazil,theoretical_best,#1,80.472,80.472,0.0,0.0
+2024_brazil,best_lap,#1,80.472,80.472,0.0,0.0
+2024_brazil,degradation_slope,#1 stint 1 INTERMEDIATE,0.14473,0.14473,0.0,0.00272
+2024_brazil,degradation_slope,#1 stint 2 INTERMEDIATE,-0.18181,-0.18181,0.0,0.00225
+2024_brazil,clean_pace_mean,#4,84.0434,84.04339,1e-05,1e-05
+2024_brazil,clean_pace_median,#4,84.099,84.099,0.0,0.0
+2024_brazil,theoretical_best,#4,81.294,81.294,0.0,0.0
+2024_brazil,best_lap,#4,81.517,81.517,0.0,0.0
+2024_brazil,degradation_slope,#4 stint 1 INTERMEDIATE,-0.02143,-0.02143,0.0,0.00598
+2024_brazil,degradation_slope,#4 stint 3 INTERMEDIATE,-0.24308,-0.24308,0.0,0.00185
+2024_brazil,clean_pace_mean,#10,84.1977,84.19767,3e-05,4e-05
+2024_brazil,clean_pace_median,#10,84.2255,84.2255,0.0,0.0
+2024_brazil,theoretical_best,#10,81.54,81.54,0.0,0.0
+2024_brazil,best_lap,#10,81.645,81.645,0.0,0.0
+2024_brazil,degradation_slope,#10 stint 1 INTERMEDIATE,0.07479,0.07479,0.0,0.00613
+2024_brazil,degradation_slope,#10 stint 2 INTERMEDIATE,-0.19342,-0.19342,0.0,0.0024
+2024_brazil,clean_pace_mean,#11,85.0732,85.07319,1e-05,2e-05
+2024_brazil,clean_pace_median,#11,85.0065,85.0065,0.0,0.0
+2024_brazil,theoretical_best,#11,81.89,81.89,0.0,0.0
+2024_brazil,best_lap,#11,82.143,82.143,0.0,0.0
+2024_brazil,degradation_slope,#11 stint 1 INTERMEDIATE,-0.03338,-0.03338,0.0,0.01152
+2024_brazil,degradation_slope,#11 stint 3 INTERMEDIATE,-0.27306,-0.27306,0.0,0.00049
+2024_brazil,clean_pace_mean,#14,85.1713,85.17131,1e-05,2e-05
+2024_brazil,clean_pace_median,#14,84.4925,84.4925,0.0,0.0
+2024_brazil,theoretical_best,#14,82.237,82.237,0.0,0.0
+2024_brazil,best_lap,#14,82.293,82.293,0.0,0.0
+2024_brazil,degradation_slope,#14 stint 1 INTERMEDIATE,-0.07552,-0.07552,0.0,0.00102
+2024_brazil,degradation_slope,#14 stint 3 INTERMEDIATE,-0.29376,-0.29376,0.0,0.0009
+2024_brazil,clean_pace_mean,#16,84.245,84.245,0.0,0.0
+2024_brazil,clean_pace_median,#16,84.33,84.33,0.0,0.0
+2024_brazil,theoretical_best,#16,81.503,81.503,0.0,0.0
+2024_brazil,best_lap,#16,81.631,81.631,0.0,0.0
+2024_brazil,degradation_slope,#16 stint 1 INTERMEDIATE,-0.08167,-0.08167,0.0,0.00306
+2024_brazil,degradation_slope,#16 stint 3 INTERMEDIATE,-0.23725,-0.23725,0.0,5e-05
+2024_brazil,clean_pace_mean,#22,84.4601,84.46013,3e-05,4e-05
+2024_brazil,clean_pace_median,#22,84.547,84.547,0.0,0.0
+2024_brazil,theoretical_best,#22,81.742,81.742,0.0,0.0
+2024_brazil,best_lap,#22,81.828,81.828,0.0,0.0
+2024_brazil,degradation_slope,#22 stint 1 INTERMEDIATE,-0.04654,-0.04654,0.0,0.00661
+2024_brazil,degradation_slope,#22 stint 3 INTERMEDIATE,-0.28498,-0.28498,0.0,0.00163
+2024_brazil,clean_pace_mean,#24,86.0698,86.06981,1e-05,1e-05
+2024_brazil,clean_pace_median,#24,85.712,85.712,0.0,0.0
+2024_brazil,theoretical_best,#24,82.952,82.952,0.0,0.0
+2024_brazil,best_lap,#24,83.058,83.058,0.0,0.0
+2024_brazil,degradation_slope,#24 stint 1 INTERMEDIATE,-0.0667,-0.0667,0.0,0.00577
+2024_brazil,degradation_slope,#24 stint 5 INTERMEDIATE,-0.29984,-0.29984,0.0,0.00164
+2024_brazil,clean_pace_mean,#27,85.0673,85.06733,3e-05,4e-05
+2024_brazil,clean_pace_median,#27,84.845,84.845,0.0,0.0
+2024_brazil,theoretical_best,#27,83.591,83.591,0.0,0.0
+2024_brazil,best_lap,#27,83.764,83.764,0.0,0.0
+2024_brazil,degradation_slope,#27 stint 1 INTERMEDIATE,-0.11336,-0.11336,0.0,0.00234
+2024_brazil,clean_pace_mean,#30,84.8324,84.83243,3e-05,4e-05
+2024_brazil,clean_pace_median,#30,84.682,84.682,0.0,0.0
+2024_brazil,theoretical_best,#30,82.05,82.05,0.0,0.0
+2024_brazil,best_lap,#30,82.123,82.123,0.0,0.0
+2024_brazil,degradation_slope,#30 stint 1 INTERMEDIATE,0.00328,0.00328,0.0,0.14091
+2024_brazil,degradation_slope,#30 stint 3 INTERMEDIATE,-0.27985,-0.27985,0.0,0.00101
+2024_brazil,clean_pace_mean,#31,84.0062,84.00622,2e-05,3e-05
+2024_brazil,clean_pace_median,#31,84.326,84.326,0.0,0.0
+2024_brazil,theoretical_best,#31,81.645,81.645,0.0,0.0
+2024_brazil,best_lap,#31,81.771,81.771,0.0,0.0
+2024_brazil,degradation_slope,#31 stint 1 INTERMEDIATE,0.10783,0.10783,0.0,0.00119
+2024_brazil,degradation_slope,#31 stint 2 INTERMEDIATE,-0.1457,-0.1457,0.0,0.00051
+2024_brazil,clean_pace_mean,#43,85.7526,85.75264,4e-05,4e-05
+2024_brazil,clean_pace_median,#43,85.4835,85.4835,0.0,0.0
+2024_brazil,theoretical_best,#43,83.989,83.989,0.0,0.0
+2024_brazil,best_lap,#43,84.296,84.296,0.0,0.0
+2024_brazil,degradation_slope,#43 stint 1 INTERMEDIATE,-0.07701,-0.07701,0.0,0.00113
+2024_brazil,clean_pace_mean,#44,85.1061,85.10615,5e-05,6e-05
+2024_brazil,clean_pace_median,#44,84.5905,84.5905,0.0,0.0
+2024_brazil,theoretical_best,#44,81.52,81.52,0.0,0.0
+2024_brazil,best_lap,#44,82.041,82.041,0.0,0.0
+2024_brazil,degradation_slope,#44 stint 1 INTERMEDIATE,-0.09583,-0.09583,0.0,0.00401
+2024_brazil,degradation_slope,#44 stint 3 INTERMEDIATE,-0.2683,-0.2683,0.0,0.00166
+2024_brazil,clean_pace_mean,#50,85.2819,85.28193,3e-05,3e-05
+2024_brazil,clean_pace_median,#50,84.673,84.673,0.0,0.0
+2024_brazil,theoretical_best,#50,82.219,82.219,0.0,0.0
+2024_brazil,best_lap,#50,82.494,82.494,0.0,0.0
+2024_brazil,degradation_slope,#50 stint 1 INTERMEDIATE,-0.14377,-0.14377,0.0,0.00214
+2024_brazil,degradation_slope,#50 stint 3 INTERMEDIATE,-0.34666,-0.34666,0.0,5e-05
+2024_brazil,clean_pace_mean,#55,86.6586,86.66252,0.00392,0.00452
+2024_brazil,clean_pace_median,#55,85.6585,85.684,0.0255,0.02976
+2024_brazil,theoretical_best,#55,83.795,83.795,0.0,0.0
+2024_brazil,best_lap,#55,84.201,84.201,0.0,0.0
+2024_brazil,degradation_slope,#55 stint 1 INTERMEDIATE,-0.05996,-0.05996,0.0,0.00128
+2024_brazil,degradation_slope,#55 stint 3 INTERMEDIATE,-4.2529,-3.1762,1.0767,33.899
+2024_brazil,clean_pace_mean,#63,83.9104,83.91043,3e-05,3e-05
+2024_brazil,clean_pace_median,#63,84.1715,84.1715,0.0,0.0
+2024_brazil,theoretical_best,#63,81.516,81.516,0.0,0.0
+2024_brazil,best_lap,#63,81.645,81.645,0.0,0.0
+2024_brazil,degradation_slope,#63 stint 1 INTERMEDIATE,-0.02001,-0.02001,0.0,0.0141
+2024_brazil,degradation_slope,#63 stint 3 INTERMEDIATE,-0.21209,-0.21209,0.0,0.00088
+2024_brazil,clean_pace_mean,#77,85.5681,85.56815,5e-05,6e-05
+2024_brazil,clean_pace_median,#77,84.975,84.975,0.0,0.0
+2024_brazil,theoretical_best,#77,82.568,82.568,0.0,0.0
+2024_brazil,best_lap,#77,82.877,82.877,0.0,0.0
+2024_brazil,degradation_slope,#77 stint 1 INTERMEDIATE,0.15548,0.15548,0.0,0.00215
+2024_brazil,degradation_slope,#77 stint 2 INTERMEDIATE,-0.31464,-0.31464,0.0,0.00039
+2024_brazil,clean_pace_mean,#81,84.5254,84.52544,4e-05,5e-05
+2024_brazil,clean_pace_median,#81,84.696,84.696,0.0,0.0
+2024_brazil,theoretical_best,#81,81.433,81.433,0.0,0.0
+2024_brazil,best_lap,#81,81.532,81.532,0.0,0.0
+2024_brazil,degradation_slope,#81 stint 1 INTERMEDIATE,-0.04067,-0.04067,0.0,0.00378
+2024_brazil,degradation_slope,#81 stint 3 INTERMEDIATE,-0.25762,-0.25762,0.0,0.00023
+2024_brazil,lap_delta_curve,#1 L67 vs #31 L64,,,0.20144,
+2024_brazil,lap_delta_final,#1 L67 vs #31 L64,1.299,1.299,0.0,
+2024_brazil,lap_delta_curve,#1 L67 vs #10 L66,,,0.1388,
+2024_brazil,lap_delta_final,#1 L67 vs #10 L66,1.173,1.173,0.0,
+2024_brazil,lap_delta_curve,#31 L64 vs #10 L66,,,0.0822,
+2024_brazil,lap_delta_final,#31 L64 vs #10 L66,-0.126,-0.126,0.0,

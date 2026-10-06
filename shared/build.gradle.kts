@@ -108,3 +108,14 @@ sqldelight {
         }
     }
 }
+
+// TCC II, Fase 4: runs the metric use cases on fixtures/ and writes metrics/comparison/fastpilot/
+tasks.register<JavaExec>("exportMetrics") {
+    group = "evaluation"
+    description = "Exports FastPilot metrics computed on the recorded race fixtures"
+    val testCompilation = kotlin.targets.getByName("desktop").compilations.getByName("test")
+    dependsOn(testCompilation.compileTaskProvider)
+    classpath = files(testCompilation.output.allOutputs, testCompilation.runtimeDependencyFiles)
+    mainClass.set("com.fastpilot.evaluation.ExportMetricsKt")
+    workingDir = rootDir
+}

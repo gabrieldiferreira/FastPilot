@@ -14,13 +14,13 @@ class GetTyreDegradationUseCaseTest {
     fun `calculates degradation curve for a stint`() {
         val stints = listOf(
             Stint(driverNumber = 1, stintNumber = 1, compound = "MEDIUM",
-                lapStart = 1, lapEnd = 10, tyreAgeAtStart = 0, sessionKey = 9165)
+                lapStart = 2, lapEnd = 11, tyreAgeAtStart = 0, sessionKey = 9165)
         )
 
-        // Simulate degradation: each lap 0.1s slower
-        val laps = (1..10).map { lapNum ->
+        // Simulate degradation: each lap 0.1s slower (from lap 2: lap 1 is the standing start)
+        val laps = (2..11).map { lapNum ->
             Lap(driverNumber = 1, lapNumber = lapNum,
-                lapDuration = 91.0 + (lapNum - 1) * 0.1, sessionKey = 9165)
+                lapDuration = 91.0 + (lapNum - 2) * 0.1, sessionKey = 9165)
         }
 
         val result = useCase.invoke(laps, stints, driverNumber = 1)

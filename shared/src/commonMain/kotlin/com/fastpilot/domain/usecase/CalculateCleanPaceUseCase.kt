@@ -5,7 +5,7 @@ import com.fastpilot.model.RaceControlMessage
 
 /**
  * Calculates clean race pace by removing outlier laps.
- * Filters out: pit out laps, safety car laps, the top 5% and bottom 5%.
+ * Filters out: pit in/out laps, safety car / VSC / red flag laps, the top 5% and bottom 5%.
  */
 class CalculateCleanPaceUseCase {
 
@@ -25,21 +25,8 @@ class CalculateCleanPaceUseCase {
         driverNumber: Int,
         safetyCarMessages: List<RaceControlMessage> = emptyList()
     ): CleanPaceStats {
-        // Filter out pit out/in laps and laps with no duration
-        val validLaps = laps.filter {
-            it.driverNumber == driverNumber &&
-            !it.isPitOutLap &&
-            it.lapDuration != null &&
-            it.lapDuration > 0
-        }
-
-        // Filter out safety car laps
-        val scLapNumbers = safetyCarMessages
-            .filter { it.category == "SafetyCar" || it.flag == "YELLOW" || it.flag == "DOUBLE YELLOW" }
-            .mapNotNull { it.lapNumber }
-            .toSet()
-
-        val noScLaps = validLaps.filter { it.lapNumber !in scLapNumbers }
+        // Pit in/out laps and safety car / VSC / red flag laps are atypical (TCC I §4.7)
+        val noScLaps = LapFilters.representativeLaps(laps, driverNumber, safetyCarMessages)
 
         // Remove top/bottom 5% outliers
         val sorted = noScLaps.sortedBy { it.lapDuration }
