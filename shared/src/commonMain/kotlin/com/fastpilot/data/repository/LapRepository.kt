@@ -5,9 +5,13 @@ import com.fastpilot.model.Lap
 import com.fastpilot.network.OpenF1Api
 import kotlinx.datetime.Clock
 
+/**
+ * Cache-first repository. [db] is null on platforms without a local database (Web),
+ * in which case every call goes straight to the network.
+ */
 class LapRepository(
     private val api: OpenF1Api,
-    private val db: FastPilotDB
+    private val db: FastPilotDB?
 ) {
     companion object {
         private const val CACHE_TTL_MS = 60 * 60 * 1000L // 1 hour
@@ -19,9 +23,9 @@ class LapRepository(
         forceRefresh: Boolean = false
     ): List<Lap> {
         if (!forceRefresh) {
-            val cached = db.fastPilotDBQueries.selectLapsByDriverAndSession(
+            val cached = db?.fastPilotDBQueries?.selectLapsByDriverAndSession(
                 driverNumber.toLong(), sessionKey.toLong()
-            ).executeAsList()
+            )?.executeAsList().orEmpty()
             if (cached.isNotEmpty()) {
                 val age = Clock.System.now().toEpochMilliseconds() - cached.first().cached_at
                 if (age < CACHE_TTL_MS) {
@@ -34,7 +38,7 @@ class LapRepository(
             val remote = api.getLaps(sessionKey = sessionKey, driverNumber = driverNumber)
             val now = Clock.System.now().toEpochMilliseconds()
             remote.forEach { lap ->
-                db.fastPilotDBQueries.insertLap(
+                db?.fastPilotDBQueries?.insertLap(
                     driver_number = lap.driverNumber.toLong(),
                     session_key = (lap.sessionKey ?: sessionKey).toLong(),
                     lap_number = lap.lapNumber.toLong(),
@@ -52,9 +56,9 @@ class LapRepository(
             }
             remote
         } catch (e: Exception) {
-            val cached = db.fastPilotDBQueries.selectLapsByDriverAndSession(
+            val cached = db?.fastPilotDBQueries?.selectLapsByDriverAndSession(
                 driverNumber.toLong(), sessionKey.toLong()
-            ).executeAsList()
+            )?.executeAsList().orEmpty()
             if (cached.isNotEmpty()) cached.map { it.toLap() }
             else throw e
         }

@@ -27,6 +27,11 @@ kotlin {
         }
     }
 
+    @OptIn(org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+    }
+
     sourceSets {
         commonMain.dependencies {
             // Coroutines
@@ -73,6 +78,10 @@ kotlin {
                 implementation(libs.ktor.client.cio)
                 implementation(libs.sqldelight.sqlite.driver)
             }
+        }
+
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
     }
 }

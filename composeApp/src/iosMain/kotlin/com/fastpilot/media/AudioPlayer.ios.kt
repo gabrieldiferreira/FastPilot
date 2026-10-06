@@ -1,6 +1,6 @@
 package com.fastpilot.media
 
-import platform.AVFoundation.AVPlayer
+import platform.AVFoundation.*
 import platform.Foundation.NSURL
 
 class IosAudioPlayer : AudioPlayer {
@@ -11,11 +11,11 @@ class IosAudioPlayer : AudioPlayer {
         val nsUrl = NSURL(string = url)
 
         // Toggle pause/play
-        if (currentPlayingUrl == url && avPlayer?.timeControlStatus == platform.AVFoundation.AVPlayerTimeControlStatusPlaying) {
+        if (currentPlayingUrl == url && avPlayer?.timeControlStatus == AVPlayerTimeControlStatusPlaying) {
             pause()
             return
         }
-        if (currentPlayingUrl == url && avPlayer?.timeControlStatus == platform.AVFoundation.AVPlayerTimeControlStatusPaused) {
+        if (currentPlayingUrl == url && avPlayer?.timeControlStatus == AVPlayerTimeControlStatusPaused) {
             avPlayer?.play()
             return
         }
@@ -37,7 +37,7 @@ class IosAudioPlayer : AudioPlayer {
     }
 
     override fun getPlayingUrl(): String? {
-        return if (avPlayer?.timeControlStatus == platform.AVFoundation.AVPlayerTimeControlStatusPlaying) currentPlayingUrl else null
+        return if (avPlayer?.timeControlStatus == AVPlayerTimeControlStatusPlaying) currentPlayingUrl else null
     }
 }
 

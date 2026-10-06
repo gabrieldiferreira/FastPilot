@@ -4,8 +4,8 @@ import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import java.io.File
 
-actual class DatabaseDriverFactory {
-    actual fun create(): SqlDriver {
+class DatabaseDriverFactory {
+    fun create(): SqlDriver {
         val dbPath = File(System.getProperty("user.home"), ".fastpilot")
         dbPath.mkdirs()
         val dbFile = File(dbPath, "fastpilot.db")

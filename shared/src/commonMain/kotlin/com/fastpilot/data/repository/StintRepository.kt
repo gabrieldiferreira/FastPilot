@@ -5,9 +5,13 @@ import com.fastpilot.model.Stint
 import com.fastpilot.network.OpenF1Api
 import kotlinx.datetime.Clock
 
+/**
+ * Cache-first repository. [db] is null on platforms without a local database (Web),
+ * in which case every call goes straight to the network.
+ */
 class StintRepository(
     private val api: OpenF1Api,
-    private val db: FastPilotDB
+    private val db: FastPilotDB?
 ) {
     companion object {
         private const val CACHE_TTL_MS = 60 * 60 * 1000L // 1 hour
@@ -19,9 +23,9 @@ class StintRepository(
         forceRefresh: Boolean = false
     ): List<Stint> {
         if (!forceRefresh && driverNumber != null) {
-            val cached = db.fastPilotDBQueries.selectStintsByDriverAndSession(
+            val cached = db?.fastPilotDBQueries?.selectStintsByDriverAndSession(
                 driverNumber.toLong(), sessionKey.toLong()
-            ).executeAsList()
+            )?.executeAsList().orEmpty()
             if (cached.isNotEmpty()) {
                 val age = Clock.System.now().toEpochMilliseconds() - cached.first().cached_at
                 if (age < CACHE_TTL_MS) {
@@ -34,7 +38,7 @@ class StintRepository(
             val remote = api.getStints(sessionKey = sessionKey, driverNumber = driverNumber)
             val now = Clock.System.now().toEpochMilliseconds()
             remote.forEach { stint ->
-                db.fastPilotDBQueries.insertStint(
+                db?.fastPilotDBQueries?.insertStint(
                     driver_number = stint.driverNumber.toLong(),
                     session_key = (stint.sessionKey ?: sessionKey).toLong(),
                     stint_number = stint.stintNumber.toLong(),
@@ -48,9 +52,9 @@ class StintRepository(
             remote
         } catch (e: Exception) {
             if (driverNumber != null) {
-                val cached = db.fastPilotDBQueries.selectStintsByDriverAndSession(
+                val cached = db?.fastPilotDBQueries?.selectStintsByDriverAndSession(
                     driverNumber.toLong(), sessionKey.toLong()
-                ).executeAsList()
+                )?.executeAsList().orEmpty()
                 if (cached.isNotEmpty()) return cached.map { it.toStint() }
             }
             throw e
@@ -58,7 +62,7 @@ class StintRepository(
     }
 
     suspend fun getAllStints(sessionKey: Int): List<Stint> {
-        val cached = db.fastPilotDBQueries.selectStintsBySession(sessionKey.toLong()).executeAsList()
+        val cached = db?.fastPilotDBQueries?.selectStintsBySession(sessionKey.toLong())?.executeAsList().orEmpty()
         if (cached.isNotEmpty()) return cached.map { it.toStint() }
         return try { api.getStints(sessionKey = sessionKey) } catch (_: Exception) { emptyList() }
     }

@@ -5,9 +5,13 @@ import com.fastpilot.model.Session
 import com.fastpilot.network.OpenF1Api
 import kotlinx.datetime.Clock
 
+/**
+ * Cache-first repository. [db] is null on platforms without a local database (Web),
+ * in which case every call goes straight to the network.
+ */
 class SessionRepository(
     private val api: OpenF1Api,
-    private val db: FastPilotDB
+    private val db: FastPilotDB?
 ) {
     companion object {
         private const val CACHE_TTL_MS = 24 * 60 * 60 * 1000L // 24 hours
@@ -15,7 +19,7 @@ class SessionRepository(
 
     suspend fun getSessions(year: Int, forceRefresh: Boolean = false): List<Session> {
         if (!forceRefresh) {
-            val cached = db.fastPilotDBQueries.selectSessionsByYear(year.toLong()).executeAsList()
+            val cached = db?.fastPilotDBQueries?.selectSessionsByYear(year.toLong())?.executeAsList().orEmpty()
             if (cached.isNotEmpty()) {
                 val age = Clock.System.now().toEpochMilliseconds() - cached.first().cached_at
                 if (age < CACHE_TTL_MS) {
@@ -28,7 +32,7 @@ class SessionRepository(
             val remote = api.getSessions(year = year)
             val now = Clock.System.now().toEpochMilliseconds()
             remote.forEach { session ->
-                db.fastPilotDBQueries.insertSession(
+                db?.fastPilotDBQueries?.insertSession(
                     session_key = session.sessionKey.toLong(),
                     session_name = session.sessionName ?: "",
                     session_type = session.sessionType ?: "",
@@ -45,14 +49,14 @@ class SessionRepository(
             remote
         } catch (e: Exception) {
             // Fallback to cached data on network error
-            val cached = db.fastPilotDBQueries.selectSessionsByYear(year.toLong()).executeAsList()
+            val cached = db?.fastPilotDBQueries?.selectSessionsByYear(year.toLong())?.executeAsList().orEmpty()
             if (cached.isNotEmpty()) cached.map { it.toSession() }
             else throw e
         }
     }
 
     suspend fun getSessionByKey(sessionKey: Int): Session? {
-        val cached = db.fastPilotDBQueries.selectSessionByKey(sessionKey.toLong()).executeAsOneOrNull()
+        val cached = db?.fastPilotDBQueries?.selectSessionByKey(sessionKey.toLong())?.executeAsOneOrNull()
         if (cached != null) return cached.toSession()
 
         return try {
@@ -62,7 +66,7 @@ class SessionRepository(
     }
 
     suspend fun getSessionsByMeeting(meetingKey: Int): List<Session> {
-        val cached = db.fastPilotDBQueries.selectSessionsByMeeting(meetingKey.toLong()).executeAsList()
+        val cached = db?.fastPilotDBQueries?.selectSessionsByMeeting(meetingKey.toLong())?.executeAsList().orEmpty()
         if (cached.isNotEmpty()) return cached.map { it.toSession() }
 
         return try {

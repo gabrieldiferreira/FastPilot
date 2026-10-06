@@ -29,6 +29,17 @@ kotlin {
         }
     }
 
+    @OptIn(org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl::class)
+    wasmJs {
+        moduleName = "composeApp"
+        browser {
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+            }
+        }
+        binaries.executable()
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared)
@@ -54,13 +65,10 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tab.navigator)
             implementation(libs.voyager.transitions)
-            implementation(libs.voyager.koin)
 
             // Logging
             implementation(libs.napier)
 
-            // Firebase Auth KMP
-            implementation(libs.firebase.auth.gitlive)
 
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodel.compose)

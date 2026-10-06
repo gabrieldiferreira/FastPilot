@@ -16,10 +16,10 @@ val networkModule = module {
 }
 
 val repositoryModule = module {
-    single { SessionRepository(get(), get()) }
-    single { DriverRepository(get(), get()) }
-    single { LapRepository(get(), get()) }
-    single { StintRepository(get(), get()) }
+    single { SessionRepository(get(), getOrNull()) }
+    single { DriverRepository(get(), getOrNull()) }
+    single { LapRepository(get(), getOrNull()) }
+    single { StintRepository(get(), getOrNull()) }
     single { TelemetryRepository(get()) }
     single { PositionRepository(get()) }
     single { IntervalRepository(get()) }
