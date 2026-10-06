@@ -1,0 +1,28 @@
+-- v1 -> v2: championship standings cache (Classificação screen)
+
+CREATE TABLE IF NOT EXISTS cached_driver_standing (
+    season INTEGER NOT NULL,
+    position INTEGER NOT NULL,
+    round INTEGER NOT NULL,
+    driver_id TEXT NOT NULL,
+    code TEXT NOT NULL,
+    full_name TEXT NOT NULL,
+    constructor_id TEXT NOT NULL,
+    constructor_name TEXT NOT NULL,
+    points REAL NOT NULL,
+    wins INTEGER NOT NULL,
+    cached_at INTEGER NOT NULL,
+    PRIMARY KEY (season, position)
+);
+
+CREATE TABLE IF NOT EXISTS cached_constructor_standing (
+    season INTEGER NOT NULL,
+    position INTEGER NOT NULL,
+    round INTEGER NOT NULL,
+    constructor_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    points REAL NOT NULL,
+    wins INTEGER NOT NULL,
+    cached_at INTEGER NOT NULL,
+    PRIMARY KEY (season, position)
+);

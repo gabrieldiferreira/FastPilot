@@ -7,6 +7,7 @@ import com.fastpilot.ui.screens.radio.RadioViewModel
 import com.fastpilot.ui.screens.strategy.StrategyViewModel
 import com.fastpilot.ui.screens.telemetry.TelemetryViewModel
 import com.fastpilot.ui.screens.weather.WeatherViewModel
+import com.fastpilot.ui.screens.standings.StandingsViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -17,6 +18,7 @@ val viewModelModule = module {
     viewModel { DuelViewModel(get(), get(), get()) }
     viewModel { RadioViewModel(get(), get(), get()) }
     viewModel { WeatherViewModel(get(), get()) }
+    viewModel { StandingsViewModel(get(), get()) }
 }
 
 val appModules = sharedModules + viewModelModule

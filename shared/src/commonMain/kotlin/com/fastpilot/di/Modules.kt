@@ -28,6 +28,7 @@ val repositoryModule = module {
     single { TeamRadioRepository(get()) }
     single { PitStopRepository(get()) }
     single { MeetingRepository(get()) }
+    single { StandingsRepository(get(), getOrNull()) }
 }
 
 val pollingModule = module {
@@ -41,6 +42,7 @@ val useCaseModule = module {
     factory { CalculateCleanPaceUseCase() }
     factory { CalculateTheoreticalBestUseCase() }
     factory { GetTyreDegradationUseCase() }
+    factory { CalculateChampionshipGapsUseCase() }
 }
 
 val sharedModules = listOf(

@@ -51,6 +51,21 @@ object TeamColors {
     val Haas = Color(0xFFB6BABD)
     val Sauber = Color(0xFF52E252)
 
+    /** Maps Jolpica/Ergast constructor ids (which carry no colour) to team colours. */
+    fun fromConstructorId(id: String): Color = when (id) {
+        "red_bull" -> RedBull
+        "ferrari" -> Ferrari
+        "mercedes" -> Mercedes
+        "mclaren" -> McLaren
+        "aston_martin" -> AstonMartin
+        "alpine" -> Alpine
+        "williams" -> Williams
+        "rb", "alphatauri" -> AlphaTauri
+        "haas" -> Haas
+        "sauber", "alfa", "audi" -> Sauber
+        else -> TextSecondary
+    }
+
     fun fromHex(hex: String): Color {
         return try {
             Color(("FF${hex.removePrefix("#")}").toLong(16))

@@ -140,6 +140,60 @@ INSERT OR REPLACE INTO cached_stint(
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
 -- ═══════════════════════════════════════════════════════════════
+-- Championship Standings (Jolpica)
+-- ═══════════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS cached_driver_standing (
+    season INTEGER NOT NULL,
+    position INTEGER NOT NULL,
+    round INTEGER NOT NULL,
+    driver_id TEXT NOT NULL,
+    code TEXT NOT NULL,
+    full_name TEXT NOT NULL,
+    constructor_id TEXT NOT NULL,
+    constructor_name TEXT NOT NULL,
+    points REAL NOT NULL,
+    wins INTEGER NOT NULL,
+    cached_at INTEGER NOT NULL,
+    PRIMARY KEY (season, position)
+);
+
+CREATE TABLE IF NOT EXISTS cached_constructor_standing (
+    season INTEGER NOT NULL,
+    position INTEGER NOT NULL,
+    round INTEGER NOT NULL,
+    constructor_id TEXT NOT NULL,
+    name TEXT NOT NULL,
+    points REAL NOT NULL,
+    wins INTEGER NOT NULL,
+    cached_at INTEGER NOT NULL,
+    PRIMARY KEY (season, position)
+);
+
+selectDriverStandingsBySeason:
+SELECT * FROM cached_driver_standing WHERE season = ? ORDER BY position;
+
+insertDriverStanding:
+INSERT OR REPLACE INTO cached_driver_standing(
+    season, position, round, driver_id, code, full_name,
+    constructor_id, constructor_name, points, wins, cached_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteDriverStandingsBySeason:
+DELETE FROM cached_driver_standing WHERE season = ?;
+
+selectConstructorStandingsBySeason:
+SELECT * FROM cached_constructor_standing WHERE season = ? ORDER BY position;
+
+insertConstructorStanding:
+INSERT OR REPLACE INTO cached_constructor_standing(
+    season, position, round, constructor_id, name, points, wins, cached_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteConstructorStandingsBySeason:
+DELETE FROM cached_constructor_standing WHERE season = ?;
+
+-- ═══════════════════════════════════════════════════════════════
 -- Cache Management
 -- ═══════════════════════════════════════════════════════════════
 

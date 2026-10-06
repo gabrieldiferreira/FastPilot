@@ -28,7 +28,7 @@ class CalculateCleanPaceUseCaseTest {
     }
 
     @Test
-    fun `calculates average, median, and std dev correctly`() {
+    fun `calculates average median and std dev correctly`() {
         val durations = listOf(90.0, 91.0, 91.5, 92.0, 92.5, 93.0, 93.5, 94.0, 94.5, 95.0)
         val laps = durations.mapIndexed { i, d -> makeLap(i + 1, d) }
         val result = useCase.invoke(laps, driverNumber = 1)

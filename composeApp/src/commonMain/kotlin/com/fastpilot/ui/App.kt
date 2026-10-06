@@ -69,7 +69,8 @@ private fun FastPilotBottomBar(tabNavigator: TabNavigator) {
         StrategyTab,
         DuelTab,
         RadioTab,
-        WeatherTab
+        WeatherTab,
+        StandingsTab
     )
 
     NavigationBar(
@@ -102,7 +103,7 @@ private fun FastPilotBottomBar(tabNavigator: TabNavigator) {
                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                     )
                 },
-                alwaysShowLabel = true,
+                alwaysShowLabel = false, // 7 tabs: labels only fit on the selected one
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = F1Red.copy(alpha = 0.15f)
                 )

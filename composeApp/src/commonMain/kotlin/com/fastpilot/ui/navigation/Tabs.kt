@@ -14,6 +14,7 @@ import com.fastpilot.ui.screens.strategy.StrategyScreen
 import com.fastpilot.ui.screens.duel.DuelScreen
 import com.fastpilot.ui.screens.radio.RadioScreen
 import com.fastpilot.ui.screens.weather.WeatherScreen
+import com.fastpilot.ui.screens.standings.StandingsScreen
 
 object DashboardTab : Tab {
     override val options: TabOptions
@@ -96,5 +97,19 @@ object WeatherTab : Tab {
     @Composable
     override fun Content() {
         WeatherScreen()
+    }
+}
+
+object StandingsTab : Tab {
+    override val options: TabOptions
+        @Composable
+        get() {
+            val icon = rememberVectorPainter(Icons.Default.Leaderboard)
+            return remember { TabOptions(index = 6u, title = "Tabela", icon = icon) }
+        }
+
+    @Composable
+    override fun Content() {
+        StandingsScreen()
     }
 }

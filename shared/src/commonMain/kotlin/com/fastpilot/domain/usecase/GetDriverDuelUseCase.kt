@@ -36,9 +36,22 @@ class GetDriverDuelUseCase(
         driver2Number: Int
     ): DuelData {
         val laps1 = lapRepo.getLaps(sessionKey, driver1Number)
-            .filter { !it.isPitOutLap && it.lapDuration != null }
         val laps2 = lapRepo.getLaps(sessionKey, driver2Number)
-            .filter { !it.isPitOutLap && it.lapDuration != null }
+        return calculate(driver1Number, driver2Number, laps1, laps2)
+    }
+
+    /**
+     * Pure duel calculation over already-fetched laps. Pit-out laps and laps without
+     * a duration are ignored; only laps both drivers completed are compared.
+     */
+    fun calculate(
+        driver1Number: Int,
+        driver2Number: Int,
+        allLapsDriver1: List<Lap>,
+        allLapsDriver2: List<Lap>
+    ): DuelData {
+        val laps1 = allLapsDriver1.filter { !it.isPitOutLap && it.lapDuration != null }
+        val laps2 = allLapsDriver2.filter { !it.isPitOutLap && it.lapDuration != null }
 
         val laps1Map = laps1.associateBy { it.lapNumber }
         val laps2Map = laps2.associateBy { it.lapNumber }
