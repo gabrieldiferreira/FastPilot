@@ -5,23 +5,32 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ShowChart
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fastpilot.domain.usecase.CalculateTheoreticalBestUseCase.TheoreticalBest
 import com.fastpilot.model.CarData
 import com.fastpilot.model.Lap
 import com.fastpilot.ui.components.DriverSelector
 import com.fastpilot.ui.components.SessionPicker
 import com.fastpilot.ui.theme.*
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.math.roundToInt
 
 @Composable
 fun TelemetryScreen(
@@ -89,6 +98,12 @@ fun TelemetryScreen(
 
         Spacer(Modifier.height(16.dp))
 
+        // ── Theoretical best ────────────────────────────────────
+        uiState.theoreticalBest?.let { best ->
+            TheoreticalBestCard(best)
+            Spacer(Modifier.height(12.dp))
+        }
+
         // ── Telemetry Charts ────────────────────────────────────
         if (uiState.isLoadingTelemetry) {
             Box(Modifier.fillMaxWidth().height(200.dp), contentAlignment = Alignment.Center) {
@@ -105,21 +120,25 @@ fun TelemetryScreen(
                 Spacer(Modifier.height(12.dp))
             }
 
-            ChartCard("🏎️ Velocidade (km/h)") {
+            ChartCard(Icons.Default.Speed, "Velocidade (km/h)") {
                 SpeedChart(data = uiState.carData, modifier = Modifier.fillMaxWidth().height(180.dp))
             }
             Spacer(Modifier.height(12.dp))
-            ChartCard("🟢 Throttle / 🔴 Freio") {
+            ChartCard(Icons.AutoMirrored.Filled.ShowChart, "Acelerador / Freio", legend = {
+                LegendDot(ThrottleGreen, "Acelerador")
+                LegendDot(BrakeRed, "Freio")
+            }) {
                 ThrottleBrakeChart(data = uiState.carData, modifier = Modifier.fillMaxWidth().height(120.dp))
             }
             Spacer(Modifier.height(12.dp))
-            ChartCard("⚙️ Marcha") {
+            ChartCard(Icons.Default.Settings, "Marcha") {
                 GearChart(data = uiState.carData, modifier = Modifier.fillMaxWidth().height(100.dp))
             }
         } else if (uiState.selectedDriver == null) {
             Box(Modifier.fillMaxWidth().height(200.dp), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("📊", fontSize = 40.sp)
+                    Icon(Icons.AutoMirrored.Filled.ShowChart, contentDescription = null,
+                        tint = TextTertiary, modifier = Modifier.size(40.dp))
                     Spacer(Modifier.height(8.dp))
                     Text("Selecione um piloto acima", color = TextSecondary)
                     Text("para ver a telemetria", color = TextTertiary, fontSize = 12.sp)
@@ -188,12 +207,86 @@ private fun LapSelectorRow(laps: List<Lap>, selectedLap: Lap?, onSelect: (Lap) -
     }
 }
 
+/**
+ * Best S1 + best S2 + best S3 of the session against the best lap actually driven:
+ * the gap shows how much time the driver left by not linking their best sectors.
+ */
 @Composable
-private fun ChartCard(title: String, content: @Composable () -> Unit) {
+private fun TheoreticalBestCard(best: TheoreticalBest) {
     Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
         shape = RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(16.dp)) {
-            Text(title, color = TextSecondary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Timer, contentDescription = null, tint = TextSecondary,
+                    modifier = Modifier.size(16.dp))
+                Spacer(Modifier.width(6.dp))
+                Text("Volta Teórica", color = TextSecondary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+            }
+            Text("Soma dos melhores setores da sessão", fontSize = 11.sp, color = TextTertiary)
+            Spacer(Modifier.height(12.dp))
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
+                Column(Modifier.weight(1f)) {
+                    Text("Teórica", fontSize = 10.sp, color = TextTertiary)
+                    Text(formatLapTime(best.theoreticalBestTime), fontSize = 22.sp,
+                        color = GearPurple, fontWeight = FontWeight.Bold)
+                }
+                Column(Modifier.weight(1f)) {
+                    Text("Melhor volta real", fontSize = 10.sp, color = TextTertiary)
+                    Text(formatLapTime(best.actualBestTime), fontSize = 16.sp,
+                        color = TextPrimary, fontWeight = FontWeight.SemiBold)
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    Text("Diferença", fontSize = 10.sp, color = TextTertiary)
+                    Text("+${formatDuration(best.gap)}s", fontSize = 16.sp,
+                        color = SafetyCarAmber, fontWeight = FontWeight.SemiBold)
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            HorizontalDivider(color = DividerColor)
+            Spacer(Modifier.height(8.dp))
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                SectorStat("S1", best.bestSector1, best.bestSector1Lap)
+                SectorStat("S2", best.bestSector2, best.bestSector2Lap)
+                SectorStat("S3", best.bestSector3, best.bestSector3Lap)
+            }
+        }
+    }
+}
+
+@Composable
+private fun SectorStat(label: String, time: Double, lapNumber: Int) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(label, fontSize = 10.sp, color = TextTertiary)
+        Text(formatDuration(time), fontSize = 13.sp, color = GearPurple, fontWeight = FontWeight.Bold)
+        Text("volta $lapNumber", fontSize = 10.sp, color = TextTertiary)
+    }
+}
+
+@Composable
+private fun LegendDot(color: Color, label: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.size(8.dp).clip(RoundedCornerShape(4.dp)).background(color))
+        Spacer(Modifier.width(4.dp))
+        Text(label, fontSize = 11.sp, color = TextTertiary)
+    }
+}
+
+@Composable
+private fun ChartCard(
+    icon: ImageVector,
+    title: String,
+    legend: @Composable RowScope.() -> Unit = {},
+    content: @Composable () -> Unit
+) {
+    Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
+        shape = RoundedCornerShape(16.dp)) {
+        Column(Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Icon(icon, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(16.dp))
+                Text(title, color = TextSecondary, fontSize = 13.sp, fontWeight = FontWeight.Medium,
+                    modifier = Modifier.weight(1f))
+                legend()
+            }
             Spacer(Modifier.height(8.dp))
             content()
         }
@@ -252,6 +345,13 @@ private fun GearChart(data: List<CarData>, modifier: Modifier = Modifier) {
         }
         drawPath(path, GearPurple, style = Stroke(width = 2f))
     }
+}
+
+/** 95.123 -> "1:35.123" */
+private fun formatLapTime(seconds: Double): String {
+    val millis = (seconds * 1000).roundToInt()
+    val secs = (millis / 1000) % 60
+    return "${millis / 60000}:${secs.toString().padStart(2, '0')}.${(millis % 1000).toString().padStart(3, '0')}"
 }
 
 private fun formatDuration(value: Double): String {

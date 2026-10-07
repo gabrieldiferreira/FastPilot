@@ -3,6 +3,8 @@ package com.fastpilot.ui.screens.telemetry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.repository.*
+import com.fastpilot.domain.usecase.CalculateTheoreticalBestUseCase
+import com.fastpilot.domain.usecase.CalculateTheoreticalBestUseCase.TheoreticalBest
 import com.fastpilot.model.CarData
 import com.fastpilot.model.Driver
 import com.fastpilot.model.Lap
@@ -20,6 +22,8 @@ data class TelemetryUiState(
     val selectedDriver: Driver? = null,
     val laps: List<Lap> = emptyList(),
     val selectedLap: Lap? = null,
+    /** Sum of the driver's best sectors in the session. */
+    val theoreticalBest: TheoreticalBest? = null,
     val carData: List<CarData> = emptyList(),
     val isLoadingTelemetry: Boolean = false,
     val error: String? = null
@@ -29,7 +33,8 @@ class TelemetryViewModel(
     private val sessionRepo: SessionRepository,
     private val driverRepo: DriverRepository,
     private val lapRepo: LapRepository,
-    private val telemetryRepo: TelemetryRepository
+    private val telemetryRepo: TelemetryRepository,
+    private val theoreticalBestUseCase: CalculateTheoreticalBestUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TelemetryUiState())
@@ -60,7 +65,7 @@ class TelemetryViewModel(
         _uiState.value = _uiState.value.copy(
             selectedSession = session, isLoading = true,
             drivers = emptyList(), selectedDriver = null,
-            laps = emptyList(), selectedLap = null, carData = emptyList(), error = null
+            laps = emptyList(), selectedLap = null, theoreticalBest = null, carData = emptyList(), error = null
         )
         viewModelScope.launch {
             try {
@@ -78,13 +83,17 @@ class TelemetryViewModel(
         val sessionKey = _uiState.value.selectedSession?.sessionKey ?: return
         _uiState.value = _uiState.value.copy(
             selectedDriver = driver, laps = emptyList(),
-            selectedLap = null, carData = emptyList(), isLoading = true
+            selectedLap = null, theoreticalBest = null, carData = emptyList(), isLoading = true
         )
         viewModelScope.launch {
             try {
                 val laps = lapRepo.getLaps(sessionKey, driver.driverNumber)
                 val validLaps = laps.filter { lap -> val d = lap.lapDuration; d != null && d > 0 }
-                _uiState.value = _uiState.value.copy(laps = validLaps, isLoading = false)
+                _uiState.value = _uiState.value.copy(
+                    laps = validLaps,
+                    theoreticalBest = theoreticalBestUseCase.invoke(laps, driver.driverNumber),
+                    isLoading = false
+                )
                 // Auto-select the fastest lap
                 val fastest = validLaps.minByOrNull { it.lapDuration ?: Double.MAX_VALUE }
                 fastest?.let { selectLap(it) }
