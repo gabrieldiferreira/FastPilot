@@ -7,6 +7,17 @@ object PtBrStrings : Strings {
     override val loginAsGuest = "Continuar como Convidado"
     override val language = "Idioma"
 
+    override val routes = Routes(
+        login = "/entrar",
+        dashboard = "/painel",
+        telemetry = "/telemetria",
+        strategy = "/estrategia",
+        duel = "/duelo",
+        radio = "/radio",
+        weather = "/clima",
+        standings = "/classificacao",
+    )
+
     override val tabDashboard = "Dashboard"
     override val tabTelemetry = "Telemetria"
     override val tabStrategy = "Estratégia"

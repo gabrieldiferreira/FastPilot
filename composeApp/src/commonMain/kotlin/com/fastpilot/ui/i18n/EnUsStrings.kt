@@ -7,6 +7,17 @@ object EnUsStrings : Strings {
     override val loginAsGuest = "Continue as Guest"
     override val language = "Language"
 
+    override val routes = Routes(
+        login = "/login",
+        dashboard = "/dashboard",
+        telemetry = "/telemetry",
+        strategy = "/strategy",
+        duel = "/duel",
+        radio = "/radio",
+        weather = "/weather",
+        standings = "/standings",
+    )
+
     override val tabDashboard = "Dashboard"
     override val tabTelemetry = "Telemetry"
     override val tabStrategy = "Strategy"

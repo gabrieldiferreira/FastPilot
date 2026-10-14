@@ -14,10 +14,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.tab.CurrentTab
+import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.fastpilot.data.repository.CacheMaintenance
 import com.fastpilot.ui.i18n.LanguageState
 import com.fastpilot.ui.i18n.LocalStrings
+import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.navigation.*
 import com.fastpilot.ui.screens.splash.SplashScreen
 import com.fastpilot.ui.theme.*
@@ -28,10 +30,32 @@ enum class AppState { SPLASH, LOGIN, DASHBOARD }
 /**
  * [benchmark] is set when the app is launched in benchmark mode: `platform` and the
  * [com.fastpilot.ui.perf.LoadBenchmark.Config] spec ("off:5,on:3,...").
+ * [router] is the browser address bar on Web; a link to a screen ("/telemetria") opens it directly.
  */
 @Composable
-fun App(benchmark: Pair<String, String>? = null) {
-    var appState by remember { mutableStateOf(AppState.SPLASH) }
+fun App(benchmark: Pair<String, String>? = null, router: UrlRouter? = null) {
+    val linked = remember { router?.initialPath?.let(::destinationForPath) }
+    val linkedTab = (linked as? Destination.TabScreen)?.tab
+    var appState by remember {
+        mutableStateOf(
+            when (linked) {
+                is Destination.TabScreen -> AppState.DASHBOARD
+                Destination.Login -> AppState.LOGIN
+                null -> AppState.SPLASH
+            }
+        )
+    }
+    // The tab the address bar asks for: the linked one, then back/forward in the history
+    var routedTab by remember { mutableStateOf(linkedTab) }
+    LaunchedEffect(router) {
+        router?.onPathChange { path ->
+            when (val destination = destinationForPath(path)) {
+                is Destination.TabScreen -> { routedTab = destination.tab; appState = AppState.DASHBOARD }
+                Destination.Login -> appState = AppState.LOGIN
+                null -> {}
+            }
+        }
+    }
 
     if (benchmark != null) {
         FastPilotTheme { com.fastpilot.ui.perf.BenchmarkScreen(benchmark.first, benchmark.second) }
@@ -40,12 +64,12 @@ fun App(benchmark: Pair<String, String>? = null) {
 
     // Every screen reads its texts from LocalStrings; picking another language recomposes them
     CompositionLocalProvider(LocalStrings provides LanguageState.current.strings) {
-        AppContent(appState) { appState = it }
+        AppContent(appState, router, routedTab) { appState = it }
     }
 }
 
 @Composable
-private fun AppContent(appState: AppState, onStateChange: (AppState) -> Unit) {
+private fun AppContent(appState: AppState, router: UrlRouter?, routedTab: Tab?, onStateChange: (AppState) -> Unit) {
     // Deletes race data downloaded more than 30 days ago (not in benchmark mode: it times the cache)
     val cacheMaintenance = koinInject<CacheMaintenance>()
     LaunchedEffect(Unit) { cacheMaintenance.purgeExpired() }
@@ -57,10 +81,21 @@ private fun AppContent(appState: AppState, onStateChange: (AppState) -> Unit) {
                     SplashScreen(onSplashFinished = { onStateChange(AppState.LOGIN) })
                 }
                 AppState.LOGIN -> {
+                    // Follows the language picked on this screen
+                    val loginPath = strings.routes.login
+                    LaunchedEffect(loginPath) { router?.show(loginPath, "FastPilot") }
                     com.fastpilot.ui.screens.login.LoginScreen(onLoginSuccess = { onStateChange(AppState.DASHBOARD) })
                 }
                 AppState.DASHBOARD -> {
-                    TabNavigator(DashboardTab) { tabNavigator ->
+                    TabNavigator(routedTab ?: DashboardTab) { tabNavigator ->
+                        // Back/forward selects the tab; selecting a tab puts its path in the address bar
+                        LaunchedEffect(routedTab) {
+                            routedTab?.let { if (tabNavigator.current.key != it.key) tabNavigator.current = it }
+                        }
+                        val current = tabNavigator.current
+                        val title = current.options.title
+                        val path = pathForTab(current, strings)
+                        LaunchedEffect(path, title) { router?.show(path, "FastPilot — $title") }
                         Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         containerColor = CarbonBlack,

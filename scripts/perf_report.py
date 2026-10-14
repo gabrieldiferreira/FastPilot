@@ -109,8 +109,9 @@ def main():
         "classificação; só os áudios de rádio não entram). *Polling*: o modo ao vivo do Dashboard simulado em "
         "segundo plano, direto na API (posições e intervalos a cada 4 s, direção de prova a cada 10 s, pit stops e "
         "ultrapassagens a cada 15 s, clima a cada 60 s). "
-        "Pausa de 15 s antes de cada medição para respeitar o limite da OpenF1 (~30 requisições/min); respostas 429 "
-        "são repetidas pelo cliente após 2, 4, 8, 16 e 16 s. Sessão: a corrida mais recente no dia da medição "
+        "Pausa antes de cada medição (15 s nas rodadas 1–2, 20 s na 3) para respeitar a cota grátis da OpenF1 "
+        "(3 requisições/s e 30/min). Desde a rodada 3 o cliente espaça as requisições (uma a cada 400 ms, no máximo "
+        "29 em 61 s) em vez de receber 429; respostas 429 que ainda ocorram são repetidas após 2, 4, 8, 16 e 16 s. Sessão: a corrida mais recente no dia da medição "
         "(GP de Singapura 2026), a mesma que as telas escolhem por padrão. Valores em segundos: mediana "
         "(média ± desvio padrão), apenas medições bem-sucedidas; n = sucessos/tentativas.",
         "",
@@ -132,10 +133,14 @@ def main():
         loads = [e for e in events if e.get("type") == "load"]
         failures = [e for e in events if e.get("type") == "failure"]
         has_warm = any(e["cache"] == "warm" for e in loads)
-        scenarios = [s for s in SCENARIOS if has_warm or s[0] == "cold"]
+        # Scenarios measured on this platform (a round may skip polling: "on:0")
+        scenarios = [s for s in SCENARIOS if (has_warm or s[0] == "cold") and any(e["polling"] == s[1] for e in loads)]
         out += [f"## {device_label(name, device)}", ""]
         if not has_warm:
             out += ["Sem banco local nesta plataforma: todas as medições são *sem cache*.", ""]
+        if not any(e["polling"] for e in loads):
+            out += ["Rodada sem polling: no plano grátis da OpenF1 (30 requisições por minuto) o polling ao vivo "
+                    "sozinho (~46/min) esgota a cota.", ""]
 
         out.append("| Tela | " + " | ".join(SCENARIO_NAMES[s] for s in scenarios) + " |")
         out.append("|---|" + "---|" * len(scenarios))
@@ -196,15 +201,17 @@ def main():
         # Resources per phase
         if resources:
             phase_t = {e["phase"]: e["t"] for e in events if e.get("type") == "phase"}
-            bounds = [p for p, _ in PHASES] + ["done"]
+            # Each phase ends where the next recorded one starts (a round without polling has no polling phases)
+            starts = sorted(phase_t.values())
             # Only Android has a second memory figure (PSS besides RSS)
             android = device.get("platform") == "android"
             mem_label = "PSS (MB)" if android else "RSS (MB)"
             rss_header = " RSS (MB) média |" if android else ""
             out += [f"| Fase | {mem_label} média | {mem_label} pico |{rss_header} CPU média (%) | CPU p95 (%) |",
                     "|---|---|---|" + ("---|" if android else "") + "---|---|"]
-            for i, (phase, label) in enumerate(PHASES):
-                start, end = phase_t.get(bounds[i]), phase_t.get(bounds[i + 1])
+            for phase, label in PHASES:
+                start = phase_t.get(phase)
+                end = next((t for t in starts if start is not None and t > start), None)
                 if start is None or end is None:
                     continue
                 window = [r for r in resources if start <= r["t_ms"] < end]

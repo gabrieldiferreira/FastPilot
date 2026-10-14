@@ -62,7 +62,7 @@ class RecentSessionsTest {
     }
 
     @Test
-    fun `season sessions come in one request, merged newest first, and are kept in memory`() = runTest {
+    fun `season sessions come in one request merged newest first and kept in memory`() = runTest {
         var requests = 0
         val repository = SessionRepository(OpenF1Api(mockHttpClient { request ->
             requests++

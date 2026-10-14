@@ -13,6 +13,9 @@ interface Strings {
     val loginAsGuest: String
     val language: String
 
+    /** Web address of each screen in this language (no accents: they would show as %C3%A7 in the address bar). */
+    val routes: Routes
+
     // ── Tabs ───────────────────────────────────────────────────────────
     val tabDashboard: String
     val tabTelemetry: String
@@ -167,6 +170,18 @@ interface Strings {
     val wins: String
     val leader: String
 }
+
+/** One path per screen ("/telemetria"); see `UrlRouter`. */
+data class Routes(
+    val login: String,
+    val dashboard: String,
+    val telemetry: String,
+    val strategy: String,
+    val duel: String,
+    val radio: String,
+    val weather: String,
+    val standings: String,
+)
 
 /** What failed to load; the screen turns it into text with [Strings.error]. */
 enum class ErrorKind { NO_SESSIONS, SESSIONS, POSITIONS, DRIVERS, LAPS, TELEMETRY, RADIO, WEATHER, STANDINGS, DUEL, GENERIC }

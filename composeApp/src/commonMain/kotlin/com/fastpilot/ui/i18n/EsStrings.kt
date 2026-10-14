@@ -7,6 +7,17 @@ object EsStrings : Strings {
     override val loginAsGuest = "Continuar como invitado"
     override val language = "Idioma"
 
+    override val routes = Routes(
+        login = "/acceder",
+        dashboard = "/panel",
+        telemetry = "/telemetria",
+        strategy = "/estrategia",
+        duel = "/duelo",
+        radio = "/radio",
+        weather = "/clima",
+        standings = "/clasificacion",
+    )
+
     override val tabDashboard = "Panel"
     override val tabTelemetry = "Telemetría"
     override val tabStrategy = "Estrategia"

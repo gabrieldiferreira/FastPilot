@@ -185,18 +185,22 @@ class LoadBenchmark(
         phase("loads_polling_off")
         repeat(config.runsWithoutPolling) { runAll(it + 1, polling = false) }
 
-        // Same session the screens select by default: the most recent race
-        val sessionKey = koin.get<SessionRepository>().getRecentSessions().defaultSession()?.sessionKey
-        val polling = sessionKey?.let { startPolling(scope, it) }
+        // "on:0" skips the polling part: on the free OpenF1 tier, live polling alone (~46 requests
+        // per minute) exceeds the 30 per minute quota, so loads would only measure the quota
+        if (config.runsWithPolling > 0) {
+            // Same session the screens select by default: the most recent race
+            val sessionKey = koin.get<SessionRepository>().getRecentSessions().defaultSession()?.sessionKey
+            val polling = sessionKey?.let { startPolling(scope, it) }
 
-        phase("idle_polling_on")
-        _progress.value = "Polling ativo (ocioso)"
-        delay(config.idle)
+            phase("idle_polling_on")
+            _progress.value = "Polling ativo (ocioso)"
+            delay(config.idle)
 
-        phase("loads_polling_on")
-        repeat(config.runsWithPolling) { runAll(it + 1, polling = true) }
+            phase("loads_polling_on")
+            repeat(config.runsWithPolling) { runAll(it + 1, polling = true) }
 
-        polling?.cancel()
+            polling?.cancel()
+        }
         phase("done")
         _progress.value = "Concluído"
     }

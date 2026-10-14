@@ -8,6 +8,10 @@
     {
       "source": "/openf1/v1/:endpoint",
       "destination": "/api/openf1?endpoint=:endpoint"
+    },
+    {
+      "source": "/(entrar|login|acceder|painel|dashboard|panel|telemetria|telemetry|estrategia|strategy|duelo|duel|radio|clima|weather|classificacao|standings|clasificacion)/?",
+      "destination": "/index.html"
     }
   ],
   "headers": [

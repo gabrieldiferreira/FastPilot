@@ -16,7 +16,9 @@
 
 **FastPilot** is a cross-platform application built with **Kotlin Multiplatform (KMP)** and **Compose Multiplatform**, developed as a Final Course Project (TCC). It consumes the public [OpenF1](https://openf1.org) and [Jolpica (Ergast)](https://github.com/jolpica/jolpica-f1) APIs and computes race metrics locally — clean pace, tyre degradation, theoretical best lap, driver duels and lap delta — in plain, unit-tested Kotlin.
 
-Both the business logic **and the UI** are shared: every screen is written once in Compose Multiplatform and runs on Android, iOS (simulator/device) and the browser (Kotlin/Wasm). The only platform-specific code is the entry point of each app, the HTTP engine and the SQLite driver. Measured with `cloc`, **94.9% of the code of the Android + iOS + Web apps is shared** (see [`metrics/shared_code.md`](metrics/shared_code.md)).
+Both the business logic **and the UI** are shared: every screen is written once in Compose Multiplatform and runs on Android, iOS (simulator/device) and the browser (Kotlin/Wasm). The only platform-specific code is the entry point of each app, the HTTP engine, the SQLite driver, the audio player, where the chosen language is saved and how the time zone is read. Measured with `cloc`, **96.1% of the code of the Android + iOS + Web apps is shared** (see [`metrics/shared_code.md`](metrics/shared_code.md)).
+
+The app speaks **Brazilian Portuguese, American English and Spanish** (picked with flags on the login screen) and shows every time in the user's time zone.
 
 ---
 
@@ -26,13 +28,15 @@ Seven tabs, all shared across platforms:
 
 | Tab | What it shows |
 |---|---|
-| **Dashboard** | Session picker (year/race/session, 2023 to the current season), positions, intervals, pit stops and overtakes, race control messages; opens the live session (or the latest race) and polls OpenF1 while it is live. |
+| **Dashboard** | Positions with interval and gap (races and sprints) or best lap and gap to the fastest (practice and qualifying, split into **Q1/Q2/Q3**, laps deleted by race control left out); pit stops and overtakes with their lap; race control messages; opens the live session (or the latest race) and polls OpenF1 while it is live. |
 | **Telemetria** | Speed, RPM, gear and throttle traces for a driver, plus a **theoretical best lap** card (best S1 + S2 + S3, compared with the best real lap). |
 | **Estratégia** | Stint timeline per driver with compound colours, **tyre degradation** (s/lap per stint) and a **clean pace** ranking (median of clean laps, gap to the leader, σ). |
 | **Duelo** | Head-to-head between two drivers and the **lap delta** on their fastest laps, aligned by position on track. |
 | **Rádio** | Team radio recordings for the session; new messages every 15 s while it is live. |
 | **Clima** | Air/track temperature, wind, humidity and rain; refreshed every 60 s while live. |
 | **Tabela** | Driver and constructor championship standings (Jolpica), cached for 7 days (1 hour for the current season). |
+
+Every tab shares the **session picker**: year, Grand Prix (with its round number) and one chip per event of the weekend (FP1–FP3, Sprint Qualifying, Sprint, Qualifying, Race).
 
 Clean pace and tyre degradation discard laps that are not representative (lap 1, in/out laps, laps under SC/VSC/red flag, the lap a driver retires on) using `LapFilters`, matched against `/race_control` by timestamp.
 
@@ -98,7 +102,13 @@ The project follows Clean Architecture: `shared` holds the data layer (Ktor clie
 
 **Offline cache.** On Android, iOS and Desktop, repositories read from SQLite first and only hit the network on a miss. Data downloaded after a session ended — drivers, laps, stints, final positions and gaps, race control, weather, team radio list, pit stops, overtakes and each lap's raw telemetry and track positions — never expires and is never downloaded again, so a race opened once works offline on every screen; race data is deleted 30 days after it was downloaded. Live sessions are never cached. SQLDelight has no synchronous driver for the browser, so on **Web the app runs without the local cache** and every load goes to the network.
 
-**Networking.** OpenF1's free tier allows about 30 requests per minute. The shared `HttpClient` retries 429/5xx responses with exponential backoff (2, 4, 8, 16, 16 s) and counts requests and rate-limited responses for the performance benchmark.
+**Networking.** OpenF1's free tier allows 3 requests per second **and** 30 in any 60 s (measured). The shared `HttpClient` spaces requests to it (one every 400 ms, at most 29 per 61 s) so the app waits for its turn instead of getting 429s; live sessions go through the Sponsor proxy and are not limited. It retries 429/5xx responses with exponential backoff (2, 4, 8, 16, 16 s) and counts requests and rate-limited responses for the performance benchmark. The calendar of every season comes in a single request (`year>=2023`).
+
+**Languages.** Typed string packages (`composeApp/.../ui/i18n`: `PtBrStrings`, `EnUsStrings`, `EsStrings`) implement one `Strings` interface, so a text missing in any language does not compile; switching language recomposes the app at once and the choice is saved per platform. API texts are translated too: session, country and circuit names, and the FIA **race control messages**, by rules over their closed set of formats (99.9% of 12,372 real messages; a message with any unknown part stays in English).
+
+**Times.** API timestamps are UTC and times written inside race control messages are the circuit's local time; both are shown in the user's time zone (system zone; browser zone on Web), using the session's `gmt_offset` for the latter.
+
+**Web routes.** Each screen has its own path in the app language — `/painel`, `/telemetria`, `/estrategia`, `/duelo`, `/radio`, `/clima`, `/classificacao`, `/entrar` in Portuguese; `/dashboard`, `/telemetry`, `/strategy`, `/duel`, `/radio`, `/weather`, `/standings`, `/login` in English; `/panel`, `/telemetria`, `/estrategia`, `/duelo`, `/radio`, `/clima`, `/clasificacion`, `/acceder` in Spanish — kept with the browser History API: links open a screen directly (a path in any language works), reload keeps it, back/forward switch screens, and changing language rewrites the address without a new history entry. `vercel.json` and `scripts/serve_web.py` serve `index.html` for these paths (a test checks that both list them all).
 
 ### Core technologies
 
@@ -107,7 +117,7 @@ The project follows Clean Architecture: `shared` holds the data layer (Ktor clie
 | [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) | 2.1.0 | Targets: `androidTarget`, `iosX64`/`iosArm64`/`iosSimulatorArm64`, `wasmJs`, `jvm("desktop")` |
 | [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/) | 1.7.3 | Shared UI on all platforms |
 | [Ktor Client](https://ktor.io/) | 3.0.3 | HTTP (OkHttp / Darwin / JS / CIO engines) |
-| [SQLDelight](https://cashapp.github.io/sqldelight/) | 2.1.0 | Local cache (schema v3 with migrations) |
+| [SQLDelight](https://cashapp.github.io/sqldelight/) | 2.1.0 | Local cache (schema v4 with migrations) |
 | [Koin](https://insert-koin.io/) | 4.0.1 | Dependency injection |
 | [Voyager](https://voyager.adriel.cafe/) | 1.1.0-beta03 | Tab navigation |
 
@@ -147,7 +157,7 @@ open iosApp.xcodeproj            # pick an iPhone simulator and Run
 ```bash
 ./gradlew :composeApp:wasmJsBrowserDevelopmentRun        # dev server with reload
 ./gradlew :composeApp:wasmJsBrowserDistribution          # production build
-python3 -m http.server -d composeApp/build/dist/wasmJs/productionExecutable 8080
+python3 scripts/serve_web.py 8080                       # serves it; screen paths (/telemetry...) answer index.html
 ```
 Requires a browser with WasmGC (current Chrome, Firefox, Safari 18.2+).
 
@@ -185,10 +195,10 @@ python3 scripts/measure_shared_code.py      # needs cloc → metrics/shared_code
 ```
 | Scope | % shared |
 |---|---:|
-| Android + iOS + Web apps | **94.9%** |
-| Android app | 97.8% |
-| iOS app | 98.1% |
-| Web app | 98.8% |
+| Android + iOS + Web apps | **96.1%** |
+| Android app | 98.4% |
+| iOS app | 98.6% |
+| Web app | 99.0% |
 
 Tests, generated code and build scripts are excluded; the methodology is in the script header.
 
@@ -221,7 +231,16 @@ python3 scripts/perf_report.py                                 # → metrics/per
 ```
 The benchmark can also be started by hand: Android `adb shell am start -n com.fastpilot.app/.MainActivity -e perf "off:5,on:3"`, iOS launch argument `-perf off:5,on:3`, Web `index.html?perf=off:5,on:3`.
 
-Results: [`metrics/performance/README.md`](metrics/performance/README.md).
+Latest round (Oct 14 2026, 2026 Singapore GP, 5 runs per screen, 150 loads, all successful, no 429 responses), median time without cache → with cache:
+
+| Screen | Android emulator | iOS simulator | Web (Chrome) |
+|---|---|---|---|
+| Dashboard | 1.70 s → 0.04 s | 1.07 s → 0.02 s | 0.65 s |
+| Strategy (stints) | 1.19 s → 1.42 s | 1.27 s → 0.46 s | 1.04 s |
+| Duel (comparison) | 3.39 s → 0.04 s | 1.60 s → 0.01 s | 1.80 s |
+| Standings | 0.71 s → 0.01 s | 0.15 s → 0.00 s | 0.18 s |
+
+With the local cache the median screen loads in 2–3% of the time without it (Web has no local cache). This round measured without live polling: on the free OpenF1 tier (30 requests per minute) polling alone (~46/min) exhausts the quota, so the polling round will run through the Sponsor proxy. Full tables, memory and CPU: [`metrics/performance/README.md`](metrics/performance/README.md).
 
 ---
 

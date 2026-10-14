@@ -31,7 +31,7 @@ fun createHttpClient(): HttpClient {
 
 /** Plugins shared by every platform's client (also used by tests with a mock engine). */
 fun HttpClientConfig<*>.installFastPilotPlugins() {
-    // The free OpenF1 tier allows ~30 requests per minute and answers 429 above it;
+    // The free OpenF1 tier allows 30 requests per minute and 3 per second (see OpenF1RateLimit);
     // Jolpica occasionally answers 5xx. OpenF1 always sends "Retry-After: 60" although the
     // limit frees up within seconds, so the header is ignored: 2, 4, 8, 16 and 16 s (46 s).
     // Installed before HttpTimeout so the timeout applies to each attempt, not to the waits.
@@ -88,7 +88,11 @@ private val RequestCounter = createClientPlugin("RequestCounter") {
  * Lets at most [permits] requests start in any [windowMs] window, delaying the others.
  * A request that waits is cheaper than a 429, whose retry waits at least 2 s.
  */
-internal class RateLimiter(private val permits: Int, private val windowMs: Long) {
+internal class RateLimiter(
+    private val permits: Int,
+    private val windowMs: Long,
+    private val timeSource: TimeSource = TimeSource.Monotonic
+) {
     private val mutex = Mutex()
     private val starts = ArrayDeque<TimeMark>()
 
@@ -97,19 +101,27 @@ internal class RateLimiter(private val permits: Int, private val windowMs: Long)
             val wait = windowMs - starts.removeFirst().elapsedNow().inWholeMilliseconds
             if (wait > 0) delay(wait)
         }
-        starts.addLast(TimeSource.Monotonic.markNow())
+        starts.addLast(timeSource.markNow())
     }
 }
 
 /**
- * OpenF1 answers 429 above 3 requests per second ("Max 3 requests/second"). Bursts of 3 still
- * got 429s (the server sees them with network jitter), so requests are spread evenly instead:
- * one every 400 ms, 2.5 per second.
+ * The free OpenF1 tier has two limits, both answered with 429 and "Retry-After: 60":
+ * - 3 requests per second. Bursts of 3 still got 429s (the server sees them with network
+ *   jitter), so requests are spread evenly: one every 400 ms, 2.5 per second.
+ * - 30 requests in any 60 s (measured: 30 answers, then 429 until the first one is 60 s old).
+ *   29 per 61 s leaves a margin.
+ * Waiting here is cheaper than a 429, whose retries wait 2 s or more and still count.
+ * Live sessions go to the proxy (another host, the Sponsor quota) and are not limited here.
  */
 private val OpenF1RateLimit = createClientPlugin("OpenF1RateLimit") {
-    val limiter = RateLimiter(permits = 1, windowMs = 400)
+    val perMinute = RateLimiter(permits = 29, windowMs = 61_000)
+    val perSecond = RateLimiter(permits = 1, windowMs = 400)
     on(Send) { request ->
-        if (request.url.host == "api.openf1.org") limiter.acquire()
+        if (request.url.host == "api.openf1.org") {
+            perMinute.acquire()
+            perSecond.acquire()
+        }
         proceed(request)
     }
 }
