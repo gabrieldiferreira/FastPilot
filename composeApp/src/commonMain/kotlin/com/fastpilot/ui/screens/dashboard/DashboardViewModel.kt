@@ -217,10 +217,11 @@ class DashboardViewModel(
             // ── HISTORICAL MODE: one-shot fetch ────────────────────
             pollingJob = viewModelScope.launch {
                 try {
-                    getPositions.invoke(sessionKey, pollIntervalMs = Long.MAX_VALUE).collect { positions ->
-                        _uiState.value = _uiState.value.copy(positions = positions, isLoading = false)
-                        positionsShown.complete(Unit)
-                    }
+                    // Once: without network and without the session in the cache this fails right away
+                    // and the error is shown (a flow that retries would keep the spinner forever)
+                    val positions = getPositions.once(sessionKey)
+                    _uiState.value = _uiState.value.copy(positions = positions, isLoading = false)
+                    positionsShown.complete(Unit)
                 } catch (e: kotlinx.coroutines.CancellationException) {
                     throw e
                 } catch (e: Exception) {

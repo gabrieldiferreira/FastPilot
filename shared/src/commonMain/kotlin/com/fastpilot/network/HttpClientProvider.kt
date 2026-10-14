@@ -2,7 +2,10 @@ package com.fastpilot.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
+import io.ktor.client.network.sockets.ConnectTimeoutException
+import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.api.Send
 import io.ktor.client.plugins.api.createClientPlugin
@@ -40,15 +43,25 @@ fun HttpClientConfig<*>.installFastPilotPlugins() {
         retryIf { _, response ->
             response.status == HttpStatusCode.TooManyRequests || response.status.value in 500..599
         }
+        // A request that fails without an answer (no network, DNS) is retried once, for a brief
+        // drop. Ktor retries exceptions by default, which with the delays above made a screen
+        // without network wait 46 s per request before showing the error. Timeouts are not retried.
+        retryOnExceptionIf { _, cause ->
+            retryCount <= 1 && cause !is HttpRequestTimeoutException &&
+                cause !is ConnectTimeoutException && cause !is SocketTimeoutException
+        }
         exponentialDelay(base = 2.0, baseDelayMs = 2_000, maxDelayMs = 16_000, respectRetryAfterHeader = false)
     }
+    // Plugins installed first wrap the later ones. The rate limiter goes after the retry plugin, so
+    // every attempt waits for its turn, and before HttpTimeout, so the time waiting for the quota
+    // (over a minute when many screens open in a row) does not count against the request timeout
+    install(OpenF1RateLimit)
     install(HttpTimeout) {
         requestTimeoutMillis = 60000
         connectTimeoutMillis = 60000
         socketTimeoutMillis = 60000
     }
-    // Installed after the retry plugin so every attempt is spaced and counted
-    install(OpenF1RateLimit)
+    // Installed after the retry plugin so every attempt is counted
     install(RequestCounter)
     install(ContentNegotiation) {
         json(Json {

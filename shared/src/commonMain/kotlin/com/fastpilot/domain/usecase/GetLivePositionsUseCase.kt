@@ -34,22 +34,33 @@ class GetLivePositionsUseCase(
             drivers.await() to positions.await()
         }
 
-        val driverMap = drivers.associateBy { it.driverNumber }
         var pending = firstPositions
 
         while (currentCoroutineContext().isActive) {
             try {
                 val positions = pending ?: positionRepo.getLatestPositions(sessionKey)
                 pending = null
-                val enriched = positions.map { pos ->
-                    PositionWithDriver(
-                        position = pos,
-                        driver = driverMap[pos.driverNumber]
-                    )
-                }.sortedBy { it.position.position }
-                emit(enriched)
+                emit(withDrivers(positions, drivers))
             } catch (_: Exception) { /* retry */ }
             delay(pollIntervalMs)
         }
+    }
+
+    /**
+     * The positions of a finished session, once. A failure (no network and nothing in the
+     * cache) is thrown, so the screen can say so instead of waiting for a retry that never comes.
+     */
+    suspend fun once(sessionKey: Int): List<PositionWithDriver> = coroutineScope {
+        val drivers = async {
+            try { driverRepo.getDriversBySession(sessionKey) } catch (_: Exception) { emptyList() }
+        }
+        val positions = positionRepo.getLatestPositions(sessionKey)
+        withDrivers(positions, drivers.await())
+    }
+
+    private fun withDrivers(positions: List<Position>, drivers: List<Driver>): List<PositionWithDriver> {
+        val driverMap = drivers.associateBy { it.driverNumber }
+        return positions.map { pos -> PositionWithDriver(position = pos, driver = driverMap[pos.driverNumber]) }
+            .sortedBy { it.position.position }
     }
 }
