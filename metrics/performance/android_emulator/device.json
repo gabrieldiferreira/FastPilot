@@ -1,0 +1,10 @@
+{
+  "platform": "android",
+  "model": "sdk_gphone16k_arm64",
+  "manufacturer": "Google",
+  "android": "17",
+  "sdk": "37",
+  "emulator": true,
+  "cpu_cores": "4",
+  "build": "benchmark (release, not debuggable)"
+}

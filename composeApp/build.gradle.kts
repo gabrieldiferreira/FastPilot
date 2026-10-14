@@ -69,6 +69,9 @@ kotlin {
             // Logging
             implementation(libs.napier)
 
+            // Wall-clock timestamps in the load benchmark log
+            implementation(libs.kotlinx.datetime)
+
 
             // Lifecycle
             implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -110,6 +113,16 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
+    }
+
+    buildTypes {
+        // Release build installable without a release key, used for the performance measurements
+        create("benchmark") {
+            initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
+        }
     }
 
     compileOptions {

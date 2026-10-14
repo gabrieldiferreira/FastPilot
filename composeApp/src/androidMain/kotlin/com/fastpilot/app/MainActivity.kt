@@ -28,8 +28,10 @@ class FastPilotApplication : Application() {
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // adb shell am start -n com.fastpilot.app/.MainActivity -e perf "off:5,on:3"
+        val benchmark = intent.getStringExtra("perf")?.let { "android" to it }
         setContent {
-            App()
+            App(benchmark)
         }
     }
 }

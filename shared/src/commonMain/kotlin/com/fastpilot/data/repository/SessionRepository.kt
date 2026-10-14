@@ -29,7 +29,9 @@ class SessionRepository(
         }
 
         return try {
-            val remote = api.getSessions(year = year)
+            // Newest first, the same order as selectSessionsByYear: screens pick the first race,
+            // which must not change depending on whether the list came from the cache
+            val remote = api.getSessions(year = year).sortedByDescending { it.dateStart.orEmpty() }
             val now = Clock.System.now().toEpochMilliseconds()
             remote.forEach { session ->
                 db?.fastPilotDBQueries?.insertSession(

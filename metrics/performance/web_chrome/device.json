@@ -1,0 +1,7 @@
+{
+  "platform": "web",
+  "browser": "Chrome/155.0.8059.40",
+  "headless": true,
+  "host": "Apple M1 Pro",
+  "build": "wasmJs production"
+}

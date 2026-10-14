@@ -12,7 +12,10 @@ import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-fun main() {
+fun main(args: Array<String>) {
+    // ./gradlew :composeApp:run --args="-perf off:5,on:3"
+    val benchmark = args.indexOf("-perf").takeIf { it >= 0 }?.let { "desktop" to args.getOrElse(it + 1) { "" } }
+
     // Initialize Koin before the Compose application
     if (GlobalContext.getOrNull() == null) {
         startKoin {
@@ -29,7 +32,7 @@ fun main() {
             title = "FastPilot — F1 Telemetry",
             state = rememberWindowState(width = 420.dp, height = 900.dp)
         ) {
-            App()
+            App(benchmark)
         }
     }
 }

@@ -7,6 +7,7 @@ import com.fastpilot.ui.App
 import com.fastpilot.ui.di.appModules
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import platform.Foundation.NSProcessInfo
 import platform.UIKit.UIViewController
 
 private var koinStarted = false
@@ -23,5 +24,9 @@ fun MainViewController(): UIViewController {
             )
         }
     }
-    return ComposeUIViewController { App() }
+    // xcrun simctl launch booted com.fastpilot.app -perf "off:5,on:3"
+    val arguments = NSProcessInfo.processInfo.arguments.map { it.toString() }
+    val benchmark = arguments.indexOf("-perf").takeIf { it >= 0 }
+        ?.let { "ios" to arguments.getOrElse(it + 1) { "" } }
+    return ComposeUIViewController { App(benchmark) }
 }

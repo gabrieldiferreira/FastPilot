@@ -21,9 +21,18 @@ import com.fastpilot.ui.theme.*
 
 enum class AppState { SPLASH, LOGIN, DASHBOARD }
 
+/**
+ * [benchmark] is set when the app is launched in benchmark mode: `platform` and the
+ * [com.fastpilot.ui.perf.LoadBenchmark.Config] spec ("off:5,on:3,...").
+ */
 @Composable
-fun App() {
+fun App(benchmark: Pair<String, String>? = null) {
     var appState by remember { mutableStateOf(AppState.SPLASH) }
+
+    if (benchmark != null) {
+        FastPilotTheme { com.fastpilot.ui.perf.BenchmarkScreen(benchmark.first, benchmark.second) }
+        return
+    }
 
     FastPilotTheme {
         Crossfade(targetState = appState) { state ->

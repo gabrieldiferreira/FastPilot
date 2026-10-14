@@ -1,0 +1,8 @@
+{
+  "platform": "ios",
+  "model": "iPhone 17",
+  "ios": "iOS-26-5",
+  "simulator": true,
+  "host": "Apple M1 Pro",
+  "build": "Release"
+}

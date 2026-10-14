@@ -209,5 +209,11 @@ DELETE FROM cached_lap WHERE cached_at < ?;
 clearStintCache:
 DELETE FROM cached_stint WHERE cached_at < ?;
 
-clearAll:
-DELETE FROM cached_session;
+clearAll {
+    DELETE FROM cached_session;
+    DELETE FROM cached_driver;
+    DELETE FROM cached_lap;
+    DELETE FROM cached_stint;
+    DELETE FROM cached_driver_standing;
+    DELETE FROM cached_constructor_standing;
+}
