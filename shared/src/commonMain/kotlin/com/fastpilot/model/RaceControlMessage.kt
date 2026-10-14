@@ -12,7 +12,7 @@ data class RaceControlMessage(
     @SerialName("lap_number") val lapNumber: Int? = null,
     val scope: String? = null,
     val sector: Int? = null,
-    @SerialName("qualifying_phase") val qualifyingPhase: String? = null,
+    @SerialName("qualifying_phase") val qualifyingPhase: Int? = null,
     val date: String? = null,
     @SerialName("session_key") val sessionKey: Int? = null,
     @SerialName("meeting_key") val meetingKey: Int? = null

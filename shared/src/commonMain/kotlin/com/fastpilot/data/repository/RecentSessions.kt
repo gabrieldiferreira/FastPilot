@@ -19,15 +19,7 @@ fun availableSeasons(now: Instant = Clock.System.now()): List<Int> =
  * (OpenF1 lists the whole calendar in advance). A season that fails to load is skipped.
  */
 suspend fun SessionRepository.getSeasonSessions(now: Instant = Clock.System.now()): List<Session> =
-    availableSeasons(now).flatMap { year ->
-        try {
-            getSessions(year)
-        } catch (e: kotlinx.coroutines.CancellationException) {
-            throw e
-        } catch (_: Exception) {
-            emptyList()
-        }
-    }.sortedByDescending { it.dateStart.orEmpty() }
+    getSessionsOfYears(availableSeasons(now)).sortedByDescending { it.dateStart.orEmpty() }
 
 /** Sessions of [availableSeasons] that have already started (they have data), newest first. */
 suspend fun SessionRepository.getRecentSessions(now: Instant = Clock.System.now()): List<Session> =

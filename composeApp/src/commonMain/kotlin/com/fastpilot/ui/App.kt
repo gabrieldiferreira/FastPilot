@@ -16,6 +16,8 @@ import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
 import com.fastpilot.data.repository.CacheMaintenance
+import com.fastpilot.ui.i18n.LanguageState
+import com.fastpilot.ui.i18n.LocalStrings
 import com.fastpilot.ui.navigation.*
 import com.fastpilot.ui.screens.splash.SplashScreen
 import com.fastpilot.ui.theme.*
@@ -36,6 +38,14 @@ fun App(benchmark: Pair<String, String>? = null) {
         return
     }
 
+    // Every screen reads its texts from LocalStrings; picking another language recomposes them
+    CompositionLocalProvider(LocalStrings provides LanguageState.current.strings) {
+        AppContent(appState) { appState = it }
+    }
+}
+
+@Composable
+private fun AppContent(appState: AppState, onStateChange: (AppState) -> Unit) {
     // Deletes race data downloaded more than 30 days ago (not in benchmark mode: it times the cache)
     val cacheMaintenance = koinInject<CacheMaintenance>()
     LaunchedEffect(Unit) { cacheMaintenance.purgeExpired() }
@@ -44,10 +54,10 @@ fun App(benchmark: Pair<String, String>? = null) {
         Crossfade(targetState = appState) { state ->
             when (state) {
                 AppState.SPLASH -> {
-                    SplashScreen(onSplashFinished = { appState = AppState.LOGIN })
+                    SplashScreen(onSplashFinished = { onStateChange(AppState.LOGIN) })
                 }
                 AppState.LOGIN -> {
-                    com.fastpilot.ui.screens.login.LoginScreen(onLoginSuccess = { appState = AppState.DASHBOARD })
+                    com.fastpilot.ui.screens.login.LoginScreen(onLoginSuccess = { onStateChange(AppState.DASHBOARD) })
                 }
                 AppState.DASHBOARD -> {
                     TabNavigator(DashboardTab) { tabNavigator ->

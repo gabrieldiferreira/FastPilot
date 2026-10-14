@@ -3,6 +3,8 @@ package com.fastpilot.data.repository
 import com.fastpilot.db.FastPilotDB
 import com.fastpilot.model.Session
 import com.fastpilot.network.OpenF1Api
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.datetime.Clock
 
 /**
@@ -17,43 +19,94 @@ class SessionRepository(
         private const val CACHE_TTL_MS = 24 * 60 * 60 * 1000L // 24 hours
     }
 
+    /** Sessions loaded in this run, by year, with when they were fetched: the only cache on Web. */
+    private val memory = mutableMapOf<Int, Pair<List<Session>, Long>>()
+    private val seasonsMutex = Mutex()
+
     /** Sessions of [year], newest first. Also tells the API which of them can be live. */
     suspend fun getSessions(year: Int, forceRefresh: Boolean = false): List<Session> =
         loadSessions(year, forceRefresh).also { api.sessionRegistry.track(it) }
 
-    private suspend fun loadSessions(year: Int, forceRefresh: Boolean): List<Session> {
-        if (!forceRefresh) {
-            val cached = db?.fastPilotDBQueries?.selectSessionsByYear(year.toLong())?.executeAsList().orEmpty()
-            if (cached.isNotEmpty()) {
-                val age = Clock.System.now().toEpochMilliseconds() - cached.first().cached_at
-                // The calendar of a past season no longer changes
-                if (age < CACHE_TTL_MS || year < availableSeasons().first()) {
-                    return cached.map { it.toSession() }
+    /**
+     * Sessions of every year in [years], newest first by year. The years not cached yet come
+     * in a single request ("year>=") instead of one per year; a year that fails is left out.
+     * Concurrent callers wait for each other, so screens opening together share the requests.
+     */
+    suspend fun getSessionsOfYears(years: List<Int>): List<Session> = seasonsMutex.withLock {
+        val byYear = mutableMapOf<Int, List<Session>>()
+        years.forEach { year -> cachedSessions(year)?.let { byYear[year] = it } }
+        val missing = years - byYear.keys
+        if (missing.size > 1) {
+            try {
+                val remote = api.getSessions(fromYear = missing.min())
+                // Every OpenF1 session has its year; without it (or with no sessions at all)
+                // the list cannot be split, so each year is asked for on its own
+                if (remote.isNotEmpty() && remote.all { it.year != null }) {
+                    val remoteByYear = remote.groupBy { it.year }
+                    missing.forEach { year -> byYear[year] = store(year, remoteByYear[year].orEmpty()) }
                 }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                // Falls back to one request per year below, which also falls back to the cache
             }
         }
+        (years - byYear.keys).forEach { year ->
+            try {
+                byYear[year] = loadSessions(year, forceRefresh = false)
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (_: Exception) {
+            }
+        }
+        years.flatMap { byYear[it].orEmpty() }.also { api.sessionRegistry.track(it) }
+    }
+
+    /** The cached sessions of [year] while still valid: memory first, then the database. */
+    private fun cachedSessions(year: Int): List<Session>? {
+        val now = Clock.System.now().toEpochMilliseconds()
+        // The calendar of a past season no longer changes
+        fun valid(cachedAt: Long) = now - cachedAt < CACHE_TTL_MS || year < availableSeasons().first()
+        memory[year]?.let { (sessions, cachedAt) -> if (valid(cachedAt)) return sessions }
+        val cached = db?.fastPilotDBQueries?.selectSessionsByYear(year.toLong())?.executeAsList().orEmpty()
+        // Rows cached before v4 have no time zone: fetched again once
+        if (cached.isNotEmpty() && valid(cached.first().cached_at) && cached.none { it.gmt_offset.isEmpty() }) {
+            return cached.map { it.toSession() }.also { memory[year] = it to cached.first().cached_at }
+        }
+        return null
+    }
+
+    /** Keeps [sessions] of [year] in memory and in the database, and returns them newest first. */
+    private fun store(year: Int, sessions: List<Session>): List<Session> {
+        // Newest first, the same order as selectSessionsByYear: screens pick the first race,
+        // which must not change depending on whether the list came from the cache
+        val sorted = sessions.sortedByDescending { it.dateStart.orEmpty() }
+        val now = Clock.System.now().toEpochMilliseconds()
+        memory[year] = sorted to now
+        sorted.forEach { session ->
+            db?.fastPilotDBQueries?.insertSession(
+                session_key = session.sessionKey.toLong(),
+                session_name = session.sessionName ?: "",
+                session_type = session.sessionType ?: "",
+                meeting_key = (session.meetingKey ?: 0).toLong(),
+                circuit_short_name = session.circuitShortName ?: "",
+                country_name = session.countryName ?: "",
+                country_code = session.countryCode ?: "",
+                date_start = session.dateStart ?: "",
+                date_end = session.dateEnd ?: "",
+                year = (session.year ?: year).toLong(),
+                cached_at = now,
+                gmt_offset = session.gmtOffset ?: ""
+            )
+        }
+        return sorted
+    }
+
+    private suspend fun loadSessions(year: Int, forceRefresh: Boolean): List<Session> {
+        if (!forceRefresh) cachedSessions(year)?.let { return it }
 
         return try {
-            // Newest first, the same order as selectSessionsByYear: screens pick the first race,
-            // which must not change depending on whether the list came from the cache
-            val remote = api.getSessions(year = year).sortedByDescending { it.dateStart.orEmpty() }
-            val now = Clock.System.now().toEpochMilliseconds()
-            remote.forEach { session ->
-                db?.fastPilotDBQueries?.insertSession(
-                    session_key = session.sessionKey.toLong(),
-                    session_name = session.sessionName ?: "",
-                    session_type = session.sessionType ?: "",
-                    meeting_key = (session.meetingKey ?: 0).toLong(),
-                    circuit_short_name = session.circuitShortName ?: "",
-                    country_name = session.countryName ?: "",
-                    country_code = session.countryCode ?: "",
-                    date_start = session.dateStart ?: "",
-                    date_end = session.dateEnd ?: "",
-                    year = (session.year ?: year).toLong(),
-                    cached_at = now
-                )
-            }
-            remote
+            store(year, api.getSessions(year = year))
         } catch (e: Exception) {
             // Fallback to cached data on network error
             val cached = db?.fastPilotDBQueries?.selectSessionsByYear(year.toLong())?.executeAsList().orEmpty()
@@ -93,5 +146,6 @@ private fun com.fastpilot.db.Cached_session.toSession() = Session(
     countryCode = country_code,
     dateStart = date_start,
     dateEnd = date_end,
-    year = year.toInt()
+    year = year.toInt(),
+    gmtOffset = gmt_offset.ifEmpty { null }
 )

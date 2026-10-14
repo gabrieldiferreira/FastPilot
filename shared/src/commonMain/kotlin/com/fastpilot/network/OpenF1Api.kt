@@ -52,9 +52,12 @@ class OpenF1Api(
         countryName: String? = null,
         sessionName: String? = null,
         sessionKey: Int? = null,
-        meetingKey: Int? = null
+        meetingKey: Int? = null,
+        /** Every year from this one on ("year>=2023"), in one request. */
+        fromYear: Int? = null
     ): List<Session> = get("sessions", sessionKey) {
         year?.let { parameter("year", it) }
+        fromYear?.let { parameter("year>", it) }
         countryName?.let { parameter("country_name", it) }
         sessionName?.let { parameter("session_name", it) }
         sessionKey?.let { parameter("session_key", it) }

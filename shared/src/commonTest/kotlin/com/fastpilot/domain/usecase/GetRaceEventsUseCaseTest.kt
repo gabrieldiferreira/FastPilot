@@ -2,6 +2,7 @@ package com.fastpilot.domain.usecase
 
 import com.fastpilot.data.repository.OvertakeRepository
 import com.fastpilot.data.repository.PitStopRepository
+import com.fastpilot.model.Lap
 import com.fastpilot.model.Overtake
 import com.fastpilot.model.PitStop
 import com.fastpilot.network.OpenF1Api
@@ -31,6 +32,22 @@ class GetRaceEventsUseCaseTest {
         assertEquals(2.4, events[1].stopDuration)
         assertEquals(10, events[0].otherDriverNumber)
         assertEquals(5, events[0].position)
+    }
+
+    @Test
+    fun `an overtake gets the lap the overtaking driver was on`() {
+        val laps = listOf(
+            Lap(driverNumber = 1, lapNumber = 1, dateStart = null),
+            Lap(driverNumber = 1, lapNumber = 2, dateStart = "2024-12-08T13:03:10+00:00"),
+            Lap(driverNumber = 1, lapNumber = 3, dateStart = "2024-12-08T13:04:40+00:00"),
+            Lap(driverNumber = 55, lapNumber = 9, dateStart = "2024-12-08T13:03:00+00:00"),
+        )
+        val events = GetRaceEventsUseCase.merge(
+            emptyList(),
+            listOf(Overtake(overtakingDriverNumber = 1, overtakenDriverNumber = 55, date = "2024-12-08T13:03:42+00:00")),
+            laps
+        )
+        assertEquals(2, events.single().lapNumber)
     }
 
     @Test

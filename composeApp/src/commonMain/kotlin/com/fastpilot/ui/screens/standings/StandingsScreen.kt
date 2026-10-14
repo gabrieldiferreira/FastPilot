@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fastpilot.domain.usecase.ChampionshipRow
 import com.fastpilot.domain.usecase.ChampionshipTable
+import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.theme.*
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
@@ -34,16 +35,16 @@ fun StandingsScreen(viewModel: StandingsViewModel = koinViewModel()) {
         Spacer(Modifier.height(28.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
-                Text("Classificação", style = MaterialTheme.typography.headlineSmall,
+                Text(strings.standingsTitle, style = MaterialTheme.typography.headlineSmall,
                     color = TextPrimary, fontWeight = FontWeight.Bold)
                 Text(
-                    if (tables != null && tables.round > 0) "Temporada ${tables.season} • após a etapa ${tables.round}"
-                    else "Temporada ${uiState.selectedSeason}",
+                    if (tables != null && tables.round > 0) strings.seasonAfterRound(tables.season, tables.round)
+                    else strings.season(uiState.selectedSeason),
                     color = TextSecondary, fontSize = 12.sp
                 )
             }
             IconButton(onClick = viewModel::refresh, enabled = !uiState.isLoading) {
-                Icon(Icons.Default.Refresh, contentDescription = "Atualizar", tint = TextSecondary)
+                Icon(Icons.Default.Refresh, contentDescription = strings.refresh, tint = TextSecondary)
             }
         }
 
@@ -61,10 +62,10 @@ fun StandingsScreen(viewModel: StandingsViewModel = koinViewModel()) {
         Row(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(CardSurface).padding(4.dp)
         ) {
-            ModeTab("Pilotos", uiState.mode == StandingsMode.DRIVERS, Modifier.weight(1f)) {
+            ModeTab(strings.drivers, uiState.mode == StandingsMode.DRIVERS, Modifier.weight(1f)) {
                 viewModel.selectMode(StandingsMode.DRIVERS)
             }
-            ModeTab("Equipes", uiState.mode == StandingsMode.CONSTRUCTORS, Modifier.weight(1f)) {
+            ModeTab(strings.constructors, uiState.mode == StandingsMode.CONSTRUCTORS, Modifier.weight(1f)) {
                 viewModel.selectMode(StandingsMode.CONSTRUCTORS)
             }
         }
@@ -75,15 +76,15 @@ fun StandingsScreen(viewModel: StandingsViewModel = koinViewModel()) {
             uiState.isLoading -> CenteredMessage {
                 CircularProgressIndicator(color = F1Red)
                 Spacer(Modifier.height(8.dp))
-                Text("Carregando classificação...", color = TextSecondary, fontSize = 12.sp)
+                Text(strings.loadingStandings, color = TextSecondary, fontSize = 12.sp)
             }
             uiState.error != null -> CenteredMessage {
-                Text(uiState.error!!, color = TextSecondary, fontSize = 13.sp)
+                Text(strings.error(uiState.error!!), color = TextSecondary, fontSize = 13.sp)
                 Spacer(Modifier.height(8.dp))
-                TextButton(onClick = viewModel::refresh) { Text("Tentar novamente", color = F1Red) }
+                TextButton(onClick = viewModel::refresh) { Text(strings.retry, color = F1Red) }
             }
             tables == null || tables.drivers.rows.isEmpty() -> CenteredMessage {
-                Text("Sem classificação para esta temporada", color = TextSecondary)
+                Text(strings.noStandings, color = TextSecondary)
             }
             uiState.mode == StandingsMode.DRIVERS -> StandingsList(tables.drivers) { row ->
                 StandingRow(
@@ -149,7 +150,7 @@ private fun StandingRow(
                         maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
                     if (wins > 0) {
                         Spacer(Modifier.width(6.dp))
-                        Icon(Icons.Default.EmojiEvents, contentDescription = "Vitórias",
+                        Icon(Icons.Default.EmojiEvents, contentDescription = strings.wins,
                             tint = FlagYellow, modifier = Modifier.size(12.dp))
                         Text(wins.toString(), color = FlagYellow, fontSize = 11.sp)
                     }
@@ -170,7 +171,7 @@ private fun StandingRow(
             Column(horizontalAlignment = Alignment.End, modifier = Modifier.widthIn(min = 56.dp)) {
                 Text(formatPoints(row.points), color = TextPrimary, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                 Text(
-                    if (isLeader) "líder" else "-${formatPoints(row.gapToLeader)}",
+                    if (isLeader) strings.leader else "-${formatPoints(row.gapToLeader)}",
                     color = if (isLeader) FlagYellow else TextTertiary, fontSize = 11.sp
                 )
             }

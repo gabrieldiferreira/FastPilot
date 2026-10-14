@@ -28,6 +28,7 @@ import com.fastpilot.model.CarData
 import com.fastpilot.model.Lap
 import com.fastpilot.ui.components.DriverSelector
 import com.fastpilot.ui.components.SessionPicker
+import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.theme.*
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
@@ -46,7 +47,7 @@ fun TelemetryScreen(
     ) {
         Spacer(Modifier.height(12.dp))
 
-        Text("Telemetria", style = MaterialTheme.typography.headlineSmall,
+        Text(strings.telemetryTitle, style = MaterialTheme.typography.headlineSmall,
             color = TextPrimary, fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(8.dp))
 
@@ -64,7 +65,7 @@ fun TelemetryScreen(
         // ── Driver Selector ─────────────────────────────────────
         if (uiState.drivers.isNotEmpty()) {
             DriverSelector(
-                label = "Piloto",
+                label = strings.driver,
                 drivers = uiState.drivers,
                 selectedDriver = uiState.selectedDriver,
                 onDriverSelected = { viewModel.selectDriver(it) }
@@ -72,7 +73,7 @@ fun TelemetryScreen(
         } else if (!uiState.isLoading && uiState.selectedSession != null) {
             Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
                 shape = RoundedCornerShape(10.dp)) {
-                Text("Nenhum piloto disponível para esta sessão",
+                Text(strings.noDriversForSession,
                     Modifier.padding(16.dp), color = TextTertiary, fontSize = 13.sp)
             }
         }
@@ -81,7 +82,7 @@ fun TelemetryScreen(
 
         // ── Lap Selector ────────────────────────────────────────
         if (uiState.laps.isNotEmpty()) {
-            Text("Voltas", fontSize = 13.sp, color = TextSecondary, fontWeight = FontWeight.Medium)
+            Text(strings.laps, fontSize = 13.sp, color = TextSecondary, fontWeight = FontWeight.Medium)
             Spacer(Modifier.height(6.dp))
             LapSelectorRow(
                 laps = uiState.laps,
@@ -91,7 +92,7 @@ fun TelemetryScreen(
         } else if (uiState.selectedDriver != null && !uiState.isLoading) {
             Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
                 shape = RoundedCornerShape(10.dp)) {
-                Text("Nenhuma volta registrada para ${uiState.selectedDriver?.nameAcronym ?: "este piloto"}",
+                Text(strings.noLapsFor(uiState.selectedDriver?.nameAcronym),
                     Modifier.padding(16.dp), color = TextTertiary, fontSize = 13.sp)
             }
         }
@@ -110,7 +111,7 @@ fun TelemetryScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator(color = F1Red)
                     Spacer(Modifier.height(8.dp))
-                    Text("Carregando telemetria...", color = TextSecondary, fontSize = 12.sp)
+                    Text(strings.loadingTelemetry, color = TextSecondary, fontSize = 12.sp)
                 }
             }
         } else if (uiState.carData.isNotEmpty()) {
@@ -120,18 +121,18 @@ fun TelemetryScreen(
                 Spacer(Modifier.height(12.dp))
             }
 
-            ChartCard(Icons.Default.Speed, "Velocidade (km/h)") {
+            ChartCard(Icons.Default.Speed, strings.speedChart) {
                 SpeedChart(data = uiState.carData, modifier = Modifier.fillMaxWidth().height(180.dp))
             }
             Spacer(Modifier.height(12.dp))
-            ChartCard(Icons.AutoMirrored.Filled.ShowChart, "Acelerador / Freio", legend = {
-                LegendDot(ThrottleGreen, "Acelerador")
-                LegendDot(BrakeRed, "Freio")
+            ChartCard(Icons.AutoMirrored.Filled.ShowChart, strings.throttleBrakeChart, legend = {
+                LegendDot(ThrottleGreen, strings.throttle)
+                LegendDot(BrakeRed, strings.brake)
             }) {
                 ThrottleBrakeChart(data = uiState.carData, modifier = Modifier.fillMaxWidth().height(120.dp))
             }
             Spacer(Modifier.height(12.dp))
-            ChartCard(Icons.Default.Settings, "Marcha") {
+            ChartCard(Icons.Default.Settings, strings.gear) {
                 GearChart(data = uiState.carData, modifier = Modifier.fillMaxWidth().height(100.dp))
             }
         } else if (uiState.selectedDriver == null) {
@@ -140,8 +141,8 @@ fun TelemetryScreen(
                     Icon(Icons.AutoMirrored.Filled.ShowChart, contentDescription = null,
                         tint = TextTertiary, modifier = Modifier.size(40.dp))
                     Spacer(Modifier.height(8.dp))
-                    Text("Selecione um piloto acima", color = TextSecondary)
-                    Text("para ver a telemetria", color = TextTertiary, fontSize = 12.sp)
+                    Text(strings.selectDriverAbove, color = TextSecondary)
+                    Text(strings.toSeeTelemetry, color = TextTertiary, fontSize = 12.sp)
                 }
             }
         }
@@ -155,7 +156,7 @@ fun TelemetryScreen(
         uiState.error?.let { error ->
             Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = F1Red.copy(alpha = 0.1f)),
                 shape = RoundedCornerShape(10.dp)) {
-                Text(error, Modifier.padding(12.dp), color = F1Red, fontSize = 12.sp)
+                Text(strings.error(error), Modifier.padding(12.dp), color = F1Red, fontSize = 12.sp)
             }
         }
 
@@ -168,8 +169,8 @@ private fun LapInfoCard(lap: Lap) {
     Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
         shape = RoundedCornerShape(12.dp)) {
         Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
-            LapStat("Volta", "L${lap.lapNumber}")
-            LapStat("Tempo", lap.lapDuration?.let { formatDuration(it) } ?: "--")
+            LapStat(strings.lapLabel, strings.lapShort(lap.lapNumber))
+            LapStat(strings.timeLabel, lap.lapDuration?.let { formatDuration(it) } ?: "--")
             LapStat("S1", lap.sector1?.let { formatDuration(it) } ?: "--")
             LapStat("S2", lap.sector2?.let { formatDuration(it) } ?: "--")
             LapStat("S3", lap.sector3?.let { formatDuration(it) } ?: "--")
@@ -195,7 +196,7 @@ private fun LapSelectorRow(laps: List<Lap>, selectedLap: Lap?, onSelect: (Lap) -
                 onClick = { onSelect(lap) },
                 label = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("L${lap.lapNumber}", fontSize = 12.sp)
+                        Text(strings.lapShort(lap.lapNumber), fontSize = 12.sp)
                         Text(lap.lapDuration?.let { formatDuration(it) } ?: "--",
                             fontSize = 10.sp, color = if (isSelected) TextPrimary else TextTertiary)
                     }
@@ -220,23 +221,23 @@ private fun TheoreticalBestCard(best: TheoreticalBest) {
                 Icon(Icons.Default.Timer, contentDescription = null, tint = TextSecondary,
                     modifier = Modifier.size(16.dp))
                 Spacer(Modifier.width(6.dp))
-                Text("Volta Teórica", color = TextSecondary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                Text(strings.theoreticalLap, color = TextSecondary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
             }
-            Text("Soma dos melhores setores da sessão", fontSize = 11.sp, color = TextTertiary)
+            Text(strings.theoreticalLapHint, fontSize = 11.sp, color = TextTertiary)
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
                 Column(Modifier.weight(1f)) {
-                    Text("Teórica", fontSize = 10.sp, color = TextTertiary)
+                    Text(strings.theoretical, fontSize = 10.sp, color = TextTertiary)
                     Text(formatLapTime(best.theoreticalBestTime), fontSize = 22.sp,
                         color = GearPurple, fontWeight = FontWeight.Bold)
                 }
                 Column(Modifier.weight(1f)) {
-                    Text("Melhor volta real", fontSize = 10.sp, color = TextTertiary)
+                    Text(strings.bestActualLap, fontSize = 10.sp, color = TextTertiary)
                     Text(formatLapTime(best.actualBestTime), fontSize = 16.sp,
                         color = TextPrimary, fontWeight = FontWeight.SemiBold)
                 }
                 Column(horizontalAlignment = Alignment.End) {
-                    Text("Diferença", fontSize = 10.sp, color = TextTertiary)
+                    Text(strings.difference, fontSize = 10.sp, color = TextTertiary)
                     Text("+${formatDuration(best.gap)}s", fontSize = 16.sp,
                         color = SafetyCarAmber, fontWeight = FontWeight.SemiBold)
                 }
@@ -258,7 +259,7 @@ private fun SectorStat(label: String, time: Double, lapNumber: Int) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(label, fontSize = 10.sp, color = TextTertiary)
         Text(formatDuration(time), fontSize = 13.sp, color = GearPurple, fontWeight = FontWeight.Bold)
-        Text("volta $lapNumber", fontSize = 10.sp, color = TextTertiary)
+        Text(strings.lap(lapNumber).lowercase(), fontSize = 10.sp, color = TextTertiary)
     }
 }
 

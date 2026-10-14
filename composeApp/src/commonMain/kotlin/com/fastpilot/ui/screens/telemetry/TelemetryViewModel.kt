@@ -1,5 +1,7 @@
 package com.fastpilot.ui.screens.telemetry
 
+import com.fastpilot.ui.i18n.ErrorKind
+import com.fastpilot.ui.i18n.UiError
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.repository.*
@@ -27,7 +29,7 @@ data class TelemetryUiState(
     val theoreticalBest: TheoreticalBest? = null,
     val carData: List<CarData> = emptyList(),
     val isLoadingTelemetry: Boolean = false,
-    val error: String? = null
+    val error: UiError? = null
 )
 
 class TelemetryViewModel(
@@ -56,7 +58,7 @@ class TelemetryViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message))
             }
         }
     }
@@ -74,7 +76,7 @@ class TelemetryViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = "Erro ao carregar pilotos: ${e.message}")
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.DRIVERS, e.message))
             }
         }
     }
@@ -100,7 +102,7 @@ class TelemetryViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = "Erro ao carregar voltas: ${e.message}")
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.LAPS, e.message))
             }
         }
     }
@@ -119,7 +121,7 @@ class TelemetryViewModel(
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoadingTelemetry = false,
-                    error = "Erro ao carregar telemetria: ${e.message}"
+                    error = UiError(ErrorKind.TELEMETRY, e.message)
                 )
             }
         }

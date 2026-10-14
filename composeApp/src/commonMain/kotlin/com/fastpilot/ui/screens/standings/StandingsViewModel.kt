@@ -1,5 +1,7 @@
 package com.fastpilot.ui.screens.standings
 
+import com.fastpilot.ui.i18n.ErrorKind
+import com.fastpilot.ui.i18n.UiError
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.repository.StandingsRepository
@@ -20,7 +22,7 @@ data class StandingsUiState(
     val selectedSeason: Int = StandingsViewModel.SEASONS.first(),
     val mode: StandingsMode = StandingsMode.DRIVERS,
     val tables: ChampionshipTables? = null,
-    val error: String? = null
+    val error: UiError? = null
 )
 
 class StandingsViewModel(
@@ -57,7 +59,7 @@ class StandingsViewModel(
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = "Erro ao carregar classificação: ${e.message}"
+                    error = UiError(ErrorKind.STANDINGS, e.message)
                 )
             }
         }

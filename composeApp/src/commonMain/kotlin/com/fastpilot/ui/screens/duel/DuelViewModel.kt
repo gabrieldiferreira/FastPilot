@@ -1,5 +1,7 @@
 package com.fastpilot.ui.screens.duel
 
+import com.fastpilot.ui.i18n.ErrorKind
+import com.fastpilot.ui.i18n.UiError
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.repository.DriverRepository
@@ -28,7 +30,7 @@ data class DuelUiState(
     val isComputingLapDelta: Boolean = false,
     /** Position data could not be loaded (e.g. OpenF1 rate limit); lap-by-lap comparison still shown. */
     val lapDeltaUnavailable: Boolean = false,
-    val error: String? = null
+    val error: UiError? = null
 )
 
 class DuelViewModel(
@@ -53,7 +55,7 @@ class DuelViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message))
             }
         }
     }
@@ -70,7 +72,7 @@ class DuelViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.DRIVERS, e.message))
             }
         }
     }
@@ -102,7 +104,7 @@ class DuelViewModel(
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isComputing = false,
-                    error = "Erro ao comparar pilotos: ${e.message}"
+                    error = UiError(ErrorKind.DUEL, e.message)
                 )
             }
         }

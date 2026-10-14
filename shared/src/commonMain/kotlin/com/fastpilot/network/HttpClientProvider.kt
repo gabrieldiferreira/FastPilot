@@ -11,7 +11,12 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
+import kotlin.time.TimeMark
+import kotlin.time.TimeSource
 
 /**
  * Creates a configured HTTP client with JSON serialization and logging.
@@ -42,7 +47,8 @@ fun HttpClientConfig<*>.installFastPilotPlugins() {
         connectTimeoutMillis = 60000
         socketTimeoutMillis = 60000
     }
-    // Installed after the retry plugin so every attempt is counted
+    // Installed after the retry plugin so every attempt is spaced and counted
+    install(OpenF1RateLimit)
     install(RequestCounter)
     install(ContentNegotiation) {
         json(Json {
@@ -75,5 +81,35 @@ private val RequestCounter = createClientPlugin("RequestCounter") {
         val call = proceed(request)
         RequestStats.record(call.response.status)
         call
+    }
+}
+
+/**
+ * Lets at most [permits] requests start in any [windowMs] window, delaying the others.
+ * A request that waits is cheaper than a 429, whose retry waits at least 2 s.
+ */
+internal class RateLimiter(private val permits: Int, private val windowMs: Long) {
+    private val mutex = Mutex()
+    private val starts = ArrayDeque<TimeMark>()
+
+    suspend fun acquire() = mutex.withLock {
+        if (starts.size >= permits) {
+            val wait = windowMs - starts.removeFirst().elapsedNow().inWholeMilliseconds
+            if (wait > 0) delay(wait)
+        }
+        starts.addLast(TimeSource.Monotonic.markNow())
+    }
+}
+
+/**
+ * OpenF1 answers 429 above 3 requests per second ("Max 3 requests/second"). Bursts of 3 still
+ * got 429s (the server sees them with network jitter), so requests are spread evenly instead:
+ * one every 400 ms, 2.5 per second.
+ */
+private val OpenF1RateLimit = createClientPlugin("OpenF1RateLimit") {
+    val limiter = RateLimiter(permits = 1, windowMs = 400)
+    on(Send) { request ->
+        if (request.url.host == "api.openf1.org") limiter.acquire()
+        proceed(request)
     }
 }

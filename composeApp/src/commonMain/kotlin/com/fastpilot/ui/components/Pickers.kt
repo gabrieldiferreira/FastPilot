@@ -1,8 +1,10 @@
 package com.fastpilot.ui.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -12,15 +14,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.filled.Flag
 import com.fastpilot.data.repository.availableSeasons
 import com.fastpilot.model.Session
+import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.theme.*
 
 /**
- * Reusable session picker with dropdown menus for year and session selection.
+ * Reusable session picker: year and race weekend dropdowns, then one chip per event of the weekend.
  */
 @Composable
 fun SessionPicker(
@@ -30,17 +34,15 @@ fun SessionPicker(
     modifier: Modifier = Modifier
 ) {
     var yearExpanded by remember { mutableStateOf(false) }
-    var sessionExpanded by remember { mutableStateOf(false) }
+    var weekendExpanded by remember { mutableStateOf(false) }
 
-    // Group sessions by year
     val years = sessions.mapNotNull { it.year }.distinct().sortedDescending()
     val selectedYear = selectedSession?.year ?: years.firstOrNull() ?: availableSeasons().first()
 
-    // Group by circuit (meeting) within selected year
-    val yearSessions = sessions.filter { it.year == selectedYear }
-    val circuits = yearSessions
-        .map { it.circuitShortName ?: it.countryName ?: "Unknown" }
-        .distinct()
+    val weekends = remember(sessions, selectedYear) {
+        groupRaceWeekends(sessions.filter { it.year == selectedYear })
+    }
+    val selectedWeekend = weekends.firstOrNull { w -> w.sessions.any { it.sessionKey == selectedSession?.sessionKey } }
 
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -48,16 +50,15 @@ fun SessionPicker(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             // Year selector
-            Box(modifier = Modifier.weight(0.35f)) {
+            Box(modifier = Modifier.weight(0.32f)) {
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { yearExpanded = true },
+                    onClick = { yearExpanded = true },
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
                     colors = CardDefaults.cardColors(containerColor = CardSurface),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                        modifier = Modifier.fillMaxHeight().padding(horizontal = 12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(Icons.Default.Flag, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(16.dp))
@@ -71,7 +72,7 @@ fun SessionPicker(
                         )
                         Icon(
                             Icons.Default.ArrowDropDown,
-                            contentDescription = "Selecionar ano",
+                            contentDescription = strings.selectYear,
                             tint = TextTertiary, modifier = Modifier.size(20.dp)
                         )
                     }
@@ -88,37 +89,38 @@ fun SessionPicker(
                             },
                             onClick = {
                                 yearExpanded = false
-                                // Select first session of this year
-                                sessions.firstOrNull { it.year == year }?.let { onSessionSelected(it) }
+                                // Most recent weekend of that year, keeping the event when it has one
+                                groupRaceWeekends(sessions.filter { it.year == year }).firstOrNull()
+                                    ?.let { onSessionSelected(pickSessionInWeekend(it, selectedSession)) }
                             }
                         )
                     }
                 }
             }
 
-            // Session selector
-            Box(modifier = Modifier.weight(0.65f)) {
+            // Race weekend selector
+            Box(modifier = Modifier.weight(0.68f)) {
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { sessionExpanded = true },
+                    onClick = { weekendExpanded = true },
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
                     colors = CardDefaults.cardColors(containerColor = CardSurface),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                        modifier = Modifier.fillMaxHeight().padding(horizontal = 12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                selectedSession?.circuitShortName ?: "Selecione",
+                                selectedWeekend?.title(strings) ?: strings.select,
                                 fontSize = 13.sp,
                                 color = TextPrimary,
                                 fontWeight = FontWeight.Medium,
-                                maxLines = 1
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                             Text(
-                                selectedSession?.sessionName ?: "",
+                                selectedWeekend?.subtitle(strings) ?: "",
                                 fontSize = 11.sp,
                                 color = TextSecondary,
                                 maxLines = 1
@@ -126,40 +128,62 @@ fun SessionPicker(
                         }
                         Icon(
                             Icons.Default.ArrowDropDown,
-                            contentDescription = "Selecionar sessão",
+                            contentDescription = strings.selectRaceWeekend,
                             tint = TextTertiary, modifier = Modifier.size(20.dp)
                         )
                     }
                 }
                 DropdownMenu(
-                    expanded = sessionExpanded,
-                    onDismissRequest = { sessionExpanded = false },
+                    expanded = weekendExpanded,
+                    onDismissRequest = { weekendExpanded = false },
                     modifier = Modifier.background(DarkSurface).heightIn(max = 400.dp)
                 ) {
-                    yearSessions.forEach { session ->
-                        val isSelected = session.sessionKey == selectedSession?.sessionKey
+                    weekends.forEach { weekend ->
+                        val isSelected = weekend.key == selectedWeekend?.key
                         DropdownMenuItem(
                             text = {
                                 Column {
                                     Text(
-                                        "${session.circuitShortName ?: session.countryName ?: ""}",
+                                        weekend.title(strings),
                                         color = if (isSelected) F1Red else TextPrimary,
                                         fontSize = 13.sp,
                                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                                     )
-                                    Text(
-                                        "${session.sessionName ?: ""} • ${session.countryName ?: ""}",
-                                        color = TextSecondary,
-                                        fontSize = 11.sp
-                                    )
+                                    Text(weekend.subtitle(strings), color = TextSecondary, fontSize = 11.sp)
                                 }
                             },
                             onClick = {
-                                sessionExpanded = false
-                                onSessionSelected(session)
+                                weekendExpanded = false
+                                onSessionSelected(pickSessionInWeekend(weekend, selectedSession))
                             }
                         )
                     }
+                }
+            }
+        }
+
+        // Events of the selected weekend
+        selectedWeekend?.let { weekend ->
+            Spacer(Modifier.height(8.dp))
+            val chipsState = rememberLazyListState()
+            val selectedIndex = weekend.sessions.indexOfFirst { it.sessionKey == selectedSession?.sessionKey }
+            LaunchedEffect(weekend.key, selectedIndex) {
+                if (selectedIndex >= 0) chipsState.animateScrollToItem(selectedIndex)
+            }
+            LazyRow(state = chipsState, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                items(weekend.sessions, key = { it.sessionKey }) { session ->
+                    val sel = session.sessionKey == selectedSession?.sessionKey
+                    FilterChip(
+                        selected = sel,
+                        onClick = { if (!sel) onSessionSelected(session) },
+                        label = { Text(strings.sessionShort(session.sessionName), fontSize = 12.sp) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = F1Red.copy(alpha = 0.3f),
+                            selectedLabelColor = TextPrimary,
+                            containerColor = CardSurface,
+                            labelColor = TextSecondary
+                        )
+                    )
                 }
             }
         }
@@ -182,9 +206,9 @@ fun DriverSelector(
 
     Box(modifier = modifier) {
         Card(
+            onClick = { expanded = true },
             modifier = Modifier
-                .fillMaxWidth()
-                .clickable { expanded = true },
+                .fillMaxWidth(),
             colors = CardDefaults.cardColors(containerColor = CardSurface),
             shape = RoundedCornerShape(10.dp)
         ) {
@@ -209,7 +233,7 @@ fun DriverSelector(
                     Text(
                         selectedDriver?.let {
                             "${it.nameAcronym ?: ""} — ${it.fullName ?: ""}"
-                        } ?: "Selecione um piloto",
+                        } ?: strings.selectADriver,
                         fontSize = 13.sp,
                         color = if (selectedDriver != null) TextPrimary else TextTertiary,
                         fontWeight = FontWeight.Medium,
@@ -218,7 +242,7 @@ fun DriverSelector(
                 }
                 Icon(
                     Icons.Default.ArrowDropDown,
-                    contentDescription = "Selecionar piloto",
+                    contentDescription = strings.selectDriver,
                     tint = TextTertiary, modifier = Modifier.size(20.dp)
                 )
             }

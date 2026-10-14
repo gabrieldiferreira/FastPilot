@@ -1,7 +1,6 @@
 package com.fastpilot.ui.screens.radio
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -18,11 +17,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PauseCircle
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.Radio
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Warning
 import com.fastpilot.model.TeamRadio
 import com.fastpilot.ui.components.SessionPicker
+import com.fastpilot.ui.i18n.strings
+import com.fastpilot.ui.time.localClock
 import com.fastpilot.ui.theme.*
 import com.fastpilot.media.AudioPlayer
 import com.fastpilot.media.createAudioPlayer
@@ -36,7 +39,7 @@ fun RadioScreen(viewModel: RadioViewModel = koinViewModel()) {
 
     Column(Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
         Spacer(Modifier.height(12.dp))
-        Text("Rádio de Equipe", style = MaterialTheme.typography.headlineSmall,
+        Text(strings.radioTitle, style = MaterialTheme.typography.headlineSmall,
             color = TextPrimary, fontWeight = FontWeight.Bold)
 
         Spacer(Modifier.height(8.dp))
@@ -58,7 +61,7 @@ fun RadioScreen(viewModel: RadioViewModel = koinViewModel()) {
                 item {
                     FilterChip(selected = uiState.selectedDriver == null,
                         onClick = { viewModel.filterByDriver(null) },
-                        label = { Text("Todos") },
+                        label = { Text(strings.all) },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = F1Red.copy(alpha = 0.3f), containerColor = CardSurface))
                 }
@@ -84,7 +87,7 @@ fun RadioScreen(viewModel: RadioViewModel = koinViewModel()) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator(color = F1Red)
                     Spacer(Modifier.height(8.dp))
-                    Text("Carregando rádios...", color = TextSecondary, fontSize = 12.sp)
+                    Text(strings.loadingRadios, color = TextSecondary, fontSize = 12.sp)
                 }
             }
         } else if (filtered.isEmpty()) {
@@ -92,13 +95,13 @@ fun RadioScreen(viewModel: RadioViewModel = koinViewModel()) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Default.Radio, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(40.dp))
                     Spacer(Modifier.height(8.dp))
-                    Text("Nenhuma comunicação de rádio", color = TextSecondary)
-                    Text("encontrada para esta sessão", color = TextTertiary, fontSize = 12.sp)
+                    Text(strings.noRadios, color = TextSecondary)
+                    Text(strings.noRadiosForSession, color = TextTertiary, fontSize = 12.sp)
                 }
             }
         } else {
             // Radio count
-            Text("${filtered.size} comunicações", color = TextTertiary, fontSize = 12.sp)
+            Text(strings.radioCount(filtered.size), color = TextTertiary, fontSize = 12.sp)
             Spacer(Modifier.height(4.dp))
 
             LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -125,7 +128,7 @@ fun RadioScreen(viewModel: RadioViewModel = koinViewModel()) {
         uiState.error?.let { error ->
             Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = F1Red.copy(alpha = 0.1f)),
                 shape = RoundedCornerShape(10.dp)) {
-                Text(error, Modifier.padding(12.dp), color = F1Red, fontSize = 12.sp)
+                Text(strings.error(error), Modifier.padding(12.dp), color = F1Red, fontSize = 12.sp)
             }
         }
     }
@@ -155,7 +158,7 @@ private fun RadioCard(
                         Text(driver?.teamName ?: "", fontSize = 11.sp, color = TextTertiary)
                     }
                     // Timestamp
-                    val timestamp = radio.date?.let { parseTimestamp(it) } ?: ""
+                    val timestamp = localClock(radio.date) ?: ""
                     if (timestamp.isNotEmpty()) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(Icons.Default.Schedule, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(12.dp))
@@ -170,8 +173,8 @@ private fun RadioCard(
             // Audio Playback
             radio.recordingUrl?.let { url ->
                 Card(
-                    modifier = Modifier.fillMaxWidth()
-                        .clickable { onPlayClicked(url) },
+                    onClick = { onPlayClicked(url) },
+                    modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
                         containerColor = if (isPlaying) F1Red.copy(alpha = 0.15f) else DRSGreen.copy(alpha = 0.1f)
                     ),
@@ -181,15 +184,16 @@ private fun RadioCard(
                         Modifier.padding(10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = if (isPlaying) "⏸" else "▶", 
-                            color = if (isPlaying) F1Red else DRSGreen, 
-                            fontSize = 20.sp
+                        Icon(
+                            if (isPlaying) Icons.Default.PauseCircle else Icons.Default.PlayCircle,
+                            contentDescription = if (isPlaying) strings.pause else strings.listen,
+                            tint = if (isPlaying) F1Red else DRSGreen,
+                            modifier = Modifier.size(28.dp)
                         )
                         Spacer(Modifier.width(8.dp))
                         Column(Modifier.weight(1f)) {
                             Text(
-                                text = if (isPlaying) "Reproduzindo nativamente..." else "Ouvir comunicação no App",
+                                text = if (isPlaying) strings.playing else strings.listenInApp,
                                 color = if (isPlaying) F1Red else DRSGreen, 
                                 fontSize = 13.sp, fontWeight = FontWeight.Medium
                             )
@@ -202,20 +206,9 @@ private fun RadioCard(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Warning, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(14.dp))
                     Spacer(Modifier.width(4.dp))
-                    Text("URL do áudio não disponível", color = TextTertiary, fontSize = 12.sp)
+                    Text(strings.audioUnavailable, color = TextTertiary, fontSize = 12.sp)
                 }
             }
         }
     }
-}
-
-private fun parseTimestamp(dateStr: String): String {
-    // Format: "2024-03-24T00:15:30.123+00:00" -> "00:15:30"
-    return try {
-        val tIndex = dateStr.indexOf('T')
-        if (tIndex >= 0) {
-            val timeStr = dateStr.substring(tIndex + 1)
-            timeStr.take(8) // "HH:mm:ss"
-        } else dateStr
-    } catch (_: Exception) { dateStr }
 }

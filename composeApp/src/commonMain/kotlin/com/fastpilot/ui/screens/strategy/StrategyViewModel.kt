@@ -1,5 +1,7 @@
 package com.fastpilot.ui.screens.strategy
 
+import com.fastpilot.ui.i18n.ErrorKind
+import com.fastpilot.ui.i18n.UiError
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.repository.*
@@ -27,7 +29,7 @@ data class StrategyUiState(
     val isLoadingMetrics: Boolean = false,
     /** /race_control could not be loaded: safety car laps may be included in the metrics. */
     val metricsWithoutRaceControl: Boolean = false,
-    val error: String? = null
+    val error: UiError? = null
 )
 
 /** Fewer clean laps than this (e.g. an early retirement) do not give a meaningful pace. */
@@ -59,7 +61,7 @@ class StrategyViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message))
             }
         }
     }
@@ -86,7 +88,7 @@ class StrategyViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = "Erro: ${e.message}")
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.GENERIC, e.message))
             }
         }
     }

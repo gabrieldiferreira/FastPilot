@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
+import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.screens.dashboard.DashboardScreen
 import com.fastpilot.ui.screens.telemetry.TelemetryScreen
 import com.fastpilot.ui.screens.strategy.StrategyScreen
@@ -21,7 +22,8 @@ object DashboardTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Speed)
-            return remember { TabOptions(index = 0u, title = "Dashboard", icon = icon) }
+            val title = strings.tabDashboard
+            return remember(title) { TabOptions(index = 0u, title = title, icon = icon) }
         }
 
     @Composable
@@ -35,7 +37,8 @@ object TelemetryTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.ShowChart)
-            return remember { TabOptions(index = 1u, title = "Telemetria", icon = icon) }
+            val title = strings.tabTelemetry
+            return remember(title) { TabOptions(index = 1u, title = title, icon = icon) }
         }
 
     @Composable
@@ -49,7 +52,8 @@ object StrategyTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Timeline)
-            return remember { TabOptions(index = 2u, title = "Estratégia", icon = icon) }
+            val title = strings.tabStrategy
+            return remember(title) { TabOptions(index = 2u, title = title, icon = icon) }
         }
 
     @Composable
@@ -63,7 +67,8 @@ object DuelTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.AutoMirrored.Filled.CompareArrows)
-            return remember { TabOptions(index = 3u, title = "Duelo", icon = icon) }
+            val title = strings.tabDuel
+            return remember(title) { TabOptions(index = 3u, title = title, icon = icon) }
         }
 
     @Composable
@@ -77,7 +82,8 @@ object RadioTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Radio)
-            return remember { TabOptions(index = 4u, title = "Rádio", icon = icon) }
+            val title = strings.tabRadio
+            return remember(title) { TabOptions(index = 4u, title = title, icon = icon) }
         }
 
     @Composable
@@ -91,7 +97,8 @@ object WeatherTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Cloud)
-            return remember { TabOptions(index = 5u, title = "Clima", icon = icon) }
+            val title = strings.tabWeather
+            return remember(title) { TabOptions(index = 5u, title = title, icon = icon) }
         }
 
     @Composable
@@ -105,7 +112,8 @@ object StandingsTab : Tab {
         @Composable
         get() {
             val icon = rememberVectorPainter(Icons.Default.Leaderboard)
-            return remember { TabOptions(index = 6u, title = "Tabela", icon = icon) }
+            val title = strings.tabStandings
+            return remember(title) { TabOptions(index = 6u, title = title, icon = icon) }
         }
 
     @Composable

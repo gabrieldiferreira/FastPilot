@@ -1,6 +1,8 @@
 package com.fastpilot.domain.usecase
 
+import com.fastpilot.data.repository.LapRepository
 import com.fastpilot.data.repository.OvertakeRepository
+import com.fastpilot.model.Lap
 import com.fastpilot.data.repository.PitStopRepository
 import com.fastpilot.model.Overtake
 import com.fastpilot.model.PitStop
@@ -33,13 +35,21 @@ data class RaceEvent(
 
 class GetRaceEventsUseCase(
     private val pitStopRepo: PitStopRepository,
-    private val overtakeRepo: OvertakeRepository
+    private val overtakeRepo: OvertakeRepository,
+    /** Gives overtakes their lap number, which OpenF1 does not send (only the time). */
+    private val lapRepo: LapRepository? = null
 ) {
     companion object {
         const val MAX_EVENTS = 30
 
-        /** Pit stops and overtakes as one feed, newest first, at most [MAX_EVENTS]. */
-        fun merge(pitStops: List<PitStop>, overtakes: List<Overtake>): List<RaceEvent> {
+        /**
+         * Pit stops and overtakes as one feed, newest first, at most [MAX_EVENTS]. An overtake's lap
+         * is the one the overtaking driver was on, found in [laps] by start time.
+         */
+        fun merge(pitStops: List<PitStop>, overtakes: List<Overtake>, laps: List<Lap> = emptyList()): List<RaceEvent> {
+            val lapStarts = laps.filter { it.dateStart != null }
+                .groupBy { it.driverNumber }
+                .mapValues { (_, driverLaps) -> driverLaps.sortedBy { it.dateStart } }
             val pits = pitStops.mapNotNull { pit ->
                 RaceEvent(
                     date = pit.date ?: return@mapNotNull null,
@@ -51,15 +61,18 @@ class GetRaceEventsUseCase(
                 )
             }
             val passes = overtakes.mapNotNull { overtake ->
+                val date = overtake.date ?: return@mapNotNull null
                 RaceEvent(
-                    date = overtake.date ?: return@mapNotNull null,
+                    date = date,
                     type = RaceEvent.Type.OVERTAKE,
                     driverNumber = overtake.overtakingDriverNumber,
                     otherDriverNumber = overtake.overtakenDriverNumber,
-                    position = overtake.position
+                    position = overtake.position,
+                    // ISO-8601 dates with the same offset compare as text
+                    lapNumber = lapStarts[overtake.overtakingDriverNumber]
+                        ?.lastOrNull { it.dateStart!! <= date }?.lapNumber
                 )
             }
-            // ISO-8601 dates with the same offset sort as text
             return (pits + passes).sortedByDescending { it.date }.take(MAX_EVENTS)
         }
     }
@@ -68,7 +81,8 @@ class GetRaceEventsUseCase(
     suspend operator fun invoke(sessionKey: Int): List<RaceEvent> = coroutineScope {
         val pitStops = async { orEmpty { pitStopRepo.getPitStops(sessionKey) } }
         val overtakes = async { orEmpty { overtakeRepo.getOvertakes(sessionKey) } }
-        merge(pitStops.await(), overtakes.await())
+        val laps = async { lapRepo?.let { repo -> orEmpty { repo.getAllLaps(sessionKey) } }.orEmpty() }
+        merge(pitStops.await(), overtakes.await(), laps.await())
     }
 
     /** [invoke] every [pollIntervalMs] while collected (live sessions). */

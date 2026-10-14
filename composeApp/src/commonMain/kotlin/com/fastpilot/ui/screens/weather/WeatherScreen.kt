@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.fastpilot.model.Weather
 import com.fastpilot.ui.components.SessionPicker
+import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.theme.*
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -35,7 +36,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
 
     Column(Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState())) {
         Spacer(Modifier.height(12.dp))
-        Text("Condições Climáticas", style = MaterialTheme.typography.headlineSmall,
+        Text(strings.weatherTitle, style = MaterialTheme.typography.headlineSmall,
             color = TextPrimary, fontWeight = FontWeight.Bold)
 
         Spacer(Modifier.height(8.dp))
@@ -56,7 +57,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator(color = F1Red)
                     Spacer(Modifier.height(8.dp))
-                    Text("Carregando dados climáticos...", color = TextSecondary, fontSize = 12.sp)
+                    Text(strings.loadingWeather, color = TextSecondary, fontSize = 12.sp)
                 }
             }
         } else if (weather != null) {
@@ -73,11 +74,11 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
                     Spacer(Modifier.width(12.dp))
                     Column {
                         Text(
-                            if ((weather.rainfall ?: 0) > 0) "Condições de chuva" else "Pista seca",
+                            if ((weather.rainfall ?: 0) > 0) strings.wetConditions else strings.dryTrack,
                             fontWeight = FontWeight.Bold, color = TextPrimary, fontSize = 16.sp
                         )
                         Text(
-                            "${uiState.selectedSession?.circuitShortName ?: ""} • ${uiState.selectedSession?.sessionName ?: ""}",
+                            "${strings.place(uiState.selectedSession?.circuitShortName)} • ${strings.sessionLong(uiState.selectedSession?.sessionName)}",
                             color = TextSecondary, fontSize = 12.sp
                         )
                     }
@@ -88,32 +89,32 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
 
             // Temperature cards
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                WeatherGauge("Temp. Ar", "${weather.airTemperature ?: "--"}°C",
+                WeatherGauge(strings.airTemp, "${weather.airTemperature ?: "--"}°C",
                     SpeedBlue, Modifier.weight(1f))
-                WeatherGauge("Temp. Pista", "${weather.trackTemperature ?: "--"}°C",
+                WeatherGauge(strings.trackTemp, "${weather.trackTemperature ?: "--"}°C",
                     F1Red, Modifier.weight(1f))
             }
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                WeatherInfoCard(Icons.Default.WaterDrop, "Umidade", "${weather.humidity ?: "--"}%", Modifier.weight(1f))
+                WeatherInfoCard(Icons.Default.WaterDrop, strings.humidity, "${weather.humidity ?: "--"}%", Modifier.weight(1f))
                 WeatherInfoCard(
-                    Icons.Default.Umbrella, "Chuva",
-                    if ((weather.rainfall ?: 0) > 0) "Sim" else "Não",
+                    Icons.Default.Umbrella, strings.rain,
+                    if ((weather.rainfall ?: 0) > 0) strings.yes else strings.no,
                     Modifier.weight(1f)
                 )
             }
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                WeatherInfoCard(Icons.Default.Air, "Vento", "${weather.windSpeed ?: "--"} km/h", Modifier.weight(1f))
+                WeatherInfoCard(Icons.Default.Air, strings.wind, "${weather.windSpeed ?: "--"} km/h", Modifier.weight(1f))
                 WindDirection(weather.windDirection ?: 0, Modifier.weight(1f))
             }
             Spacer(Modifier.height(12.dp))
-            WeatherInfoCard(Icons.Default.Compress, "Pressão", "${weather.pressure ?: "--"} hPa", Modifier.fillMaxWidth())
+            WeatherInfoCard(Icons.Default.Compress, strings.pressure, "${weather.pressure ?: "--"} hPa", Modifier.fillMaxWidth())
 
             // History stats
             if (uiState.weatherHistory.size > 1) {
                 Spacer(Modifier.height(16.dp))
-                Text("Histórico da sessão", color = TextSecondary, fontSize = 13.sp,
+                Text(strings.sessionHistory, color = TextSecondary, fontSize = 13.sp,
                     fontWeight = FontWeight.Medium)
                 Spacer(Modifier.height(8.dp))
 
@@ -123,18 +124,18 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
                 Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
                     shape = RoundedCornerShape(12.dp)) {
                     Column(Modifier.padding(12.dp)) {
-                        Text("${uiState.weatherHistory.size} medições", color = TextTertiary, fontSize = 11.sp)
+                        Text(strings.readings(uiState.weatherHistory.size), color = TextTertiary, fontSize = 11.sp)
                         Spacer(Modifier.height(4.dp))
                         if (temps.isNotEmpty()) {
                             Row {
-                                Text("Pista: ", color = TextSecondary, fontSize = 12.sp)
+                                Text(strings.trackPrefix, color = TextSecondary, fontSize = 12.sp)
                                 Text("min ${temps.min().toInt()}° / max ${temps.max().toInt()}°",
                                     color = F1Red, fontSize = 12.sp, fontWeight = FontWeight.Medium)
                             }
                         }
                         if (winds.isNotEmpty()) {
                             Row {
-                                Text("Vento: ", color = TextSecondary, fontSize = 12.sp)
+                                Text(strings.windPrefix, color = TextSecondary, fontSize = 12.sp)
                                 Text("min ${winds.min().toInt()} / max ${winds.max().toInt()} km/h",
                                     color = SpeedBlue, fontSize = 12.sp, fontWeight = FontWeight.Medium)
                             }
@@ -147,8 +148,8 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Default.Cloud, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(40.dp))
                     Spacer(Modifier.height(8.dp))
-                    Text("Sem dados de clima", color = TextSecondary)
-                    Text("Selecione outra sessão acima", color = TextTertiary, fontSize = 12.sp)
+                    Text(strings.noWeather, color = TextSecondary)
+                    Text(strings.selectAnotherSession, color = TextTertiary, fontSize = 12.sp)
                 }
             }
         }
@@ -157,7 +158,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
             Spacer(Modifier.height(12.dp))
             Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = F1Red.copy(alpha = 0.1f)),
                 shape = RoundedCornerShape(10.dp)) {
-                Text(error, Modifier.padding(12.dp), color = F1Red, fontSize = 12.sp)
+                Text(strings.error(error), Modifier.padding(12.dp), color = F1Red, fontSize = 12.sp)
             }
         }
 
@@ -201,7 +202,7 @@ private fun WindDirection(degrees: Int, modifier: Modifier) {
     Card(modifier, colors = CardDefaults.cardColors(containerColor = CardSurface),
         shape = RoundedCornerShape(12.dp)) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Direção do Vento", fontSize = 13.sp, color = TextSecondary)
+            Text(strings.windDirection, fontSize = 13.sp, color = TextSecondary)
             Spacer(Modifier.height(4.dp))
             Icon(Icons.Default.ArrowUpward, contentDescription = null, tint = DRSGreen,
                 modifier = Modifier.size(28.dp).rotate(degrees.toFloat()))

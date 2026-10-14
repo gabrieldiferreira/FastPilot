@@ -1,5 +1,7 @@
 package com.fastpilot.ui.screens.weather
 
+import com.fastpilot.ui.i18n.ErrorKind
+import com.fastpilot.ui.i18n.UiError
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.polling.LivePollingManager
@@ -23,7 +25,7 @@ data class WeatherUiState(
     val selectedSession: Session? = null,
     val currentWeather: Weather? = null,
     val weatherHistory: List<Weather> = emptyList(),
-    val error: String? = null
+    val error: UiError? = null
 )
 
 class WeatherViewModel(
@@ -46,7 +48,7 @@ class WeatherViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message))
             }
         }
     }
@@ -80,7 +82,7 @@ class WeatherViewModel(
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    error = "Erro ao carregar clima: ${e.message}"
+                    error = UiError(ErrorKind.WEATHER, e.message)
                 )
             }
         }

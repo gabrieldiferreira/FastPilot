@@ -62,19 +62,36 @@ class RecentSessionsTest {
     }
 
     @Test
-    fun `season sessions merge every year newest first`() = runTest {
+    fun `season sessions come in one request, merged newest first, and are kept in memory`() = runTest {
+        var requests = 0
         val repository = SessionRepository(OpenF1Api(mockHttpClient { request ->
-            when (request.url.parameters["year"]) {
-                "2026" -> respondJson("""[
-                    {"session_key":1,"session_type":"Qualifying","date_start":"2026-11-07T18:00:00+00:00"},
-                    {"session_key":3,"session_type":"Race","date_start":"2026-11-22T04:00:00+00:00"},
-                    {"session_key":2,"session_type":"Race","date_start":"2026-11-08T17:00:00+00:00"}]""")
-                "2025" -> respondJson("""[{"session_key":4,"session_type":"Race","date_start":"2025-12-07T13:00:00+00:00"}]""")
-                else -> respondJson("[]")
+            requests++
+            when (request.url.parameters["year>"]) {
+                "2023" -> respondJson("""[
+                    {"session_key":1,"session_type":"Qualifying","date_start":"2026-11-07T18:00:00+00:00","year":2026},
+                    {"session_key":3,"session_type":"Race","date_start":"2026-11-22T04:00:00+00:00","year":2026},
+                    {"session_key":2,"session_type":"Race","date_start":"2026-11-08T17:00:00+00:00","year":2026},
+                    {"session_key":4,"session_type":"Race","date_start":"2025-12-07T13:00:00+00:00","year":2025},
+                    {"session_key":5,"session_type":"Race","date_start":"2027-03-14T04:00:00+00:00","year":2027}]""")
+                else -> error("one request per year: ${request.url}")
             }
         }), db = null)
 
         assertEquals(listOf(3, 2, 1, 4), repository.getSeasonSessions(now).map { it.sessionKey })
         assertEquals(listOf(2, 1, 4), repository.getRecentSessions(now).map { it.sessionKey })
+        assertEquals(1, requests)
+    }
+
+    @Test
+    fun `sessions without a year fall back to one request per year`() = runTest {
+        val repository = SessionRepository(OpenF1Api(mockHttpClient { request ->
+            when (request.url.parameters["year"]) {
+                "2026" -> respondJson("""[{"session_key":2,"session_type":"Race","date_start":"2026-11-08T17:00:00+00:00"}]""")
+                "2025" -> respondJson("""[{"session_key":4,"session_type":"Race","date_start":"2025-12-07T13:00:00+00:00"}]""")
+                else -> respondJson("[]")
+            }
+        }), db = null)
+
+        assertEquals(listOf(2, 4), repository.getSeasonSessions(now).map { it.sessionKey })
     }
 }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import com.fastpilot.ui.i18n.ErrorKind
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -119,7 +120,7 @@ class StandingsViewModelTest {
         val state = vm.uiState.value
         assertFalse(state.isLoading)
         assertNull(state.tables)
-        assertTrue(state.error!!.startsWith("Erro ao carregar classificação"))
+        assertEquals(ErrorKind.STANDINGS, state.error!!.kind)
     }
 
     @Test

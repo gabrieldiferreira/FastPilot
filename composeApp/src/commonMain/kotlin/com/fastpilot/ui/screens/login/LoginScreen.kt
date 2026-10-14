@@ -1,12 +1,20 @@
 package com.fastpilot.ui.screens.login
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -14,6 +22,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fastpilot.ui.theme.DarkGradientColors
 import com.fastpilot.ui.theme.F1Red
+import com.fastpilot.ui.i18n.AppLanguage
+import com.fastpilot.ui.i18n.Flag
+import com.fastpilot.ui.i18n.LanguageState
+import com.fastpilot.ui.i18n.strings
 
 @Composable
 fun LoginScreen(onLoginSuccess: () -> Unit) {
@@ -38,7 +50,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
             )
             
             Text(
-                text = "Telemetria de elite nas suas mãos",
+                text = strings.loginTagline,
                 color = Color.Gray,
                 fontSize = 14.sp,
                 modifier = Modifier.padding(top = 8.dp, bottom = 48.dp)
@@ -73,7 +85,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                         modifier = Modifier.padding(end = 12.dp)
                     )
                     Text(
-                        text = "Continuar com o Google",
+                        text = strings.loginWithGoogle,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -89,8 +101,52 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                 }
             ) {
                 Text(
-                    text = "Continuar como Convidado",
+                    text = strings.loginAsGuest,
                     color = Color.Gray
+                )
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            LanguagePicker()
+        }
+    }
+}
+
+/** One flag per language; the choice is saved and applies to the whole app at once. */
+@Composable
+private fun LanguagePicker() {
+    Text(strings.language, color = Color.Gray, fontSize = 12.sp)
+    Spacer(Modifier.height(12.dp))
+    Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+        AppLanguage.entries.forEach { language ->
+            val selected = language == LanguageState.current
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(10.dp))
+                    .clickable { LanguageState.select(language) }
+                    .semantics { this.selected = selected; role = Role.RadioButton }
+                    .padding(8.dp)
+            ) {
+                Flag(
+                    language,
+                    Modifier
+                        .size(width = 42.dp, height = 28.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .border(
+                            width = if (selected) 2.dp else 1.dp,
+                            color = if (selected) F1Red else Color.White.copy(alpha = 0.25f),
+                            shape = RoundedCornerShape(4.dp)
+                        )
+                        .alpha(if (selected) 1f else 0.6f)
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    language.nativeName,
+                    color = if (selected) Color.White else Color.Gray,
+                    fontSize = 11.sp,
+                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
                 )
             }
         }

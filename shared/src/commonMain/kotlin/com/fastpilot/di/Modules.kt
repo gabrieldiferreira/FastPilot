@@ -48,7 +48,7 @@ val useCaseModule = module {
     factory { CalculateTheoreticalBestUseCase() }
     factory { GetTyreDegradationUseCase() }
     factory { CalculateChampionshipGapsUseCase() }
-    factory { GetRaceEventsUseCase(get(), get()) }
+    factory { GetRaceEventsUseCase(get(), get(), get()) }
 }
 
 val sharedModules = listOf(

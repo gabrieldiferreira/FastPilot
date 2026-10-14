@@ -16,7 +16,9 @@ CREATE TABLE IF NOT EXISTS cached_session (
     date_start TEXT NOT NULL,
     date_end TEXT NOT NULL,
     year INTEGER NOT NULL,
-    cached_at INTEGER NOT NULL
+    cached_at INTEGER NOT NULL,
+    -- Circuit time zone ("08:00:00"): race control writes times in it
+    gmt_offset TEXT NOT NULL DEFAULT ''
 );
 
 selectAllSessions:
@@ -35,8 +37,8 @@ insertSession:
 INSERT OR REPLACE INTO cached_session(
     session_key, session_name, session_type, meeting_key,
     circuit_short_name, country_name, country_code,
-    date_start, date_end, year, cached_at
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    date_start, date_end, year, cached_at, gmt_offset
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 deleteSessionByKey:
 DELETE FROM cached_session WHERE session_key = ?;

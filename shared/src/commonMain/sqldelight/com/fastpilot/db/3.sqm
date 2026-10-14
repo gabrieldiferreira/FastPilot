@@ -1,0 +1,3 @@
+-- v3 -> v4: circuit time zone of each session, to show race control times in the user's time zone
+
+ALTER TABLE cached_session ADD COLUMN gmt_offset TEXT NOT NULL DEFAULT '';

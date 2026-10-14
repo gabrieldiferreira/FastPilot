@@ -25,6 +25,7 @@ import com.fastpilot.domain.usecase.LapDeltaPoint
 import com.fastpilot.model.Driver
 import com.fastpilot.ui.components.DriverSelector
 import com.fastpilot.ui.components.SessionPicker
+import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.theme.*
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.roundToInt
@@ -42,7 +43,7 @@ fun DuelScreen(
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(Modifier.height(12.dp))
-        Text("Duelo de Pilotos", style = MaterialTheme.typography.headlineSmall,
+        Text(strings.duelTitle, style = MaterialTheme.typography.headlineSmall,
             color = TextPrimary, fontWeight = FontWeight.Bold)
 
         Spacer(Modifier.height(8.dp))
@@ -62,7 +63,7 @@ fun DuelScreen(
         if (uiState.drivers.isNotEmpty()) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 DriverSelector(
-                    label = "Piloto 1",
+                    label = strings.driverN(1),
                     drivers = uiState.drivers,
                     selectedDriver = uiState.driver1,
                     onDriverSelected = { viewModel.selectDriver1(it) },
@@ -71,7 +72,7 @@ fun DuelScreen(
                 Text("VS", color = F1Red, fontWeight = FontWeight.Bold, fontSize = 16.sp,
                     modifier = Modifier.align(Alignment.CenterVertically))
                 DriverSelector(
-                    label = "Piloto 2",
+                    label = strings.driverN(2),
                     drivers = uiState.drivers,
                     selectedDriver = uiState.driver2,
                     onDriverSelected = { viewModel.selectDriver2(it) },
@@ -87,8 +88,8 @@ fun DuelScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Default.CompareArrows, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(48.dp))
                     Spacer(Modifier.height(8.dp))
-                    Text("Selecione dois pilotos acima", color = TextSecondary)
-                    Text("para comparar o desempenho", color = TextTertiary, fontSize = 12.sp)
+                    Text(strings.selectTwoDrivers, color = TextSecondary)
+                    Text(strings.toComparePerformance, color = TextTertiary, fontSize = 12.sp)
                 }
             }
         }
@@ -101,7 +102,7 @@ fun DuelScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator(color = F1Red)
                     Spacer(Modifier.height(8.dp))
-                    Text("Calculando comparação...", color = TextSecondary, fontSize = 12.sp)
+                    Text(strings.computingComparison, color = TextSecondary, fontSize = 12.sp)
                 }
             }
         }
@@ -110,7 +111,7 @@ fun DuelScreen(
         uiState.error?.let { error ->
             Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = F1Red.copy(alpha = 0.1f)),
                 shape = RoundedCornerShape(10.dp)) {
-                Text(error, Modifier.padding(12.dp), color = F1Red, fontSize = 12.sp)
+                Text(strings.error(error), Modifier.padding(12.dp), color = F1Red, fontSize = 12.sp)
             }
             Spacer(Modifier.height(12.dp))
         }
@@ -121,9 +122,9 @@ fun DuelScreen(
                 Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
                     shape = RoundedCornerShape(16.dp)) {
                     Column(Modifier.padding(16.dp)) {
-                        Text("Delta Acumulado", color = TextSecondary, fontSize = 13.sp)
+                        Text(strings.cumulativeDelta, color = TextSecondary, fontSize = 13.sp)
                         Spacer(Modifier.height(4.dp))
-                        Text("Positivo = ${uiState.driver1?.nameAcronym ?: "D1"} à frente",
+                        Text(strings.positiveMeansAhead(uiState.driver1?.nameAcronym ?: "D1"),
                             fontSize = 11.sp, color = TextTertiary)
                         Spacer(Modifier.height(12.dp))
                         DeltaChart(deltas = duel.cumulativeDelta,
@@ -153,22 +154,22 @@ fun DuelScreen(
                 StatsComparisonRow(
                     uiState.driver1?.nameAcronym ?: "D1",
                     uiState.driver2?.nameAcronym ?: "D2",
-                    "Ritmo Médio", formatTime(avg1), formatTime(avg2), avg1 < avg2)
+                    strings.averagePace, formatTime(avg1), formatTime(avg2), avg1 < avg2)
                 Spacer(Modifier.height(8.dp))
                 StatsComparisonRow(
                     uiState.driver1?.nameAcronym ?: "D1",
                     uiState.driver2?.nameAcronym ?: "D2",
-                    "Melhor Volta", formatTime(best1), formatTime(best2), best1 < best2)
+                    strings.bestLap, formatTime(best1), formatTime(best2), best1 < best2)
                 Spacer(Modifier.height(8.dp))
                 StatsComparisonRow(
                     uiState.driver1?.nameAcronym ?: "D1",
                     uiState.driver2?.nameAcronym ?: "D2",
-                    "Voltas Válidas", "${duel.lapsDriver1.size}", "${duel.lapsDriver2.size}",
+                    strings.validLaps, "${duel.lapsDriver1.size}", "${duel.lapsDriver2.size}",
                     duel.lapsDriver1.size > duel.lapsDriver2.size)
             } else if (!uiState.isComputing && uiState.driver1 != null && uiState.driver2 != null) {
                 Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
                     shape = RoundedCornerShape(12.dp)) {
-                    Text("Sem dados de voltas comuns entre os pilotos selecionados",
+                    Text(strings.noCommonLaps,
                         Modifier.padding(16.dp), color = TextTertiary, fontSize = 13.sp)
                 }
             }
@@ -210,18 +211,17 @@ private fun LapDeltaCard(lapDelta: LapDelta?, isComputing: Boolean, unavailable:
     Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
         shape = RoundedCornerShape(16.dp)) {
         Column(Modifier.padding(16.dp)) {
-            Text("Delta na Volta Mais Rápida", color = TextSecondary, fontSize = 13.sp)
+            Text(strings.fastestLapDelta, color = TextSecondary, fontSize = 13.sp)
             Spacer(Modifier.height(4.dp))
             if (lapDelta == null) {
                 Box(Modifier.fillMaxWidth().height(120.dp), contentAlignment = Alignment.Center) {
-                    if (unavailable) Text("Dados de posição indisponíveis para estas voltas", color = TextTertiary, fontSize = 12.sp)
+                    if (unavailable) Text(strings.positionDataUnavailable, color = TextTertiary, fontSize = 12.sp)
                     else CircularProgressIndicator(color = F1Red, modifier = Modifier.size(24.dp))
                 }
                 return@Column
             }
             Text(
-                "Volta ${lapDelta.referenceLapNumber} de $name1 vs volta ${lapDelta.comparedLapNumber} de $name2 " +
-                    "• acima de 0 = $name1 à frente",
+                strings.lapVsLap(lapDelta.referenceLapNumber, name1, lapDelta.comparedLapNumber, name2),
                 fontSize = 11.sp, color = TextTertiary
             )
             Spacer(Modifier.height(12.dp))
@@ -236,9 +236,9 @@ private fun LapDeltaCard(lapDelta: LapDelta?, isComputing: Boolean, unavailable:
             val gap = lapDelta.finalGap
             Text(
                 when {
-                    gap > 0 -> "$name1 mais rápido por ${formatGap(gap)}"
-                    gap < 0 -> "$name2 mais rápido por ${formatGap(-gap)}"
-                    else -> "Mesmo tempo de volta"
+                    gap > 0 -> strings.fasterBy(name1, formatGap(gap))
+                    gap < 0 -> strings.fasterBy(name2, formatGap(-gap))
+                    else -> strings.sameLapTime
                 },
                 color = TextPrimary, fontWeight = FontWeight.SemiBold, fontSize = 13.sp
             )

@@ -22,6 +22,8 @@ import com.fastpilot.model.Driver
 import com.fastpilot.model.PitStop
 import com.fastpilot.model.Stint
 import com.fastpilot.ui.components.SessionPicker
+import com.fastpilot.ui.i18n.oneDecimal
+import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.theme.*
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.abs
@@ -40,7 +42,7 @@ fun StrategyScreen(
     ) {
         Spacer(Modifier.height(12.dp))
         Text(
-            "Estratégia de Pneus",
+            strings.strategyTitle,
             style = MaterialTheme.typography.headlineSmall,
             color = TextPrimary,
             fontWeight = FontWeight.Bold
@@ -66,7 +68,7 @@ fun StrategyScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     CircularProgressIndicator(color = F1Red)
                     Spacer(Modifier.height(8.dp))
-                    Text("Carregando estratégia...", color = TextSecondary, fontSize = 12.sp)
+                    Text(strings.loadingStrategy, color = TextSecondary, fontSize = 12.sp)
                 }
             }
         } else if (uiState.stintsByDriver.isEmpty()) {
@@ -75,8 +77,8 @@ fun StrategyScreen(
                     Icon(Icons.Default.Flag, contentDescription = null, tint = TextTertiary,
                         modifier = Modifier.size(40.dp))
                     Spacer(Modifier.height(8.dp))
-                    Text("Nenhum stint encontrado", color = TextSecondary)
-                    Text("Selecione uma sessão de corrida", color = TextTertiary, fontSize = 12.sp)
+                    Text(strings.noStints, color = TextSecondary)
+                    Text(strings.selectARace, color = TextTertiary, fontSize = 12.sp)
                 }
             }
         } else {
@@ -94,8 +96,7 @@ fun StrategyScreen(
                 if (uiState.degradationByDriver.isNotEmpty()) {
                     item {
                         Text(
-                            "Degradação: aumento do tempo de volta por volta de uso do pneu " +
-                                "(regressão linear sobre as voltas limpas de cada stint)",
+                            strings.degradationHint,
                             fontSize = 11.sp, color = TextTertiary
                         )
                     }
@@ -126,7 +127,7 @@ fun StrategyScreen(
                 // Pit stops section
                 if (uiState.pitStops.isNotEmpty()) {
                     item {
-                        Text("Pit Stops", style = MaterialTheme.typography.titleMedium,
+                        Text(strings.pitStops, style = MaterialTheme.typography.titleMedium,
                             color = TextSecondary)
                         Spacer(Modifier.height(8.dp))
                     }
@@ -255,7 +256,7 @@ private fun DegradationLabel(curve: DegradationCurve) {
         )
         Spacer(Modifier.width(4.dp))
         Text(
-            "${formatSigned(curve.degradationPerLap, 3)} s/volta",
+            "${formatSigned(curve.degradationPerLap, 3)} ${strings.perLap}",
             fontSize = 10.sp,
             color = TextSecondary
         )
@@ -264,16 +265,15 @@ private fun DegradationLabel(curve: DegradationCurve) {
 
 @Composable
 private fun CleanPaceHeader(withoutRaceControl: Boolean) {
-    Text("Ritmo Limpo", style = MaterialTheme.typography.titleMedium, color = TextSecondary)
+    Text(strings.cleanPace, style = MaterialTheme.typography.titleMedium, color = TextSecondary)
     Text(
-        "Mediana das voltas representativas: sem volta 1, entrada/saída de box, " +
-            "safety car, VSC e bandeira vermelha; 5% mais rápidas e mais lentas descartadas",
+        strings.cleanPaceHint,
         fontSize = 11.sp, color = TextTertiary
     )
     if (withoutRaceControl) {
         Spacer(Modifier.height(4.dp))
         Text(
-            "Mensagens da direção de prova indisponíveis: voltas sob safety car podem estar incluídas",
+            strings.raceControlUnavailable,
             fontSize = 11.sp, color = SafetyCarAmber
         )
     }
@@ -301,13 +301,13 @@ private fun CleanPaceRow(position: Int, stats: CleanPaceStats, driver: Driver?, 
             Column(Modifier.weight(1f)) {
                 Text(formatLapTime(stats.medianPace), fontSize = 14.sp, color = TextPrimary,
                     fontWeight = FontWeight.Bold)
-                Text("${stats.cleanLapCount}/${stats.totalLapCount} voltas limpas",
+                Text(strings.cleanLaps(stats.cleanLapCount, stats.totalLapCount),
                     fontSize = 10.sp, color = TextTertiary)
             }
             Column(horizontalAlignment = Alignment.End) {
                 val gap = stats.medianPace - reference
                 Text(
-                    if (position == 1) "referência" else "${formatSigned(gap, 3)}s",
+                    if (position == 1) strings.reference else "${formatSigned(gap, 3)}s",
                     fontSize = 13.sp,
                     color = if (position == 1) DRSGreen else TextSecondary,
                     fontWeight = FontWeight.SemiBold
@@ -363,16 +363,19 @@ private fun PitStopCard(pit: PitStop, driver: Driver?) {
                 color = driver?.teamColour?.let { TeamColors.fromHex(it) } ?: TextSecondary,
                 modifier = Modifier.width(50.dp)
             )
-            Text("Volta ${pit.lapNumber ?: "?"}", fontSize = 12.sp, color = TextSecondary)
+            Text(pit.lapNumber?.let { strings.lap(it) } ?: "--", fontSize = 12.sp, color = TextSecondary)
             Spacer(Modifier.weight(1f))
             Column(horizontalAlignment = Alignment.End) {
+                // OpenF1 stopped sending the stationary time in 2026: the pit lane time instead
+                val stationary = pit.stopDuration
+                val lane = pit.laneDuration ?: pit.pitDuration
                 Text(
-                    "${pit.stopDuration ?: "--"}s",
+                    (stationary ?: lane)?.let { "${oneDecimal(it, strings.decimalSeparator)} s" } ?: "--",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     color = DRSGreen
                 )
-                Text("pit stop", fontSize = 10.sp, color = TextTertiary)
+                Text(if (stationary == null && lane != null) "pit lane" else strings.pitStopLabel, fontSize = 10.sp, color = TextTertiary)
             }
         }
     }

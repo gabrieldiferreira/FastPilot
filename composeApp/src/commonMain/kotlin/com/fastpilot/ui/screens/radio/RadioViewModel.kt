@@ -1,5 +1,7 @@
 package com.fastpilot.ui.screens.radio
 
+import com.fastpilot.ui.i18n.ErrorKind
+import com.fastpilot.ui.i18n.UiError
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.polling.LivePollingManager
@@ -26,7 +28,7 @@ data class RadioUiState(
     val drivers: List<Driver> = emptyList(),
     val selectedDriver: Driver? = null,
     val radios: List<TeamRadio> = emptyList(),
-    val error: String? = null
+    val error: UiError? = null
 )
 
 class RadioViewModel(
@@ -51,7 +53,7 @@ class RadioViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = e.message)
+                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message))
             }
         }
     }
@@ -73,7 +75,9 @@ class RadioViewModel(
                 while (LiveSessionDetector.isLive(session)) {
                     delay(LivePollingManager.TEAM_RADIO_POLL_MS)
                     try {
-                        _uiState.value = _uiState.value.copy(radios = radioRepo.getTeamRadio(session.sessionKey))
+                        // Fetched before reading the state, which may change during the request
+                        val radios = radioRepo.getTeamRadio(session.sessionKey)
+                        _uiState.value = _uiState.value.copy(radios = radios)
                     } catch (e: kotlinx.coroutines.CancellationException) {
                         throw e
                     } catch (_: Exception) { /* retry on next poll */ }
@@ -82,7 +86,7 @@ class RadioViewModel(
                 throw e
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
-                    isLoading = false, error = "Erro ao carregar rádios: ${e.message}"
+                    isLoading = false, error = UiError(ErrorKind.RADIO, e.message)
                 )
             }
         }
