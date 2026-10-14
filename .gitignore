@@ -1,0 +1,27 @@
+# Build output (Gradle, Kotlin, Android, Xcode): regenerated on every build
+build/
+.gradle/
+.kotlin/
+*.apk
+*.aab
+DerivedData/
+composeApp/release/
+
+# Machine-specific settings
+local.properties
+.idea/
+*.iml
+.vscode/
+xcuserdata/
+*.xcuserstate
+.DS_Store
+
+# Android developer verification
+adi-registration.properties
+
+# Benchmark scratch (metrics/performance keeps only the published round)
+metrics/performance/_*
+
+# Python
+__pycache__/
+*.pyc
