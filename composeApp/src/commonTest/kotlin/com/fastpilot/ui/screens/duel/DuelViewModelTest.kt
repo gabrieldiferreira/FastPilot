@@ -4,6 +4,7 @@ import com.fastpilot.data.repository.DriverRepository
 import com.fastpilot.data.repository.LapRepository
 import com.fastpilot.data.repository.LocationRepository
 import com.fastpilot.data.repository.SessionRepository
+import com.fastpilot.data.repository.availableSeasons
 import com.fastpilot.domain.usecase.CalculateLapDeltaUseCase
 import com.fastpilot.domain.usecase.GetDriverDuelUseCase
 import com.fastpilot.domain.usecase.GetLapDeltaUseCase
@@ -72,7 +73,7 @@ class DuelViewModelTest {
             val params = request.url.parameters
             when {
                 request.url.encodedPath.endsWith("/sessions") ->
-                    respondJson(if (params["year"] == "2024") """[{"session_key":9636,"session_name":"Race","session_type":"Race","year":2024}]""" else "[]")
+                    respondJson(if (params["year"] == availableSeasons().last().toString()) """[{"session_key":9636,"session_name":"Race","session_type":"Race","year":2024}]""" else "[]")
                 request.url.encodedPath.endsWith("/drivers") ->
                     respondJson("""[{"driver_number":1,"name_acronym":"VER"},{"driver_number":44,"name_acronym":"HAM"}]""")
                 request.url.encodedPath.endsWith("/laps") -> respondJson(lapsJson(params["driver_number"]!!.toInt()))

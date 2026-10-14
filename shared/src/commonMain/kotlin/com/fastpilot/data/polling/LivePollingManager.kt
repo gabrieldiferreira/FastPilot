@@ -24,10 +24,16 @@ class LivePollingManager(
     private val raceControlRepo: RaceControlRepository,
     private val weatherRepo: WeatherRepository
 ) {
+    // Intervals from the TCC I (§4.5). Live requests share one OpenF1 Sponsor quota (60 per
+    // minute) through the proxy, whose CDN cache answers repeated requests; with every live
+    // screen open: positions 15 + intervals 15 + race control 6 + pit stops and overtakes 8
+    // + radio 4 + weather 1 = 49 requests per minute.
     companion object {
         const val POSITION_POLL_MS = 4_000L
+        const val RACE_CONTROL_POLL_MS = 10_000L
+        const val RACE_EVENTS_POLL_MS = 15_000L
+        const val TEAM_RADIO_POLL_MS = 15_000L
         const val WEATHER_POLL_MS = 60_000L
-        const val RACE_CONTROL_POLL_MS = 5_000L
     }
 
     fun observePositions(sessionKey: Int): Flow<List<Position>> = flow {

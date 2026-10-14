@@ -1,0 +1,12 @@
+-- v2 -> v3: raw telemetry and track position cache (TCC I §4.5)
+
+CREATE TABLE IF NOT EXISTS cached_samples (
+    endpoint TEXT NOT NULL,
+    session_key INTEGER NOT NULL,
+    driver_number INTEGER NOT NULL,
+    date_gte TEXT NOT NULL,
+    date_lte TEXT NOT NULL,
+    json TEXT NOT NULL,
+    cached_at INTEGER NOT NULL,
+    PRIMARY KEY (endpoint, session_key, driver_number, date_gte, date_lte)
+);

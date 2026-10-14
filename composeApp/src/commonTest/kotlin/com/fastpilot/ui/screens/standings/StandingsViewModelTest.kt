@@ -71,7 +71,7 @@ class StandingsViewModelTest {
 
         val state = vm.uiState.value
         assertFalse(state.isLoading)
-        assertEquals(2025, state.selectedSeason)
+        assertEquals(StandingsViewModel.SEASONS.first(), state.selectedSeason)
         assertNull(state.error)
         val tables = assertNotNull(state.tables)
         assertEquals(22, tables.round)

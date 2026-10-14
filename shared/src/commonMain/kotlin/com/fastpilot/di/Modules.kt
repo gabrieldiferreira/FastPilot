@@ -20,7 +20,7 @@ val repositoryModule = module {
     single { DriverRepository(get(), getOrNull()) }
     single { LapRepository(get(), getOrNull()) }
     single { StintRepository(get(), getOrNull()) }
-    single { TelemetryRepository(get()) }
+    single { TelemetryRepository(get(), getOrNull()) }
     single { PositionRepository(get()) }
     single { IntervalRepository(get()) }
     single { RaceControlRepository(get()) }
@@ -28,7 +28,9 @@ val repositoryModule = module {
     single { TeamRadioRepository(get()) }
     single { PitStopRepository(get()) }
     single { MeetingRepository(get()) }
-    single { LocationRepository(get()) }
+    single { LocationRepository(get(), getOrNull()) }
+    single { OvertakeRepository(get()) }
+    single { CacheMaintenance(getOrNull()) }
     single { StandingsRepository(get(), getOrNull()) }
 }
 
@@ -46,6 +48,7 @@ val useCaseModule = module {
     factory { CalculateTheoreticalBestUseCase() }
     factory { GetTyreDegradationUseCase() }
     factory { CalculateChampionshipGapsUseCase() }
+    factory { GetRaceEventsUseCase(get(), get()) }
 }
 
 val sharedModules = listOf(

@@ -10,16 +10,27 @@ import com.fastpilot.model.Weather
 import com.fastpilot.model.TeamRadio
 import com.fastpilot.model.PitStop
 import com.fastpilot.model.Meeting
+import com.fastpilot.model.Overtake
+import com.fastpilot.db.FastPilotDB
 import com.fastpilot.network.OpenF1Api
+import com.fastpilot.network.SessionRegistry
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.json.Json
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 /**
  * Repository for telemetry data (car_data endpoint).
- * No local cache — telemetry is always fetched fresh due to high volume.
+ * A lap's samples of a finished session are kept in the local cache ([SamplesCache]).
  */
-class TelemetryRepository(private val api: OpenF1Api) {
+class TelemetryRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
     suspend fun getCarData(
         sessionKey: Int,
@@ -27,6 +38,15 @@ class TelemetryRepository(private val api: OpenF1Api) {
         dateGte: String? = null,
         dateLte: String? = null
     ): List<CarData> = api.getCarData(sessionKey, driverNumber, dateGte, dateLte)
+
+    /** Samples of one lap (~270 at 3.7 Hz); without a lap time, everything from the lap start. */
+    suspend fun getLapCarData(sessionKey: Int, lap: Lap): List<CarData> {
+        val start = lap.dateStart ?: return emptyList()
+        val end = lapEnd(lap) ?: return getCarData(sessionKey, lap.driverNumber, dateGte = start)
+        return cache.getOrFetch("car_data", sessionKey, lap.driverNumber, start, end, ListSerializer(CarData.serializer())) {
+            getCarData(sessionKey, lap.driverNumber, dateGte = start, dateLte = end)
+        }
+    }
 }
 
 /**
@@ -107,6 +127,14 @@ class PitStopRepository(private val api: OpenF1Api) {
 }
 
 /**
+ * Repository for overtakes (passes between two cars).
+ */
+class OvertakeRepository(private val api: OpenF1Api) {
+
+    suspend fun getOvertakes(sessionKey: Int): List<Overtake> = api.getOvertakes(sessionKey)
+}
+
+/**
  * Repository for meeting (Grand Prix) data.
  */
 class MeetingRepository(private val api: OpenF1Api) {
@@ -120,14 +148,62 @@ class MeetingRepository(private val api: OpenF1Api) {
 
 /**
  * Repository for car positions on track (location endpoint).
- * No local cache — only the samples of the requested lap are fetched (~350 per lap).
+ * Only the samples of the requested lap are fetched (~350 per lap); those of a finished
+ * session are kept in the local cache ([SamplesCache]).
  */
-class LocationRepository(private val api: OpenF1Api) {
+class LocationRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
     suspend fun getLapLocations(sessionKey: Int, lap: Lap): List<Location> {
-        val start = lap.dateStart?.let(Instant::parse) ?: return emptyList()
-        val duration = lap.lapDuration ?: return emptyList()
-        val end = start + (duration * 1000).toLong().milliseconds + 1.seconds
-        return api.getLocation(sessionKey, lap.driverNumber, dateGte = start.toString(), dateLte = end.toString())
+        val start = lap.dateStart ?: return emptyList()
+        val end = lapEnd(lap) ?: return emptyList()
+        return cache.getOrFetch("location", sessionKey, lap.driverNumber, start, end, ListSerializer(Location.serializer())) {
+            api.getLocation(sessionKey, lap.driverNumber, dateGte = start, dateLte = end)
+        }
+    }
+}
+
+/** End of [lap] plus one second of margin, or null without a start or a lap time. */
+private fun lapEnd(lap: Lap): String? {
+    val start = lap.dateStart?.let(Instant::parse) ?: return null
+    val duration = lap.lapDuration ?: return null
+    return (start + (duration * 1000).toLong().milliseconds + 1.seconds).toString()
+}
+
+/**
+ * Raw samples (telemetry, track position) of one driver in one time window (TCC I §4.5).
+ * Only samples of a finished session are stored, as they no longer change; they are read
+ * back before any request, also offline, until the 30-day cleanup ([CacheMaintenance]).
+ * Without a database (Web) every call goes to the network.
+ */
+private class SamplesCache(private val db: FastPilotDB?, private val sessions: SessionRegistry) {
+    private val json = Json { ignoreUnknownKeys = true }
+
+    suspend fun <T> getOrFetch(
+        endpoint: String,
+        sessionKey: Int,
+        driverNumber: Int,
+        from: String,
+        to: String,
+        serializer: KSerializer<List<T>>,
+        fetch: suspend () -> List<T>
+    ): List<T> {
+        val queries = db?.fastPilotDBQueries ?: return fetch()
+        queries.selectSamples(endpoint, sessionKey.toLong(), driverNumber.toLong(), from, to)
+            .executeAsOneOrNull()
+            ?.let { return json.decodeFromString(serializer, it) }
+
+        val samples = fetch()
+        val now = Clock.System.now().toEpochMilliseconds()
+        if (samples.isNotEmpty() && sessions.isFinal(sessionKey, now)) {
+            queries.insertSamples(
+                endpoint, sessionKey.toLong(), driverNumber.toLong(), from, to,
+                json.encodeToString(serializer, samples), now
+            )
+        }
+        return samples
     }
 }

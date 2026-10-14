@@ -15,9 +15,11 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import com.fastpilot.data.repository.CacheMaintenance
 import com.fastpilot.ui.navigation.*
 import com.fastpilot.ui.screens.splash.SplashScreen
 import com.fastpilot.ui.theme.*
+import org.koin.compose.koinInject
 
 enum class AppState { SPLASH, LOGIN, DASHBOARD }
 
@@ -33,6 +35,10 @@ fun App(benchmark: Pair<String, String>? = null) {
         FastPilotTheme { com.fastpilot.ui.perf.BenchmarkScreen(benchmark.first, benchmark.second) }
         return
     }
+
+    // Deletes race data downloaded more than 30 days ago (not in benchmark mode: it times the cache)
+    val cacheMaintenance = koinInject<CacheMaintenance>()
+    LaunchedEffect(Unit) { cacheMaintenance.purgeExpired() }
 
     FastPilotTheme {
         Crossfade(targetState = appState) { state ->

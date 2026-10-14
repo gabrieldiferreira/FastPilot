@@ -12,7 +12,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { DashboardViewModel(get(), get(), get(), get(), get()) }
+    viewModel { DashboardViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { TelemetryViewModel(get(), get(), get(), get(), get()) }
     viewModel { StrategyViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { DuelViewModel(get(), get(), get(), get()) }

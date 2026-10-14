@@ -3,6 +3,7 @@ package com.fastpilot.ui.screens.telemetry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.repository.*
+import com.fastpilot.domain.usecase.LiveSessionDetector
 import com.fastpilot.domain.usecase.CalculateTheoreticalBestUseCase
 import com.fastpilot.domain.usecase.CalculateTheoreticalBestUseCase.TheoreticalBest
 import com.fastpilot.model.CarData
@@ -45,12 +46,11 @@ class TelemetryViewModel(
     private fun loadSessions() {
         viewModelScope.launch {
             try {
-                val s2024 = try { sessionRepo.getSessions(2024) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
-                val s2025 = try { sessionRepo.getSessions(2025) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
-                val all = s2025 + s2024
+                val all = sessionRepo.getRecentSessions()
                 _uiState.value = _uiState.value.copy(sessions = all, isLoading = false)
-                // Auto-select first qualifying or race session
-                val auto = all.firstOrNull { it.sessionType == "Qualifying" || it.sessionType == "Race" }
+                // Auto-select the live session, else the latest qualifying or race
+                val auto = LiveSessionDetector.findLiveSession(all)
+                    ?: all.firstOrNull { it.sessionType == "Qualifying" || it.sessionType == "Race" }
                     ?: all.firstOrNull()
                 auto?.let { selectSession(it) }
             } catch (e: kotlinx.coroutines.CancellationException) {
@@ -107,15 +107,12 @@ class TelemetryViewModel(
 
     fun selectLap(lap: Lap) {
         val sessionKey = _uiState.value.selectedSession?.sessionKey ?: return
-        val driverNumber = _uiState.value.selectedDriver?.driverNumber ?: return
+        if (_uiState.value.selectedDriver == null) return
         _uiState.value = _uiState.value.copy(selectedLap = lap, isLoadingTelemetry = true, carData = emptyList())
         viewModelScope.launch {
             try {
-                val data = telemetryRepo.getCarData(
-                    sessionKey = sessionKey,
-                    driverNumber = driverNumber,
-                    dateGte = lap.dateStart
-                )
+                // Only this lap's samples (cached for finished sessions)
+                val data = telemetryRepo.getLapCarData(sessionKey, lap)
                 _uiState.value = _uiState.value.copy(carData = data.take(500), isLoadingTelemetry = false)
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e

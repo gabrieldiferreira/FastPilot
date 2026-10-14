@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.repository.DriverRepository
 import com.fastpilot.data.repository.SessionRepository
+import com.fastpilot.data.repository.defaultSession
+import com.fastpilot.data.repository.getRecentSessions
 import com.fastpilot.domain.usecase.*
 import com.fastpilot.model.Driver
 import com.fastpilot.model.Session
@@ -44,11 +46,9 @@ class DuelViewModel(
     private fun loadSessions() {
         viewModelScope.launch {
             try {
-                val s2024 = try { sessionRepo.getSessions(2024) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
-                val s2025 = try { sessionRepo.getSessions(2025) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
-                val all = s2025 + s2024
+                val all = sessionRepo.getRecentSessions()
                 _uiState.value = _uiState.value.copy(sessions = all, isLoading = false)
-                val auto = all.firstOrNull { it.sessionType == "Race" } ?: all.firstOrNull()
+                val auto = all.defaultSession()
                 auto?.let { selectSession(it) }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e

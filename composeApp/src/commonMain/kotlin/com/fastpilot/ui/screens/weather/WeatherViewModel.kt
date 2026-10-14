@@ -2,10 +2,16 @@ package com.fastpilot.ui.screens.weather
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fastpilot.data.polling.LivePollingManager
 import com.fastpilot.data.repository.SessionRepository
 import com.fastpilot.data.repository.WeatherRepository
+import com.fastpilot.data.repository.defaultSession
+import com.fastpilot.data.repository.getRecentSessions
+import com.fastpilot.domain.usecase.LiveSessionDetector
 import com.fastpilot.model.Session
 import com.fastpilot.model.Weather
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,17 +32,16 @@ class WeatherViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(WeatherUiState())
     val uiState: StateFlow<WeatherUiState> = _uiState.asStateFlow()
+    private var liveJob: Job? = null
 
     init { loadSessions() }
 
     private fun loadSessions() {
         viewModelScope.launch {
             try {
-                val s2024 = try { sessionRepo.getSessions(2024) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
-                val s2025 = try { sessionRepo.getSessions(2025) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
-                val all = s2025 + s2024
+                val all = sessionRepo.getRecentSessions()
                 _uiState.value = _uiState.value.copy(sessions = all, isLoading = false)
-                val auto = all.firstOrNull { it.sessionType == "Race" } ?: all.firstOrNull()
+                val auto = all.defaultSession()
                 auto?.let { selectSession(it) }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
@@ -47,11 +52,12 @@ class WeatherViewModel(
     }
 
     fun selectSession(session: Session) {
+        liveJob?.cancel()
         _uiState.value = _uiState.value.copy(
             selectedSession = session, isLoading = true,
             currentWeather = null, weatherHistory = emptyList(), error = null
         )
-        viewModelScope.launch {
+        liveJob = viewModelScope.launch {
             try {
                 val history = weatherRepo.getWeather(session.sessionKey)
                 _uiState.value = _uiState.value.copy(
@@ -59,6 +65,16 @@ class WeatherViewModel(
                     currentWeather = history.lastOrNull(),
                     isLoading = false
                 )
+                // Live session: OpenF1 publishes a weather sample per minute
+                while (LiveSessionDetector.isLive(session)) {
+                    delay(LivePollingManager.WEATHER_POLL_MS)
+                    try {
+                        val latest = weatherRepo.getWeather(session.sessionKey)
+                        _uiState.value = _uiState.value.copy(weatherHistory = latest, currentWeather = latest.lastOrNull())
+                    } catch (e: kotlinx.coroutines.CancellationException) {
+                        throw e
+                    } catch (_: Exception) { /* retry on next poll */ }
+                }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {

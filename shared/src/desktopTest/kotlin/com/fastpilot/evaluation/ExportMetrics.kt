@@ -80,6 +80,14 @@ fun main(args: Array<String>) {
                                 put("laps", curve.dataPoints.size)
                                 put("slope", round(curve.degradationPerLap, 5))
                                 put("intercept", round(curve.intercept))
+                                // Laps used by the regression (scripts/degradation_edges.py)
+                                putJsonArray("points") {
+                                    for (point in curve.dataPoints) add(buildJsonObject {
+                                        put("lap", point.lapNumber)
+                                        put("tyre_age", point.tyreAge)
+                                        put("lap_time", round(point.lapTime))
+                                    })
+                                }
                             })
                         }
                     }

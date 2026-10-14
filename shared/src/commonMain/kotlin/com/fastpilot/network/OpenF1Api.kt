@@ -3,18 +3,46 @@ package com.fastpilot.network
 import com.fastpilot.model.*
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode
 
 /**
  * Client for the OpenF1 API (https://api.openf1.org/v1).
  * Provides access to all 18 endpoints covering F1 telemetry, timing, and session data.
- * Historical data from 2023 onwards is free; real-time data requires paid subscription.
+ * Historical data from 2023 onwards is free; real-time data requires paid subscription,
+ * so requests about a live session go through the proxy at [proxyBaseUrl] (see [OPENF1_PROXY_URL]).
  */
-class OpenF1Api(private val client: HttpClient) {
+class OpenF1Api(
+    private val client: HttpClient,
+    private val proxyBaseUrl: String = OPENF1_PROXY_URL,
+    val sessionRegistry: SessionRegistry = SessionRegistry()
+) {
 
     companion object {
         private const val BASE_URL = "https://api.openf1.org/v1"
+    }
+
+    private suspend inline fun <reified T> get(
+        endpoint: String,
+        sessionKey: Int?,
+        crossinline block: HttpRequestBuilder.() -> Unit
+    ): T {
+        val proxy = proxyBaseUrl.takeIf { it.isNotBlank() }
+        if (proxy != null && sessionRegistry.isLive(sessionKey)) {
+            return client.get("$proxy/$endpoint") { block() }.body()
+        }
+        val response = client.get("$BASE_URL/$endpoint") { block() }
+        // While a session is live OpenF1 may refuse unauthenticated requests: retry through the proxy
+        if (proxy != null && response.status == HttpStatusCode.Unauthorized) {
+            return client.get("$proxy/$endpoint") { block() }.body()
+        }
+        // OpenF1 answers 404 {"detail":"No results found."} instead of an empty list
+        // (e.g. /pit of a race without stops); every endpoint returns a list
+        @Suppress("UNCHECKED_CAST")
+        if (response.status == HttpStatusCode.NotFound) return emptyList<Any>() as T
+        return response.body()
     }
 
     // ── Sessions & Meetings ─────────────────────────────────────────────
@@ -25,23 +53,23 @@ class OpenF1Api(private val client: HttpClient) {
         sessionName: String? = null,
         sessionKey: Int? = null,
         meetingKey: Int? = null
-    ): List<Session> = client.get("$BASE_URL/sessions") {
+    ): List<Session> = get("sessions", sessionKey) {
         year?.let { parameter("year", it) }
         countryName?.let { parameter("country_name", it) }
         sessionName?.let { parameter("session_name", it) }
         sessionKey?.let { parameter("session_key", it) }
         meetingKey?.let { parameter("meeting_key", it) }
-    }.body()
+    }
 
     suspend fun getMeetings(
         year: Int? = null,
         countryName: String? = null,
         meetingKey: Int? = null
-    ): List<Meeting> = client.get("$BASE_URL/meetings") {
+    ): List<Meeting> = get("meetings", null) {
         year?.let { parameter("year", it) }
         countryName?.let { parameter("country_name", it) }
         meetingKey?.let { parameter("meeting_key", it) }
-    }.body()
+    }
 
     // ── Drivers ──────────────────────────────────────────────────────────
 
@@ -49,11 +77,11 @@ class OpenF1Api(private val client: HttpClient) {
         sessionKey: Int? = null,
         driverNumber: Int? = null,
         meetingKey: Int? = null
-    ): List<Driver> = client.get("$BASE_URL/drivers") {
+    ): List<Driver> = get("drivers", sessionKey) {
         sessionKey?.let { parameter("session_key", it) }
         driverNumber?.let { parameter("driver_number", it) }
         meetingKey?.let { parameter("meeting_key", it) }
-    }.body()
+    }
 
     // ── Telemetry (Car Data) ────────────────────────────────────────────
 
@@ -63,13 +91,13 @@ class OpenF1Api(private val client: HttpClient) {
         dateGte: String? = null,
         dateLte: String? = null,
         speedGte: Int? = null
-    ): List<CarData> = client.get("$BASE_URL/car_data") {
+    ): List<CarData> = get("car_data", sessionKey) {
         parameter("session_key", sessionKey)
         parameter("driver_number", driverNumber)
         dateGte?.let { parameter("date>", it) }
         dateLte?.let { parameter("date<", it) }
         speedGte?.let { parameter("speed>=", it) }
-    }.body()
+    }
 
     // ── Laps ─────────────────────────────────────────────────────────────
 
@@ -77,11 +105,11 @@ class OpenF1Api(private val client: HttpClient) {
         sessionKey: Int,
         driverNumber: Int? = null,
         lapNumber: Int? = null
-    ): List<Lap> = client.get("$BASE_URL/laps") {
+    ): List<Lap> = get("laps", sessionKey) {
         parameter("session_key", sessionKey)
         driverNumber?.let { parameter("driver_number", it) }
         lapNumber?.let { parameter("lap_number", it) }
-    }.body()
+    }
 
     // ── Stints ───────────────────────────────────────────────────────────
 
@@ -89,11 +117,11 @@ class OpenF1Api(private val client: HttpClient) {
         sessionKey: Int,
         driverNumber: Int? = null,
         stintNumber: Int? = null
-    ): List<Stint> = client.get("$BASE_URL/stints") {
+    ): List<Stint> = get("stints", sessionKey) {
         parameter("session_key", sessionKey)
         driverNumber?.let { parameter("driver_number", it) }
         stintNumber?.let { parameter("stint_number", it) }
-    }.body()
+    }
 
     // ── Positions ────────────────────────────────────────────────────────
 
@@ -101,21 +129,21 @@ class OpenF1Api(private val client: HttpClient) {
         sessionKey: Int? = null,
         meetingKey: Int? = null,
         driverNumber: Int? = null
-    ): List<Position> = client.get("$BASE_URL/position") {
+    ): List<Position> = get("position", sessionKey) {
         sessionKey?.let { parameter("session_key", it) }
         meetingKey?.let { parameter("meeting_key", it) }
         driverNumber?.let { parameter("driver_number", it) }
-    }.body()
+    }
 
     // ── Intervals ────────────────────────────────────────────────────────
 
     suspend fun getIntervals(
         sessionKey: Int,
         driverNumber: Int? = null
-    ): List<Interval> = client.get("$BASE_URL/intervals") {
+    ): List<Interval> = get("intervals", sessionKey) {
         parameter("session_key", sessionKey)
         driverNumber?.let { parameter("driver_number", it) }
-    }.body()
+    }
 
     // ── Race Control ─────────────────────────────────────────────────────
 
@@ -125,43 +153,49 @@ class OpenF1Api(private val client: HttpClient) {
         driverNumber: Int? = null,
         dateGte: String? = null,
         dateLte: String? = null
-    ): List<RaceControlMessage> = client.get("$BASE_URL/race_control") {
+    ): List<RaceControlMessage> = get("race_control", sessionKey) {
         sessionKey?.let { parameter("session_key", it) }
         flag?.let { parameter("flag", it) }
         driverNumber?.let { parameter("driver_number", it) }
         dateGte?.let { parameter("date>=", it) }
         dateLte?.let { parameter("date<", it) }
-    }.body()
+    }
 
     // ── Weather ──────────────────────────────────────────────────────────
 
     suspend fun getWeather(
         sessionKey: Int? = null,
         meetingKey: Int? = null
-    ): List<Weather> = client.get("$BASE_URL/weather") {
+    ): List<Weather> = get("weather", sessionKey) {
         sessionKey?.let { parameter("session_key", it) }
         meetingKey?.let { parameter("meeting_key", it) }
-    }.body()
+    }
 
     // ── Team Radio ───────────────────────────────────────────────────────
 
     suspend fun getTeamRadio(
         sessionKey: Int,
         driverNumber: Int? = null
-    ): List<TeamRadio> = client.get("$BASE_URL/team_radio") {
+    ): List<TeamRadio> = get("team_radio", sessionKey) {
         parameter("session_key", sessionKey)
         driverNumber?.let { parameter("driver_number", it) }
-    }.body()
+    }
 
     // ── Pit Stops ────────────────────────────────────────────────────────
 
     suspend fun getPitStops(
         sessionKey: Int,
         driverNumber: Int? = null
-    ): List<PitStop> = client.get("$BASE_URL/pit") {
+    ): List<PitStop> = get("pit", sessionKey) {
         parameter("session_key", sessionKey)
         driverNumber?.let { parameter("driver_number", it) }
-    }.body()
+    }
+
+    // ── Overtakes ────────────────────────────────────────────────────────
+
+    suspend fun getOvertakes(sessionKey: Int): List<Overtake> = get("overtakes", sessionKey) {
+        parameter("session_key", sessionKey)
+    }
 
     // ── Location ─────────────────────────────────────────────────────────
 
@@ -170,10 +204,10 @@ class OpenF1Api(private val client: HttpClient) {
         driverNumber: Int,
         dateGte: String? = null,
         dateLte: String? = null
-    ): List<Location> = client.get("$BASE_URL/location") {
+    ): List<Location> = get("location", sessionKey) {
         parameter("session_key", sessionKey)
         parameter("driver_number", driverNumber)
         dateGte?.let { parameter("date>", it) }
         dateLte?.let { parameter("date<", it) }
-    }.body()
+    }
 }

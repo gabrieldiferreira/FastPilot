@@ -5,16 +5,20 @@ import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.polling.LivePollingManager
 import com.fastpilot.data.repository.*
 import com.fastpilot.domain.usecase.GetLivePositionsUseCase
+import com.fastpilot.domain.usecase.GetRaceEventsUseCase
 import com.fastpilot.domain.usecase.LiveSessionDetector
 import com.fastpilot.domain.usecase.PositionWithDriver
+import com.fastpilot.domain.usecase.RaceEvent
 import com.fastpilot.model.Interval
 import com.fastpilot.model.RaceControlMessage
 import com.fastpilot.model.Session
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 
 data class DashboardUiState(
     val isLoading: Boolean = true,
@@ -24,6 +28,7 @@ data class DashboardUiState(
     val positions: List<PositionWithDriver> = emptyList(),
     val intervals: Map<Int, Interval> = emptyMap(),
     val raceControlMessages: List<RaceControlMessage> = emptyList(),
+    val events: List<RaceEvent> = emptyList(),
     val error: String? = null
 )
 
@@ -32,7 +37,8 @@ class DashboardViewModel(
     private val getPositions: GetLivePositionsUseCase,
     private val intervalRepo: IntervalRepository,
     private val raceControlRepo: RaceControlRepository,
-    private val livePolling: LivePollingManager
+    private val livePolling: LivePollingManager,
+    private val getRaceEvents: GetRaceEventsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DashboardUiState())
@@ -40,9 +46,16 @@ class DashboardViewModel(
     private var pollingJob: Job? = null
     private var intervalPollingJob: Job? = null
     private var raceControlPollingJob: Job? = null
+    private var eventsJob: Job? = null
+    private var liveWatchJob: Job? = null
+
+    /** The whole calendar of the recent seasons, including sessions that have not started yet. */
+    private var seasonSessions: List<Session> = emptyList()
+    private var userPickedSession = false
 
     companion object {
-        private val YEARS = listOf(2025, 2024)
+        /** How often the dashboard checks whether a session has started or ended. */
+        private const val LIVE_CHECK_MS = 30_000L
     }
 
     init {
@@ -53,11 +66,12 @@ class DashboardViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             try {
-                val allSessions = YEARS.flatMap { year ->
-                    try { sessionRepo.getSessions(year = year) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
-                }
+                seasonSessions = sessionRepo.getSeasonSessions()
+                val allSessions = seasonSessions.startedBy()
 
-                if (allSessions.isEmpty()) {
+                // Default: live session > most recent race > newest session
+                val defaultSession = allSessions.defaultSession()
+                if (defaultSession == null) {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = "Nenhuma sessão encontrada. Verifique sua conexão."
@@ -65,21 +79,9 @@ class DashboardViewModel(
                     return@launch
                 }
 
-                // Check for a live session first
-                val liveSession = LiveSessionDetector.findLiveSession(allSessions)
-
-                // Default: live session > first Race > first session
-                val defaultSession = liveSession
-                    ?: allSessions.firstOrNull { it.sessionType == "Race" }
-                    ?: allSessions.first()
-
-                _uiState.value = _uiState.value.copy(
-                    sessions = allSessions,
-                    currentSession = defaultSession,
-                    isLive = liveSession != null && liveSession.sessionKey == defaultSession.sessionKey,
-                    isLoading = false
-                )
-                loadSessionData(defaultSession)
+                _uiState.value = _uiState.value.copy(sessions = allSessions, isLoading = false)
+                showSession(defaultSession)
+                watchLiveSessions()
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -91,7 +93,38 @@ class DashboardViewModel(
         }
     }
 
+    /**
+     * Keeps the dashboard in step with the calendar while it is open: a session that starts is
+     * listed and, unless the user picked another one, opened live; a live session that ends
+     * stops polling and is reloaded as historical data.
+     */
+    private fun watchLiveSessions() {
+        liveWatchJob?.cancel()
+        liveWatchJob = viewModelScope.launch {
+            while (true) {
+                delay(LIVE_CHECK_MS)
+                val now = Clock.System.now()
+                val started = seasonSessions.startedBy(now)
+                if (started.size != _uiState.value.sessions.size) {
+                    _uiState.value = _uiState.value.copy(sessions = started)
+                }
+                val state = _uiState.value
+                val current = state.currentSession ?: continue
+                val live = LiveSessionDetector.findLiveSession(started, now)
+                when {
+                    live != null && !userPickedSession && live.sessionKey != current.sessionKey -> showSession(live)
+                    state.isLive && !LiveSessionDetector.isLive(current, now) -> showSession(current)
+                }
+            }
+        }
+    }
+
     fun selectSession(session: Session) {
+        userPickedSession = true
+        showSession(session)
+    }
+
+    private fun showSession(session: Session) {
         val isLive = LiveSessionDetector.isLive(session)
         _uiState.value = _uiState.value.copy(
             currentSession = session,
@@ -99,6 +132,7 @@ class DashboardViewModel(
             positions = emptyList(),
             intervals = emptyMap(),
             raceControlMessages = emptyList(),
+            events = emptyList(),
             isLoading = true,
             error = null
         )
@@ -110,6 +144,7 @@ class DashboardViewModel(
         pollingJob?.cancel()
         intervalPollingJob?.cancel()
         raceControlPollingJob?.cancel()
+        eventsJob?.cancel()
 
         val sessionKey = session.sessionKey
         val isLive = LiveSessionDetector.isLive(session)
@@ -133,6 +168,12 @@ class DashboardViewModel(
             raceControlPollingJob = viewModelScope.launch {
                 livePolling.observeRaceControl(sessionKey).collect { messages ->
                     _uiState.value = _uiState.value.copy(raceControlMessages = messages)
+                }
+            }
+
+            eventsJob = viewModelScope.launch {
+                getRaceEvents.observe(sessionKey, LivePollingManager.RACE_EVENTS_POLL_MS).collect { events ->
+                    _uiState.value = _uiState.value.copy(events = events)
                 }
             }
         } else {
@@ -160,6 +201,11 @@ class DashboardViewModel(
                         intervals = intervals.associateBy { it.driverNumber }
                     )
                 } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) {}
+            }
+
+            // Pit stops and overtakes (one-shot)
+            eventsJob = viewModelScope.launch {
+                _uiState.value = _uiState.value.copy(events = getRaceEvents(sessionKey))
             }
 
             // Race control (one-shot)

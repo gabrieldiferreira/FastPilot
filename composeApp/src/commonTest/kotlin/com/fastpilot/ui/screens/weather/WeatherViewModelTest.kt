@@ -2,6 +2,7 @@ package com.fastpilot.ui.screens.weather
 
 import com.fastpilot.data.repository.SessionRepository
 import com.fastpilot.data.repository.WeatherRepository
+import com.fastpilot.data.repository.availableSeasons
 import com.fastpilot.network.OpenF1Api
 import com.fastpilot.testing.mockHttpClient
 import com.fastpilot.testing.respondJson
@@ -31,6 +32,8 @@ class WeatherViewModelTest {
     @AfterTest
     fun tearDown() = Dispatchers.resetMain()
 
+    private val currentSeason = availableSeasons().first()
+
     private fun session(key: Int, name: String, year: Int) =
         """{"session_key":$key,"session_name":"$name","session_type":"$name","circuit_short_name":"Interlagos","country_name":"Brazil","year":$year}"""
 
@@ -39,8 +42,9 @@ class WeatherViewModelTest {
             when {
                 request.url.encodedPath.endsWith("/sessions") -> when (request.url.parameters["year"]) {
                     // Practice is listed first: the ViewModel must still pick the race
-                    "2025" -> respondJson("[${session(1, "Practice", 2025)},${session(2, "Race", 2025)}]")
-                    else -> respondJson("[${session(3, "Race", 2024)}]")
+                    "$currentSeason" -> respondJson("[${session(1, "Practice", currentSeason)},${session(2, "Race", currentSeason)}]")
+                    "${currentSeason - 1}" -> respondJson("[${session(3, "Race", currentSeason - 1)}]")
+                    else -> respondJson("[]")
                 }
                 else -> respondJson(weatherJson(request.url.parameters["session_key"]))
             }

@@ -9,8 +9,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 /**
- * Databases created before the standings cache (schema v1) must be upgraded
- * in place, otherwise the Classificação screen would crash on existing installs.
+ * Databases created by earlier versions must be upgraded in place: v1 lacks the standings
+ * cache (Classificação screen), v2 the raw samples cache (telemetry and track position).
  */
 class SchemaMigrationTest {
 
@@ -22,12 +22,22 @@ class SchemaMigrationTest {
         dbFile.delete()
     }
 
-    /** Builds a v1 database: full current schema minus the tables added in 1.sqm. */
+    /** Builds a v2 database: full current schema minus the table added in 2.sqm. */
+    private fun createV2Database() {
+        val driver = JdbcSqliteDriver(url)
+        FastPilotDB.Schema.create(driver)
+        driver.execute(null, "DROP TABLE cached_samples", 0)
+        driver.execute(null, "PRAGMA user_version = 2", 0)
+        driver.close()
+    }
+
+    /** Builds a v1 database: full current schema minus the tables added in 1.sqm and 2.sqm. */
     private fun createV1Database(userVersion: Int) {
         val driver = JdbcSqliteDriver(url)
         FastPilotDB.Schema.create(driver)
         driver.execute(null, "DROP TABLE cached_driver_standing", 0)
         driver.execute(null, "DROP TABLE cached_constructor_standing", 0)
+        driver.execute(null, "DROP TABLE cached_samples", 0)
         driver.execute(null, "PRAGMA user_version = $userVersion", 0)
         driver.close()
     }
@@ -40,19 +50,31 @@ class SchemaMigrationTest {
         }, 0).value
 
     @Test
-    fun `schema version is 2`() {
-        assertEquals(2, FastPilotDB.Schema.version)
+    fun `schema version is 3`() {
+        assertEquals(3, FastPilotDB.Schema.version)
     }
 
     @Test
-    fun `v1 database is migrated to v2 (Android and iOS drivers)`() {
+    fun `v1 database is migrated to v3 (Android and iOS drivers)`() {
         createV1Database(userVersion = 1)
 
         val driver = JdbcSqliteDriver(url, Properties(), FastPilotDB.Schema)
 
         assertTrue("cached_driver_standing" in tableNames(driver))
         assertTrue("cached_constructor_standing" in tableNames(driver))
+        assertTrue("cached_samples" in tableNames(driver))
         FastPilotDB(driver).fastPilotDBQueries.insertConstructorStanding(2025, 1, 24, "mclaren", "McLaren", 833.0, 14, 0)
+        driver.close()
+    }
+
+    @Test
+    fun `v2 database is migrated to v3`() {
+        createV2Database()
+
+        val driver = JdbcSqliteDriver(url, Properties(), FastPilotDB.Schema)
+
+        assertTrue("cached_samples" in tableNames(driver))
+        FastPilotDB(driver).fastPilotDBQueries.insertSamples("car_data", 9662, 1, "a", "b", "[]", 0)
         driver.close()
     }
 

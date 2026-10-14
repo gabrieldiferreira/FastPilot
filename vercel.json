@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo 'Dependencies are fetched by Gradle during the build'",
+  "buildCommand": "bash scripts/vercel_build.sh",
+  "outputDirectory": "composeApp/build/dist/wasmJs/productionExecutable",
+  "rewrites": [
+    {
+      "source": "/openf1/v1/:endpoint",
+      "destination": "/api/openf1?endpoint=:endpoint"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)\\.wasm",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/wasm"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+      ]
+    }
+  ]
+}

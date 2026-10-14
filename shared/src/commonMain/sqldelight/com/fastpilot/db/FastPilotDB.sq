@@ -1,5 +1,5 @@
 -- FastPilot Local Cache Database
--- Stores sessions, drivers, laps, and stints for offline/cache-first access
+-- Stores sessions, drivers, laps, stints, raw samples and standings for offline/cache-first access
 
 -- ═══════════════════════════════════════════════════════════════
 -- Sessions
@@ -140,6 +140,32 @@ INSERT OR REPLACE INTO cached_stint(
 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
 -- ═══════════════════════════════════════════════════════════════
+-- Raw samples: telemetry (car_data) and track position (location) of one
+-- driver in one time window (a lap), stored as the API's JSON. Only data of
+-- finished sessions is stored, and it is never downloaded again.
+-- ═══════════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS cached_samples (
+    endpoint TEXT NOT NULL,
+    session_key INTEGER NOT NULL,
+    driver_number INTEGER NOT NULL,
+    date_gte TEXT NOT NULL,
+    date_lte TEXT NOT NULL,
+    json TEXT NOT NULL,
+    cached_at INTEGER NOT NULL,
+    PRIMARY KEY (endpoint, session_key, driver_number, date_gte, date_lte)
+);
+
+selectSamples:
+SELECT json FROM cached_samples
+WHERE endpoint = ? AND session_key = ? AND driver_number = ? AND date_gte = ? AND date_lte = ?;
+
+insertSamples:
+INSERT OR REPLACE INTO cached_samples(
+    endpoint, session_key, driver_number, date_gte, date_lte, json, cached_at
+) VALUES (?, ?, ?, ?, ?, ?, ?);
+
+-- ═══════════════════════════════════════════════════════════════
 -- Championship Standings (Jolpica)
 -- ═══════════════════════════════════════════════════════════════
 
@@ -209,11 +235,15 @@ DELETE FROM cached_lap WHERE cached_at < ?;
 clearStintCache:
 DELETE FROM cached_stint WHERE cached_at < ?;
 
+clearSamplesCache:
+DELETE FROM cached_samples WHERE cached_at < ?;
+
 clearAll {
     DELETE FROM cached_session;
     DELETE FROM cached_driver;
     DELETE FROM cached_lap;
     DELETE FROM cached_stint;
+    DELETE FROM cached_samples;
     DELETE FROM cached_driver_standing;
     DELETE FROM cached_constructor_standing;
 }

@@ -17,11 +17,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fastpilot.domain.usecase.PositionWithDriver
+import com.fastpilot.domain.usecase.RaceEvent
+import com.fastpilot.model.Driver
 import com.fastpilot.model.Interval
 import com.fastpilot.model.RaceControlMessage
 import com.fastpilot.ui.components.SessionPicker
 import com.fastpilot.ui.theme.*
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.math.roundToInt
 
 @Composable
 fun DashboardScreen(
@@ -91,6 +94,17 @@ fun DashboardScreen(
                         positionWithDriver = posWithDriver,
                         interval = uiState.intervals[posWithDriver.position.driverNumber]
                     )
+                }
+
+                // Pit stops and overtakes
+                if (uiState.events.isNotEmpty()) {
+                    val drivers = uiState.positions.mapNotNull { it.driver }.associateBy { it.driverNumber }
+                    item {
+                        Spacer(Modifier.height(8.dp))
+                        Text("Eventos", style = MaterialTheme.typography.titleMedium, color = TextSecondary)
+                        Spacer(Modifier.height(8.dp))
+                    }
+                    items(uiState.events) { event -> RaceEventRow(event, drivers) }
                 }
 
                 // Race Control Feed
@@ -217,6 +231,43 @@ private fun RaceControlMessageCard(message: RaceControlMessage) {
         Spacer(Modifier.width(8.dp))
         Text(message.message ?: "", fontSize = 12.sp, color = TextSecondary, modifier = Modifier.weight(1f))
     }
+}
+
+@Composable
+private fun RaceEventRow(event: RaceEvent, drivers: Map<Int, Driver>) {
+    fun name(number: Int?) = number?.let { drivers[it]?.nameAcronym ?: "#$it" } ?: "?"
+    val isPit = event.type == RaceEvent.Type.PIT_STOP
+    val badgeColor = if (isPit) FlagYellow else DRSGreen
+    val text = if (isPit) {
+        buildString {
+            append("${name(event.driverNumber)} no box")
+            event.lapNumber?.let { append(" • volta $it") }
+            event.stopDuration?.let { append(" • parado ${formatSeconds(it)} s") }
+        }
+    } else {
+        buildString {
+            append("${name(event.driverNumber)} passa ${name(event.otherDriverNumber)}")
+            event.position?.let { append(" • P$it") }
+        }
+    }
+    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            Modifier.clip(RoundedCornerShape(4.dp)).background(badgeColor.copy(alpha = 0.2f))
+                .padding(horizontal = 6.dp, vertical = 2.dp)
+        ) {
+            Text(if (isPit) "PIT" else "ULTRAP", color = badgeColor, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        }
+        Spacer(Modifier.width(8.dp))
+        Text(text, fontSize = 12.sp, color = TextSecondary, modifier = Modifier.weight(1f))
+        // "2024-12-08T13:09:54.663+00:00" -> "13:09:54" (UTC)
+        Text(event.date.substringAfter('T').take(8), fontSize = 11.sp, color = TextTertiary)
+    }
+}
+
+/** 2.43 -> "2,4" */
+private fun formatSeconds(value: Double): String {
+    val tenths = (value * 10).roundToInt()
+    return "${tenths / 10},${tenths % 10}"
 }
 
 @Composable

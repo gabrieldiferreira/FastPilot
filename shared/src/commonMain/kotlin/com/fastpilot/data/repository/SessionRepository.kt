@@ -17,12 +17,17 @@ class SessionRepository(
         private const val CACHE_TTL_MS = 24 * 60 * 60 * 1000L // 24 hours
     }
 
-    suspend fun getSessions(year: Int, forceRefresh: Boolean = false): List<Session> {
+    /** Sessions of [year], newest first. Also tells the API which of them can be live. */
+    suspend fun getSessions(year: Int, forceRefresh: Boolean = false): List<Session> =
+        loadSessions(year, forceRefresh).also { api.sessionRegistry.track(it) }
+
+    private suspend fun loadSessions(year: Int, forceRefresh: Boolean): List<Session> {
         if (!forceRefresh) {
             val cached = db?.fastPilotDBQueries?.selectSessionsByYear(year.toLong())?.executeAsList().orEmpty()
             if (cached.isNotEmpty()) {
                 val age = Clock.System.now().toEpochMilliseconds() - cached.first().cached_at
-                if (age < CACHE_TTL_MS) {
+                // The calendar of a past season no longer changes
+                if (age < CACHE_TTL_MS || year < availableSeasons().first()) {
                     return cached.map { it.toSession() }
                 }
             }

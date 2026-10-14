@@ -3,6 +3,7 @@ package com.fastpilot.ui.screens.standings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastpilot.data.repository.StandingsRepository
+import com.fastpilot.data.repository.availableSeasons
 import com.fastpilot.domain.usecase.CalculateChampionshipGapsUseCase
 import com.fastpilot.domain.usecase.ChampionshipTables
 import kotlinx.coroutines.Job
@@ -28,8 +29,8 @@ class StandingsViewModel(
 ) : ViewModel() {
 
     companion object {
-        /** Seasons with OpenF1 coverage, newest first, matching the other screens. */
-        val SEASONS = listOf(2025, 2024, 2023)
+        /** Seasons with OpenF1 coverage (2023 on), newest first, up to the current one. */
+        val SEASONS = availableSeasons()
     }
 
     private val _uiState = MutableStateFlow(StandingsUiState())

@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fastpilot.data.repository.availableSeasons
 import com.fastpilot.model.Session
 import com.fastpilot.ui.theme.*
 
@@ -32,7 +33,7 @@ fun SessionPicker(
 
     // Group sessions by year
     val years = sessions.mapNotNull { it.year }.distinct().sortedDescending()
-    val selectedYear = selectedSession?.year ?: years.firstOrNull() ?: 2024
+    val selectedYear = selectedSession?.year ?: years.firstOrNull() ?: availableSeasons().first()
 
     // Group by circuit (meeting) within selected year
     val yearSessions = sessions.filter { it.year == selectedYear }

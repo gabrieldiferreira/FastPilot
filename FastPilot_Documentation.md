@@ -1,93 +1,134 @@
 # Documentação do Projeto: FastPilot
 
 ## 1. Visão Geral do Projeto
-O **FastPilot** é um aplicativo multiplataforma de telemetria e acompanhamento de dados da Fórmula 1 em tempo real e de forma histórica. Desenvolvido para Android, iOS e Desktop (JVM) utilizando as tecnologias mais modernas do ecossistema Kotlin. 
+O **FastPilot** é um aplicativo multiplataforma para acompanhar dados da Fórmula 1 ao vivo e de corridas passadas, desenvolvido como Trabalho de Conclusão de Curso. Roda em **Android, iOS e Web** (navegador, via Kotlin/Wasm) a partir de uma única base de código Kotlin; um alvo **Desktop (JVM)** é mantido para desenvolvimento e para a avaliação.
 
-Seu objetivo é extrair dados profundos e fornecer uma visualização rica sobre o desempenho dos pilotos, clima das sessões, transmissões de rádio e comparações diretas de performance (Duels), apoiando-se em arquitetura moderna e reativa.
+O aplicativo consome duas APIs públicas (OpenF1 e Jolpica) e calcula localmente, em Kotlin puro e testado, as métricas de análise de corrida propostas no TCC I: ritmo limpo, degradação de pneu, volta teórica, duelo entre pilotos e delta na volta.
+
+Tanto a lógica quanto a **interface** são compartilhadas: todas as telas são escritas uma vez em Compose Multiplatform. O código específico de cada plataforma se resume ao ponto de entrada do app, ao motor HTTP, ao driver SQLite e ao reprodutor de áudio. Medido com `cloc`, **94,9% do código dos apps Android + iOS + Web é compartilhado** (`metrics/shared_code.md`).
+
+> **Mudança em relação ao TCC I.** O TCC I previa Jetpack Compose no Android e SwiftUI no iOS, com telas separadas. Na implementação a UI ficou inteira em Compose Multiplatform, o que eleva o reuso muito acima da meta de 75% e trouxe o alvo Web quase sem código adicional. O iOS usa SwiftUI apenas como hospedeiro (`ComposeUIViewController`).
 
 ---
 
 ## 2. Tecnologias e Bibliotecas (Stack)
-A aplicação faz uso do **Kotlin Multiplatform (KMP)** acoplado ao **Compose Multiplatform** para garantir 100% de compartilhamento de regras de negócios e Interface de Usuário.
 
-### Core & UI
-* **Kotlin**: `2.1.0`
-* **Compose Multiplatform**: `1.7.3` para renderização gráfica de UI nativa multi-plataforma.
-* **Voyager**: `1.1.0-beta03` - Gerenciamento de navegação fluida, transições visuais e gerenciamento de Tabs (TabNavigator).
-* **Vico**: `2.0.1` - Biblioteca para criação de gráficos (Charts) de telemetria e comparação.
+| Biblioteca | Versão | Uso |
+|---|---|---|
+| Kotlin Multiplatform | 2.1.0 | Alvos `androidTarget`, `iosX64`/`iosArm64`/`iosSimulatorArm64`, `wasmJs`, `jvm("desktop")` |
+| Compose Multiplatform | 1.7.3 | UI compartilhada em todas as plataformas; gráficos desenhados com `Canvas` |
+| Voyager | 1.1.0-beta03 | Navegação por abas (`TabNavigator`) e entre telas |
+| Koin | 4.0.1 | Injeção de dependência, incluindo ViewModels (`koin-compose-viewmodel`) |
+| Ktor Client | 3.0.3 | HTTP: OkHttp (Android), Darwin (iOS), JS/fetch (Web), CIO (Desktop) |
+| Kotlinx Serialization | 1.7.3 | JSON → data classes, ignorando chaves desconhecidas |
+| SQLDelight | 2.1.0 | Cache local em SQLite (schema versão 2, com migração `1.sqm`) |
+| Kotlinx Coroutines | 1.9.0 | ViewModels com `StateFlow`, polling ao vivo |
+| Kotlinx Datetime | 0.6.1 | Datas das sessões, idade do cache, filtros por horário |
+| Napier | 2.7.1 | Logs |
 
-### Arquitetura & Injeção de Dependência
-* **Koin**: `4.0.1` - Injeção de dependência leve e multiplataforma. Conecta as bases do aplicativo desde o Ktor, SQLDelight até a injeção nativa de ViewModels no Compose (`koin-compose-viewmodel`).
-
-### Networking & Serialização
-* **Ktor Client**: `3.0.3` - Para consumo de requisições HTTP em todas as plataformas (utilizando os engines genéricos `OkHttp` no Android, `Darwin` no iOS e `CIO` no Desktop). O HTTP Client possui Content Negotiation, Timeout Configs e Logging.
-* **Kotlinx Serialization**: `1.7.3` - Para transformar e mapear as respostas cruas de JSON para data classes estruturadas, incluindo parse tolerante a chaves desconhecidas.
-
-### Persistência de Dados (Offline-First)
-* **SQLDelight**: `2.0.2` - Banco de dados embutido via SQLite que gera código Kotlin tipo-seguro a partir de queries nativas em SQL. É utilizado para estratégia de Cache e modo off-line da aplicação.
-
-### Assincronismo e Estado Reativo
-* **Kotlinx Coroutines**: `1.9.0` - O núcleo da reatividade. ViewModels assíncronos e StateFlow garantem estado de tela consistente (UDF - Unidirectional Data Flow).
-
-### Autenticação & Infraestrutura
-* **Firebase Auth**: Através do wrapper não-oficial e robusto `dev.gitlive:firebase-auth` multiplataforma, acompanhado de `Play Services Auth` no Android para o botão nativo do "Google Sign-in" e autenticação via Splash + Login Screen.
-* **Napier**: Gerenciamento de logs consolidados de debug, warning e error.
+Bibliotecas declaradas no catálogo (`gradle/libs.versions.toml`) mas **não usadas** no código: Vico (gráficos) e Play Services Auth. Firebase não está integrado (ver §5).
 
 ---
 
 ## 3. APIs Externas Consumidas
 
-A base de dados se apropria de dois enormes agregadores gratuitos para o ecossistema de F1:
+### A. OpenF1 API (tempo real e telemetria)
+* **Base:** `https://api.openf1.org/v1`
+* **Endpoints usados:** `sessions`, `meetings`, `drivers`, `laps`, `stints`, `car_data` (velocidade, RPM, marcha, acelerador, freio), `location` (posição x/y/z na pista, em decímetros), `position`, `intervals`, `race_control`, `weather`, `team_radio`, `pit`.
+* **Tempo real é pago:** desde 2025 a OpenF1 só entrega dados ao vivo (de 30 min antes até 30 min depois de cada sessão) para contas *Sponsor* (€9,90/mês, 60 requisições por minuto), autenticadas com token OAuth de 1 h (`POST /token`). O histórico desde 2023 continua grátis e sem autenticação.
+* **Limites observados:** o plano gratuito aceita cerca de 30 requisições por minuto, além de um limite por segundo, e responde `429` acima disso (sempre com `Retry-After: 60`). Quando não há dados para o filtro pedido, responde `404 {"detail":"No results found."}` em vez de uma lista vazia.
 
-### A. OpenF1 API (Real-Time & Telemetria)
-* **Endpoint Base:** `https://api.openf1.org/v1`
-* **Utilidade:** Serve como o motor de tempo real do aplicativo.
-* **Dados mapeados (Endpoints Integrados):**
-    * **Sessions & Meetings**: Calendário detalhado.
-    * **Drivers**: Informações de pilotos participantes de cada evento.
-    * **Car Data (Telemetria)**: O "núcleo duro". Retorna rotações, velocidade, câmbio do carro em microssegundos de intervalo.
-    * **Laps & Stints**: Duração das voltas até quebra por milissegundos e ciclo de vida do set de pneus.
-    * **Position & Intervals**: Acompanhamento dinâmico quadro-a-quadro e distanciamento temporal do grid.
-    * **Race Control**: Avisos diretos da FIA como bandeiras amarelas, safety cards, etc.
-    * **Weather**: Temperatura ambiente, asfalto, vento e umidade medidos a cada minuto.
-    * **Team Radio**: Links com as faixas de áudio cruas que saem dos rádios das equipes ("Bono, my tyres are dead").
-    * **Pit Stops & Location**: Tempos de parada e tracking geo-espacial dos carros.
-
-### B. Jolpica API / Ergast API (Agregador Histórico)
-* **Endpoint Base:** `https://api.jolpi.ca/ergast/f1/`
-* **Utilidade:** Como o serviço clássico do Ergast F1 foi depreciado, o Jolpica funciona como retrocompatibilidade para alimentar contexto macro-histórico do aplicativo.
-* **Dados mapeados:**
-    * Resumos de Temporada, Tabelas de Corridas históricas.
-    * Campeonatos anuais e Standings (Piloto e Construtores/Equipes).
-    * Pontuações totais das temporadas.
+### B. Jolpica API (sucessora do Ergast)
+* **Base:** `https://api.jolpi.ca/ergast/f1/`
+* **Uso:** classificação do campeonato de pilotos e de construtores (tela "Tabela").
+* As respostas trazem `Cache-Control: max-age=600`; a API às vezes fica lenta (~5 s) ou responde `522`.
 
 ---
 
-## 4. Arquitetura da Aplicação (MVI / MVVM + Clean Architecture simplificada)
+## 4. Arquitetura da Aplicação (MVVM + Clean Architecture)
 
-O sistema foi montado utilizando módulos segregados no gradle e arquitetura estratificada em camadas limpas lógicas na parte do `shared`:
+O projeto tem dois módulos Gradle: `shared` (dados e domínio) e `composeApp` (apresentação). Cada um tem um conjunto de fontes comum (`commonMain`) e conjuntos por plataforma (`androidMain`, `iosMain`, `wasmJsMain`, `desktopMain`).
 
-### Camada 1: Data e Networking
-* Controlada pelo `HttpClientFactory`, onde o Ktor processa interceptadores de cache e timeouts (`HttpTimeout` blindado contra `SocketTimeoutExceptions` oriundos da OpenF1 API).
-* Classes como `OpenF1Api.kt` encapsulam as funções de suspending calls cruas de rede.
-* O `SQLDelight` atua gerando o `FastPilotDB`, armazenando informações para acesso subjacente sem conexão com a VPN e viabilizando a estratégia híbrida de Load.
+### Camada 1: Rede (`shared/.../network`)
+* `OpenF1Api` e `JolpicaApi` encapsulam as chamadas HTTP (funções `suspend`).
+* `HttpClientProvider` configura o cliente Ktor comum: Content Negotiation, `HttpRequestRetry` para `429`/`5xx` (até 5 tentativas, com espera de 2, 4, 8, 16 e 16 s, sem respeitar o `Retry-After: 60` da OpenF1, que estouraria o timeout), e `HttpTimeout` por tentativa. Também conta requisições e respostas `429` (`RequestStats`), usadas pelo benchmark de desempenho.
+* `HttpClientFactory` (expect/actual) escolhe o motor HTTP de cada plataforma.
 
-### Camada 2: Repositories
-* Cada bloco de funcionalidade lógica assina um Repository (e.g. `SessionRepository`, `TelemetryRepository`).
-* O fluxo comum consiste no fallback dinâmico: ele sempre confere um cache (`FastPilotDB`), e se esgotado o TTL (Time-To-Live), requisita do `OpenF1Api`, injeta no banco assincronamente e cospe os dados atualizados formatados.
+### Camada 2: Repositórios (`shared/.../data/repository`)
+* **Com cache local (cache-first):** `SessionRepository`, `DriverRepository`, `LapRepository`, `StintRepository`, `StandingsRepository`. Leem o SQLite primeiro; se o dado estiver vencido, buscam na rede, gravam no banco e devolvem; em erro de rede, devolvem o cache vencido se houver.
 
-### Camada 3: ViewModels / Estado de Apresentação (MVI/MVVM)
-* O estado é garantido pela exposição exclusiva e blindada via `StateFlow` e imutabilidade dos objetos `UiState` (e.g. `DashboardUiState`).
-* O `viewModelScope.launch` controla toda coleta e emissão paralela (assíncrona). Regras e filtros de exceções de concorrência (`CancellationException`) são tratadas minuciosamente para evitar vazamentos de crash invisíveis em rápidas trocas de abas.
-* Injeção feita via Módulo do Koin (`koin-compose-viewmodel`).
+  | Dado | Validade do cache |
+  |---|---|
+  | Sessões | 24 h (temporadas passadas: sem prazo) |
+  | Pilotos | 6 h |
+  | Voltas, stints | 1 h |
+  | Telemetria e posição na pista de uma volta (`cached_samples`) | só sessões encerradas |
+  | Classificação | 7 dias (temporada atual: 1 h, pois muda a cada corrida) |
 
-### Camada 4: UI (Telas e Componentes - Voyager)
-As abas interativas implementadas no aplicativo pelo `composeApp`:
-1. **Splach / Auth Login**: Bloqueio de sessão inicial gerenciados sob Firebase GitLive com token de sessão ativo.
-2. **Dashboard**: Central com Live Polling atualizando ativamente o estado global. Transita automaticamente para polling contínuo (modo AO VIVO) em fins de semana de corrida.
-3. **Telemetry & Duel**: Permite plotagem densa. Seleciona o piloto 1 e piloto 2 lado-a-lado usando *GetDriverDuelUseCase*. Visualiza delta-time, velocidade por metro.
-4. **Team Radio**: Leitor customizável assíncrono para os audios disparados pelos chefes de equipe.
-5. **Weather & Strategy**: Relatório dos compostos e mapa meteorológico interativo extraídos a longo prazo das sessões do ano de 2024 a 2025 (e adaptado as limitações do servidor real-time do OpenF1).
+* **Corrida encerrada não é baixada de novo (TCC I §4.5):** pilotos, voltas, stints e amostras baixados depois do fim da sessão (`dateEnd` + 1 h, `SessionRegistry.isFinal`) valem sem prazo; dados baixados durante a sessão seguem a validade da tabela. A telemetria bruta e as posições na pista de cada volta ficam guardadas como o JSON da API (schema v3, migração `2.sqm`). Esses dados também servem offline.
+* **Limpeza de 30 dias:** ao abrir o app, `CacheMaintenance` apaga pilotos, voltas, stints e amostras baixados há mais de 30 dias. O calendário e a classificação são pequenos e ficam.
+* **Sempre da rede:** posições, intervalos, race control, clima, rádio, pit stops, ultrapassagens e meetings (`LiveRepositories.kt`), que mudam a cada poucos segundos. A OpenF1 responde `404 {"detail":"No results found."}` quando não há resultado; `OpenF1Api` trata isso como lista vazia.
+* **Web sem cache:** o SQLDelight não tem driver síncrono para o navegador, então no Web o banco não é registrado no Koin (`db = null`) e todo carregamento vai à rede.
+* **Temporadas:** as telas listam de 2023 (início da OpenF1) até a temporada atual, calculada pela data do aparelho (`availableSeasons`), só com sessões que já começaram (a OpenF1 lista o calendário inteiro com antecedência), da mais nova para a mais antiga. Abrem na sessão ao vivo ou, sem ela, na corrida mais recente (`RecentSessions.kt`). A Classificação usa as mesmas temporadas.
+* `LiveSessionDetector` considera ao vivo a sessão em que `dateStart ≤ agora ≤ dateEnd + 30 min`, a mesma janela de tempo real da OpenF1 (cobre atrasos e a classificação final). Com a tela aberta, o Dashboard confere a cada 30 s se uma sessão começou, abrindo-a ao vivo se o usuário não escolheu outra, ou terminou, voltando a uma carga única.
+* Durante sessões ao vivo a API é reconsultada nos intervalos do TCC I (§4.5): posições e intervalos a cada 4 s (Dashboard), rádio a cada 15 s (Rádio), clima a cada 60 s (Clima); além disso race control a cada 10 s e pit stops e ultrapassagens a cada 15 s (Dashboard). Com todas as telas abertas são ≈49 requisições por minuto, abaixo das 60 do plano Sponsor. Voltas, stints e amostras de uma sessão ao vivo ignoram o cache local.
+* **Proxy de tempo real** (`api/openf1.mjs`, função da Vercel): guarda a conta Sponsor nas variáveis `OPENF1_USERNAME`/`OPENF1_PASSWORD`, obtém e renova o token e repassa só os endpoints usados pelo app, com cache de 4 s na CDN para que vários usuários dividam a mesma cota. No app, `OpenF1Api` manda ao proxy (`OPENF1_PROXY_URL`) só as requisições de sessões ao vivo (`SessionRegistry`, alimentado pelo `SessionRepository`) e repete pelo proxy uma requisição recusada com `401`; o histórico vai direto à OpenF1, na cota grátis de cada usuário. Nenhuma senha vai no app.
+
+### Camada 3: Domínio — métricas (`shared/.../domain/usecase`)
+Todas em Kotlin puro, sem dependência de plataforma, com testes unitários:
+
+| Use case | O que calcula |
+|---|---|
+| `CalculateCleanPaceUseCase` | Ritmo limpo: média e mediana das voltas representativas (após `LapFilters`, descarta ainda os 5% mais rápidos e os 5% mais lentos), desvio-padrão, número de voltas limpas. |
+| `GetTyreDegradationUseCase` | Degradação por stint: inclinação (s/volta) da regressão linear do tempo de volta pela idade do pneu. |
+| `CalculateTheoreticalBestUseCase` | Volta teórica = melhor S1 + melhor S2 + melhor S3, comparada com a melhor volta real. |
+| `GetDriverDuelUseCase` | Duelo volta a volta entre dois pilotos, só nas voltas que ambos completaram (ignora saída de box). |
+| `CalculateLapDeltaUseCase` | Delta na volta (TCC I §4.7): diferença de tempo ao longo da volta, projetando as amostras de `/location` (~3,7 Hz) de um piloto na linha do outro e interpolando no tempo. |
+| `CalculateChampionshipGapsUseCase` | Diferença de pontos para o líder e para o anterior na classificação. |
+| `LapFilters` | Filtros comuns ao ritmo limpo e à degradação (ver abaixo). |
+
+**Voltas atípicas (`LapFilters`).** São descartadas a volta 1 (largada parada), as voltas de entrada e saída de box, a volta do abandono e as voltas sob safety car, VSC ou bandeira vermelha. Os períodos neutralizados são reconstruídos a partir de `/race_control` **por horário**, não por número de volta: a direção de prova numera as mensagens pela volta do líder, e um retardatário está em outra volta no mesmo instante. Bandeira amarela local não invalida a volta.
+
+### Camada 4: Apresentação (`composeApp/.../ui`)
+* Um ViewModel por tela, expondo um `UiState` imutável via `StateFlow`; as coletas rodam em `viewModelScope`, tratando `CancellationException` para não confundir troca de aba com erro.
+* Injeção pelo Koin (`ui/di`), navegação pelo Voyager (`ui/navigation/Tabs.kt`).
+
+**Telas:**
+1. **Splash / Login** — botões "Continuar com o Google" e "Continuar como Convidado". Hoje os dois apenas entram no app (ver §5).
+2. **Dashboard** — seletor de ano, corrida e sessão; posições, intervalos, **eventos** (pit stops com tempo parado e ultrapassagens, os 30 mais recentes; `GetRaceEventsUseCase`) e mensagens da direção de prova. Em sessão ao vivo, liga o polling. O status do DRS, citado no TCC I (§4.6), não é mostrado: o DRS foi abolido pelo regulamento de 2026, e só sessões de 2026 em diante podem ser acompanhadas ao vivo.
+3. **Telemetria** — gráficos de velocidade, RPM, marcha e acelerador de um piloto e o card **Volta Teórica** (teórica, melhor volta real, diferença e setores com a volta de origem).
+4. **Estratégia** — linha do tempo de stints com a cor do composto, **degradação** (s/volta) sob cada stint e a seção **Ritmo Limpo** (mediana, diferença para o 1º, σ, voltas limpas/total; mínimo de 5 voltas limpas; só em corridas).
+5. **Duelo** — comparação volta a volta entre dois pilotos e o card **Delta na Volta Mais Rápida**.
+6. **Rádio** — lista de mensagens de rádio com reprodução de áudio (`AudioPlayer` expect/actual em cada plataforma); em sessão ao vivo, busca mensagens novas a cada 15 s.
+7. **Clima** — temperatura do ar e da pista, vento, umidade e chuva; em sessão ao vivo, atualiza a cada 60 s.
+8. **Tabela** — classificação de pilotos e construtores com diferenças de pontos.
+
+### Código específico por plataforma
+| Plataforma | Ponto de entrada | Específico |
+|---|---|---|
+| Android | `MainActivity` | OkHttp, `AndroidSqliteDriver`, `MediaPlayer` |
+| iOS | `MainViewController` + `iosApp/` (SwiftUI hospedeiro, projeto gerado por XcodeGen) | Darwin, `NativeSqliteDriver`, `AVPlayer` |
+| Web | `main()` com `ComposeViewport` | fetch, sem banco, `HTMLAudioElement` |
+| Desktop | `main()` com `Window` | CIO, `JdbcSqliteDriver`, áudio apenas simulado (log) |
 
 ---
-*Gerado por Antigravity AI Assistant.*
+
+## 5. Limitações Conhecidas
+* **Login:** a autenticação com Google/Firebase não está implementada; os dois botões da tela de login apenas entram no app.
+* **Web sem cache local:** todo carregamento vai à rede (ver §4, Camada 2).
+* **Limite da OpenF1:** telas que disparam muitas requisições ao mesmo tempo recebem `429` e dependem das novas tentativas. O benchmark de desempenho (§6) mediu o polling com race control a cada 5 s (hoje 10 s).
+* **Tempo real depende da assinatura:** sem o proxy configurado (ou com a assinatura vencida), uma sessão ao vivo só mostra dados quando a OpenF1 os libera, 30 min depois do fim. A cota Sponsor (60 req/min) é dividida entre todos os usuários; o cache de 4 s do proxy limita o consumo por endpoint, não por usuário.
+* **Telemetria, Estratégia e Duelo** carregam uma sessão ao vivo uma vez (sem polling); para atualizar, basta selecioná-la de novo.
+* **Ícones no Web:** o Skiko não traz fonte de emoji; alguns emojis restantes (seletor de ano, Dashboard) aparecem como □.
+* **Precisão do delta na volta:** com amostragem de ~3,7 Hz, a linha traçada fica 1–3% mais curta que o traçado oficial, porque corta as curvas; o erro de fechamento contra a diferença oficial fica entre 3 e 113 ms.
+
+---
+
+## 6. Avaliação (TCC II)
+Os resultados são gerados por scripts em `scripts/` e gravados em `metrics/`:
+
+* **Código compartilhado** — `scripts/measure_shared_code.py` → `metrics/shared_code.md`: 94,9% (Android 97,8%, iOS 98,1%, Web 98,8%).
+* **Precisão em relação à biblioteca FastF1** — cinco corridas (Bahrein 2023, Bélgica 2023, Singapura 2023, Mônaco 2024, São Paulo 2024), com respostas gravadas em `fixtures/`. MAPE de 0,00% para ritmo limpo, volta teórica e melhor volta; degradação com erro médio de 0,006 s/volta e mesmo sinal em 221/221 stints; delta na volta com erro médio de ~0,1 s e diferença final idêntica. Detalhes em `metrics/comparison/README.md` e `metrics/comparison/NOTAS.md`.
+* **Desempenho** — benchmark embutido no app (`composeApp/.../ui/perf/`) que mede o tempo de carregamento de cada tela com e sem cache, com e sem polling ao vivo, enquanto `scripts/perf_run.py` amostra CPU e memória. Resultados em `metrics/performance/README.md`.
+
+Instruções de build, testes e reprodução das medições estão no `README.md`.

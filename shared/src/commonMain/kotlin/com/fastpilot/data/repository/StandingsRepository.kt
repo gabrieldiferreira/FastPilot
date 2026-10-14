@@ -20,13 +20,16 @@ class StandingsRepository(
 ) {
     companion object {
         private const val CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000L // 7 days
+        // The current season changes after every race weekend
+        private const val CURRENT_SEASON_TTL_MS = 60 * 60 * 1000L // 1 hour
     }
 
     suspend fun getStandings(season: Int, forceRefresh: Boolean = false): Standings {
         val cached = readCache(season)
         if (!forceRefresh && cached != null) {
             val age = Clock.System.now().toEpochMilliseconds() - cached.second
-            if (age < CACHE_TTL_MS) return cached.first
+            val ttl = if (season >= availableSeasons().first()) CURRENT_SEASON_TTL_MS else CACHE_TTL_MS
+            if (age < ttl) return cached.first
         }
 
         return try {

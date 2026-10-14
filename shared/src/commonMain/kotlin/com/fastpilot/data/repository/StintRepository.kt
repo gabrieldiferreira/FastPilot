@@ -22,13 +22,16 @@ class StintRepository(
         driverNumber: Int? = null,
         forceRefresh: Boolean = false
     ): List<Stint> {
-        if (!forceRefresh && driverNumber != null) {
+        // A live session keeps changing: always fetch it
+        if (!forceRefresh && !api.sessionRegistry.isLive(sessionKey) && driverNumber != null) {
             val cached = db?.fastPilotDBQueries?.selectStintsByDriverAndSession(
                 driverNumber.toLong(), sessionKey.toLong()
             )?.executeAsList().orEmpty()
             if (cached.isNotEmpty()) {
-                val age = Clock.System.now().toEpochMilliseconds() - cached.first().cached_at
-                if (age < CACHE_TTL_MS) {
+                val cachedAt = cached.first().cached_at
+                val age = Clock.System.now().toEpochMilliseconds() - cachedAt
+                // Data downloaded after the session ended never changes: kept until the 30-day cleanup
+                if (age < CACHE_TTL_MS || api.sessionRegistry.isFinal(sessionKey, cachedAt)) {
                     return cached.map { it.toStint() }
                 }
             }

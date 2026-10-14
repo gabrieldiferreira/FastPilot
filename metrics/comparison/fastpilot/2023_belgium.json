@@ -15,7 +15,69 @@
                     "lap_end": 14,
                     "laps": 12,
                     "slope": -9.7E-4,
-                    "intercept": 112.5407
+                    "intercept": 112.5407,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 113.103
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 112.277
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 112.789
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 112.602
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 112.13
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 112.415
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 112.472
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 111.88
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 9,
+                            "lap_time": 112.455
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 10,
+                            "lap_time": 112.613
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 11,
+                            "lap_time": 112.714
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 12,
+                            "lap_time": 112.962
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -24,7 +86,79 @@
                     "lap_end": 30,
                     "laps": 14,
                     "slope": -0.03701,
-                    "intercept": 112.5084
+                    "intercept": 112.5084,
+                    "points": [
+                        {
+                            "lap": 16,
+                            "tyre_age": 1,
+                            "lap_time": 110.696
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 2,
+                            "lap_time": 110.108
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 3,
+                            "lap_time": 111.637
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 4,
+                            "lap_time": 111.956
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 5,
+                            "lap_time": 115.733
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 6,
+                            "lap_time": 114.915
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 7,
+                            "lap_time": 115.325
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 8,
+                            "lap_time": 112.905
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 9,
+                            "lap_time": 110.996
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 10,
+                            "lap_time": 111.106
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 11,
+                            "lap_time": 111.377
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 12,
+                            "lap_time": 111.472
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 13,
+                            "lap_time": 111.41
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 14,
+                            "lap_time": 111.595
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -33,7 +167,74 @@
                     "lap_end": 44,
                     "laps": 13,
                     "slope": 0.01599,
-                    "intercept": 110.0826
+                    "intercept": 110.0826,
+                    "points": [
+                        {
+                            "lap": 32,
+                            "tyre_age": 1,
+                            "lap_time": 108.922
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 2,
+                            "lap_time": 110.586
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 3,
+                            "lap_time": 110.792
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 4,
+                            "lap_time": 110.408
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 5,
+                            "lap_time": 110.362
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 6,
+                            "lap_time": 110.317
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 7,
+                            "lap_time": 110.147
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 8,
+                            "lap_time": 110.113
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 9,
+                            "lap_time": 110.067
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 10,
+                            "lap_time": 109.954
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 11,
+                            "lap_time": 110.187
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 12,
+                            "lap_time": 110.095
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 13,
+                            "lap_time": 110.579
+                        }
+                    ]
                 }
             ]
         },
@@ -51,7 +252,39 @@
                     "lap_end": 8,
                     "laps": 6,
                     "slope": 0.1162,
-                    "intercept": 114.8191
+                    "intercept": 114.8191,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 115.985
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 114.142
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 114.152
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 115.729
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 115.947
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 115.4
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -60,7 +293,79 @@
                     "lap_end": 24,
                     "laps": 14,
                     "slope": 0.06475,
-                    "intercept": 114.4855
+                    "intercept": 114.4855,
+                    "points": [
+                        {
+                            "lap": 10,
+                            "tyre_age": 1,
+                            "lap_time": 113.736
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 2,
+                            "lap_time": 114.844
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 3,
+                            "lap_time": 115.497
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 4,
+                            "lap_time": 114.596
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 5,
+                            "lap_time": 114.962
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 6,
+                            "lap_time": 115.749
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 7,
+                            "lap_time": 113.822
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 8,
+                            "lap_time": 114.913
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 9,
+                            "lap_time": 115.069
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 10,
+                            "lap_time": 114.603
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 11,
+                            "lap_time": 115.579
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 12,
+                            "lap_time": 115.771
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 13,
+                            "lap_time": 115.602
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 14,
+                            "lap_time": 114.853
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -69,7 +374,49 @@
                     "lap_end": 34,
                     "laps": 8,
                     "slope": 0.33935,
-                    "intercept": 110.6201
+                    "intercept": 110.6201,
+                    "points": [
+                        {
+                            "lap": 26,
+                            "tyre_age": 1,
+                            "lap_time": 110.667
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 2,
+                            "lap_time": 111.329
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 3,
+                            "lap_time": 111.821
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 4,
+                            "lap_time": 112.192
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 5,
+                            "lap_time": 112.727
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 6,
+                            "lap_time": 112.285
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 7,
+                            "lap_time": 112.6
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 8,
+                            "lap_time": 113.556
+                        }
+                    ]
                 },
                 {
                     "stint": 4,
@@ -78,7 +425,54 @@
                     "lap_end": 44,
                     "laps": 9,
                     "slope": 0.24735,
-                    "intercept": 110.1978
+                    "intercept": 110.1978,
+                    "points": [
+                        {
+                            "lap": 36,
+                            "tyre_age": 1,
+                            "lap_time": 110.236
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 2,
+                            "lap_time": 110.486
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 3,
+                            "lap_time": 110.818
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 4,
+                            "lap_time": 111.513
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 5,
+                            "lap_time": 112.082
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 6,
+                            "lap_time": 111.581
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 7,
+                            "lap_time": 112.364
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 8,
+                            "lap_time": 111.241
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 9,
+                            "lap_time": 112.59
+                        }
+                    ]
                 }
             ]
         },
@@ -96,7 +490,24 @@
                     "lap_end": 5,
                     "laps": 3,
                     "slope": -0.5975,
-                    "intercept": 116.538
+                    "intercept": 116.538,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 116.01
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 115.204
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 114.815
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -105,7 +516,84 @@
                     "lap_end": 22,
                     "laps": 15,
                     "slope": 0.26159,
-                    "intercept": 112.2017
+                    "intercept": 112.2017,
+                    "points": [
+                        {
+                            "lap": 7,
+                            "tyre_age": 1,
+                            "lap_time": 112.398
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 2,
+                            "lap_time": 112.975
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 3,
+                            "lap_time": 113.378
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 4,
+                            "lap_time": 113.034
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 5,
+                            "lap_time": 113.369
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 6,
+                            "lap_time": 113.535
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 7,
+                            "lap_time": 114.036
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 8,
+                            "lap_time": 114.323
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 9,
+                            "lap_time": 115.31
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 10,
+                            "lap_time": 114.625
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 11,
+                            "lap_time": 114.58
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 12,
+                            "lap_time": 114.826
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 13,
+                            "lap_time": 115.001
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 14,
+                            "lap_time": 115.672
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 15,
+                            "lap_time": 117.354
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -114,7 +602,114 @@
                     "lap_end": 44,
                     "laps": 21,
                     "slope": 0.12281,
-                    "intercept": 111.3547
+                    "intercept": 111.3547,
+                    "points": [
+                        {
+                            "lap": 24,
+                            "tyre_age": 1,
+                            "lap_time": 111.719
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 2,
+                            "lap_time": 110.994
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 3,
+                            "lap_time": 111.932
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 4,
+                            "lap_time": 111.567
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 5,
+                            "lap_time": 111.634
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 6,
+                            "lap_time": 112.143
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 7,
+                            "lap_time": 111.975
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 8,
+                            "lap_time": 112.068
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 9,
+                            "lap_time": 112.419
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 10,
+                            "lap_time": 112.469
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 11,
+                            "lap_time": 112.824
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 12,
+                            "lap_time": 113.391
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 13,
+                            "lap_time": 113.215
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 14,
+                            "lap_time": 113.131
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 15,
+                            "lap_time": 113.461
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 16,
+                            "lap_time": 114.52
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 17,
+                            "lap_time": 114.361
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 18,
+                            "lap_time": 113.367
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 19,
+                            "lap_time": 115.247
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 20,
+                            "lap_time": 112.115
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 21,
+                            "lap_time": 112.265
+                        }
+                    ]
                 }
             ]
         },
@@ -132,7 +727,24 @@
                     "lap_end": 5,
                     "laps": 3,
                     "slope": 0.87,
-                    "intercept": 113.693
+                    "intercept": 113.693,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 114.921
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 114.717
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 116.661
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -141,7 +753,59 @@
                     "lap_end": 17,
                     "laps": 10,
                     "slope": 0.26513,
-                    "intercept": 112.7382
+                    "intercept": 112.7382,
+                    "points": [
+                        {
+                            "lap": 7,
+                            "tyre_age": 1,
+                            "lap_time": 113.072
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 2,
+                            "lap_time": 113.812
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 3,
+                            "lap_time": 113.209
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 4,
+                            "lap_time": 114.599
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 5,
+                            "lap_time": 113.289
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 6,
+                            "lap_time": 113.561
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 7,
+                            "lap_time": 114.112
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 8,
+                            "lap_time": 115.04
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 9,
+                            "lap_time": 115.659
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 10,
+                            "lap_time": 115.611
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -150,7 +814,139 @@
                     "lap_end": 44,
                     "laps": 26,
                     "slope": -0.0011,
-                    "intercept": 112.4138
+                    "intercept": 112.4138,
+                    "points": [
+                        {
+                            "lap": 19,
+                            "tyre_age": 1,
+                            "lap_time": 111.729
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 2,
+                            "lap_time": 111.745
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 3,
+                            "lap_time": 113.769
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 4,
+                            "lap_time": 113.725
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 5,
+                            "lap_time": 112.578
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 6,
+                            "lap_time": 112.859
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 7,
+                            "lap_time": 112.283
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 8,
+                            "lap_time": 111.682
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 9,
+                            "lap_time": 111.789
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 10,
+                            "lap_time": 111.991
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 11,
+                            "lap_time": 112.195
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 12,
+                            "lap_time": 112.289
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 13,
+                            "lap_time": 112.21
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 14,
+                            "lap_time": 111.914
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 15,
+                            "lap_time": 112.239
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 16,
+                            "lap_time": 112.221
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 17,
+                            "lap_time": 112.736
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 18,
+                            "lap_time": 112.433
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 19,
+                            "lap_time": 112.618
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 20,
+                            "lap_time": 112.659
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 21,
+                            "lap_time": 112.717
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 22,
+                            "lap_time": 112.811
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 23,
+                            "lap_time": 112.428
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 24,
+                            "lap_time": 112.0
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 25,
+                            "lap_time": 112.309
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 26,
+                            "lap_time": 112.445
+                        }
+                    ]
                 }
             ]
         },
@@ -168,7 +964,114 @@
                     "lap_end": 23,
                     "laps": 21,
                     "slope": 0.07275,
-                    "intercept": 114.1808
+                    "intercept": 114.1808,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 116.015
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 114.814
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 114.371
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 115.415
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 115.56
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 115.449
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 113.984
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 113.43
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 9,
+                            "lap_time": 113.587
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 10,
+                            "lap_time": 113.822
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 11,
+                            "lap_time": 113.641
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 12,
+                            "lap_time": 113.769
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 13,
+                            "lap_time": 114.014
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 14,
+                            "lap_time": 115.359
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 15,
+                            "lap_time": 114.782
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 16,
+                            "lap_time": 114.87
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 17,
+                            "lap_time": 115.278
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 18,
+                            "lap_time": 115.566
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 19,
+                            "lap_time": 116.854
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 20,
+                            "lap_time": 116.834
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 21,
+                            "lap_time": 117.187
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -177,7 +1080,109 @@
                     "lap_end": 44,
                     "laps": 20,
                     "slope": 0.02947,
-                    "intercept": 111.9605
+                    "intercept": 111.9605,
+                    "points": [
+                        {
+                            "lap": 25,
+                            "tyre_age": 1,
+                            "lap_time": 110.911
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 2,
+                            "lap_time": 111.509
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 3,
+                            "lap_time": 111.966
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 4,
+                            "lap_time": 112.131
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 5,
+                            "lap_time": 113.343
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 6,
+                            "lap_time": 112.362
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 7,
+                            "lap_time": 112.866
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 8,
+                            "lap_time": 113.097
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 9,
+                            "lap_time": 112.384
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 10,
+                            "lap_time": 112.246
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 11,
+                            "lap_time": 112.022
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 12,
+                            "lap_time": 112.227
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 13,
+                            "lap_time": 111.902
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 14,
+                            "lap_time": 111.831
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 15,
+                            "lap_time": 112.369
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 16,
+                            "lap_time": 112.084
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 17,
+                            "lap_time": 111.8
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 18,
+                            "lap_time": 112.234
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 19,
+                            "lap_time": 113.022
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 20,
+                            "lap_time": 113.093
+                        }
+                    ]
                 }
             ]
         },
@@ -195,7 +1200,64 @@
                     "lap_end": 13,
                     "laps": 11,
                     "slope": 0.0616,
-                    "intercept": 112.114
+                    "intercept": 112.114,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 112.166
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 112.153
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 112.336
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 112.572
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 112.466
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 112.52
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 112.305
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 112.465
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 9,
+                            "lap_time": 112.72
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 10,
+                            "lap_time": 112.644
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 11,
+                            "lap_time": 112.973
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -204,7 +1266,79 @@
                     "lap_end": 29,
                     "laps": 14,
                     "slope": -0.01229,
-                    "intercept": 113.0379
+                    "intercept": 113.0379,
+                    "points": [
+                        {
+                            "lap": 15,
+                            "tyre_age": 1,
+                            "lap_time": 111.621
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 2,
+                            "lap_time": 111.416
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 3,
+                            "lap_time": 112.175
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 4,
+                            "lap_time": 112.289
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 5,
+                            "lap_time": 113.525
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 6,
+                            "lap_time": 115.459
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 7,
+                            "lap_time": 115.448
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 8,
+                            "lap_time": 116.286
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 9,
+                            "lap_time": 113.361
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 10,
+                            "lap_time": 111.716
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 11,
+                            "lap_time": 111.692
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 12,
+                            "lap_time": 111.891
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 13,
+                            "lap_time": 112.199
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 14,
+                            "lap_time": 112.162
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -213,7 +1347,79 @@
                     "lap_end": 44,
                     "laps": 14,
                     "slope": 0.0231,
-                    "intercept": 110.9539
+                    "intercept": 110.9539,
+                    "points": [
+                        {
+                            "lap": 31,
+                            "tyre_age": 1,
+                            "lap_time": 110.308
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 2,
+                            "lap_time": 111.184
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 3,
+                            "lap_time": 111.44
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 4,
+                            "lap_time": 111.387
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 5,
+                            "lap_time": 110.827
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 6,
+                            "lap_time": 111.082
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 7,
+                            "lap_time": 111.103
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 8,
+                            "lap_time": 111.42
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 9,
+                            "lap_time": 111.117
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 10,
+                            "lap_time": 111.318
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 11,
+                            "lap_time": 110.935
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 12,
+                            "lap_time": 111.24
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 13,
+                            "lap_time": 110.911
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 14,
+                            "lap_time": 111.508
+                        }
+                    ]
                 }
             ]
         },
@@ -231,7 +1437,49 @@
                     "lap_end": 10,
                     "laps": 8,
                     "slope": -0.13074,
-                    "intercept": 114.3456
+                    "intercept": 114.3456,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 114.343
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 114.585
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 113.395
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 113.596
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 113.643
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 113.455
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 113.585
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 113.456
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -240,7 +1488,94 @@
                     "lap_end": 29,
                     "laps": 17,
                     "slope": 0.05227,
-                    "intercept": 112.8518
+                    "intercept": 112.8518,
+                    "points": [
+                        {
+                            "lap": 12,
+                            "tyre_age": 1,
+                            "lap_time": 111.942
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 2,
+                            "lap_time": 112.499
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 3,
+                            "lap_time": 111.886
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 4,
+                            "lap_time": 113.029
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 5,
+                            "lap_time": 112.635
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 6,
+                            "lap_time": 112.886
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 7,
+                            "lap_time": 112.812
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 8,
+                            "lap_time": 113.374
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 9,
+                            "lap_time": 115.606
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 10,
+                            "lap_time": 116.204
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 11,
+                            "lap_time": 116.909
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 12,
+                            "lap_time": 114.11
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 13,
+                            "lap_time": 112.249
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 14,
+                            "lap_time": 112.717
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 15,
+                            "lap_time": 112.187
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 16,
+                            "lap_time": 112.505
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 17,
+                            "lap_time": 112.928
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -249,7 +1584,79 @@
                     "lap_end": 44,
                     "laps": 14,
                     "slope": -0.04422,
-                    "intercept": 111.8233
+                    "intercept": 111.8233,
+                    "points": [
+                        {
+                            "lap": 31,
+                            "tyre_age": 1,
+                            "lap_time": 112.098
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 2,
+                            "lap_time": 111.756
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 3,
+                            "lap_time": 110.955
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 4,
+                            "lap_time": 111.834
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 5,
+                            "lap_time": 111.967
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 6,
+                            "lap_time": 111.666
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 7,
+                            "lap_time": 111.505
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 8,
+                            "lap_time": 111.442
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 9,
+                            "lap_time": 111.214
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 10,
+                            "lap_time": 111.279
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 11,
+                            "lap_time": 111.326
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 12,
+                            "lap_time": 110.938
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 13,
+                            "lap_time": 111.351
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 14,
+                            "lap_time": 111.552
+                        }
+                    ]
                 }
             ]
         },
@@ -267,7 +1674,64 @@
                     "lap_end": 13,
                     "laps": 11,
                     "slope": 0.11303,
-                    "intercept": 112.2482
+                    "intercept": 112.2482,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 112.839
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 112.292
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 112.479
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 112.575
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 112.684
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 112.763
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 112.641
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 113.603
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 9,
+                            "lap_time": 113.559
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 10,
+                            "lap_time": 113.232
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 11,
+                            "lap_time": 113.523
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -276,7 +1740,74 @@
                     "lap_end": 28,
                     "laps": 13,
                     "slope": -0.01507,
-                    "intercept": 113.1969
+                    "intercept": 113.1969,
+                    "points": [
+                        {
+                            "lap": 15,
+                            "tyre_age": 1,
+                            "lap_time": 111.88
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 2,
+                            "lap_time": 112.064
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 3,
+                            "lap_time": 112.243
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 4,
+                            "lap_time": 112.168
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 5,
+                            "lap_time": 112.868
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 6,
+                            "lap_time": 115.838
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 7,
+                            "lap_time": 115.901
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 8,
+                            "lap_time": 116.499
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 9,
+                            "lap_time": 113.585
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 10,
+                            "lap_time": 111.81
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 11,
+                            "lap_time": 111.717
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 12,
+                            "lap_time": 111.75
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 13,
+                            "lap_time": 111.865
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -285,7 +1816,84 @@
                     "lap_end": 44,
                     "laps": 15,
                     "slope": 0.13521,
-                    "intercept": 110.42
+                    "intercept": 110.42,
+                    "points": [
+                        {
+                            "lap": 30,
+                            "tyre_age": 1,
+                            "lap_time": 110.436
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 2,
+                            "lap_time": 110.903
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 3,
+                            "lap_time": 111.681
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 4,
+                            "lap_time": 111.189
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 5,
+                            "lap_time": 110.726
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 6,
+                            "lap_time": 111.267
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 7,
+                            "lap_time": 111.143
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 8,
+                            "lap_time": 111.298
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 9,
+                            "lap_time": 111.312
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 10,
+                            "lap_time": 110.919
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 11,
+                            "lap_time": 111.833
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 12,
+                            "lap_time": 112.252
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 13,
+                            "lap_time": 111.419
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 14,
+                            "lap_time": 112.442
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 15,
+                            "lap_time": 113.706
+                        }
+                    ]
                 }
             ]
         },
@@ -303,7 +1911,99 @@
                     "lap_end": 20,
                     "laps": 18,
                     "slope": 0.05433,
-                    "intercept": 114.3161
+                    "intercept": 114.3161,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 115.619
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 113.977
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 115.058
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 115.795
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 115.063
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 114.307
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 113.908
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 113.838
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 9,
+                            "lap_time": 113.889
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 10,
+                            "lap_time": 113.869
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 11,
+                            "lap_time": 114.079
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 12,
+                            "lap_time": 114.812
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 13,
+                            "lap_time": 114.264
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 14,
+                            "lap_time": 114.934
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 15,
+                            "lap_time": 115.68
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 16,
+                            "lap_time": 115.513
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 17,
+                            "lap_time": 115.474
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 18,
+                            "lap_time": 116.9
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -312,7 +2012,124 @@
                     "lap_end": 44,
                     "laps": 23,
                     "slope": 0.02026,
-                    "intercept": 112.1653
+                    "intercept": 112.1653,
+                    "points": [
+                        {
+                            "lap": 22,
+                            "tyre_age": 1,
+                            "lap_time": 116.412
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 2,
+                            "lap_time": 111.394
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 3,
+                            "lap_time": 111.446
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 4,
+                            "lap_time": 111.741
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 5,
+                            "lap_time": 111.297
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 6,
+                            "lap_time": 111.707
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 7,
+                            "lap_time": 111.705
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 8,
+                            "lap_time": 111.919
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 9,
+                            "lap_time": 112.035
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 10,
+                            "lap_time": 112.203
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 11,
+                            "lap_time": 112.218
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 12,
+                            "lap_time": 112.139
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 13,
+                            "lap_time": 112.367
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 14,
+                            "lap_time": 112.258
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 15,
+                            "lap_time": 112.884
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 16,
+                            "lap_time": 112.569
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 17,
+                            "lap_time": 112.315
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 18,
+                            "lap_time": 112.605
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 19,
+                            "lap_time": 112.617
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 20,
+                            "lap_time": 113.416
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 21,
+                            "lap_time": 112.736
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 22,
+                            "lap_time": 112.632
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 23,
+                            "lap_time": 112.778
+                        }
+                    ]
                 }
             ]
         },
@@ -330,7 +2147,24 @@
                     "lap_end": 5,
                     "laps": 3,
                     "slope": -0.4785,
-                    "intercept": 116.167
+                    "intercept": 116.167,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 115.592
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 115.403
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 114.635
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -339,7 +2173,99 @@
                     "lap_end": 25,
                     "laps": 18,
                     "slope": 0.17399,
-                    "intercept": 112.7576
+                    "intercept": 112.7576,
+                    "points": [
+                        {
+                            "lap": 7,
+                            "tyre_age": 1,
+                            "lap_time": 111.534
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 2,
+                            "lap_time": 112.645
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 3,
+                            "lap_time": 113.819
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 4,
+                            "lap_time": 114.01
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 5,
+                            "lap_time": 113.589
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 6,
+                            "lap_time": 113.828
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 7,
+                            "lap_time": 114.086
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 8,
+                            "lap_time": 114.434
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 9,
+                            "lap_time": 115.185
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 10,
+                            "lap_time": 114.434
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 11,
+                            "lap_time": 114.689
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 12,
+                            "lap_time": 114.812
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 13,
+                            "lap_time": 114.843
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 14,
+                            "lap_time": 115.621
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 15,
+                            "lap_time": 116.026
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 16,
+                            "lap_time": 116.72
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 17,
+                            "lap_time": 114.764
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 18,
+                            "lap_time": 114.351
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -348,7 +2274,99 @@
                     "lap_end": 44,
                     "laps": 18,
                     "slope": 0.16283,
-                    "intercept": 111.4228
+                    "intercept": 111.4228,
+                    "points": [
+                        {
+                            "lap": 27,
+                            "tyre_age": 1,
+                            "lap_time": 110.993
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 2,
+                            "lap_time": 111.362
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 3,
+                            "lap_time": 111.804
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 4,
+                            "lap_time": 112.039
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 5,
+                            "lap_time": 112.541
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 6,
+                            "lap_time": 112.826
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 7,
+                            "lap_time": 112.814
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 8,
+                            "lap_time": 112.789
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 9,
+                            "lap_time": 113.23
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 10,
+                            "lap_time": 113.437
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 11,
+                            "lap_time": 113.413
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 12,
+                            "lap_time": 113.103
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 13,
+                            "lap_time": 113.436
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 14,
+                            "lap_time": 113.598
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 15,
+                            "lap_time": 113.446
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 16,
+                            "lap_time": 115.236
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 17,
+                            "lap_time": 113.95
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 18,
+                            "lap_time": 113.438
+                        }
+                    ]
                 }
             ]
         },
@@ -366,7 +2384,44 @@
                     "lap_end": 9,
                     "laps": 7,
                     "slope": -0.15357,
-                    "intercept": 114.7951
+                    "intercept": 114.7951,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 114.71
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 113.774
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 115.437
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 113.829
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 114.027
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 113.679
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 113.81
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -375,7 +2430,74 @@
                     "lap_end": 24,
                     "laps": 13,
                     "slope": 0.34764,
-                    "intercept": 112.0837
+                    "intercept": 112.0837,
+                    "points": [
+                        {
+                            "lap": 11,
+                            "tyre_age": 1,
+                            "lap_time": 112.246
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 2,
+                            "lap_time": 114.228
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 3,
+                            "lap_time": 112.504
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 4,
+                            "lap_time": 112.963
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 5,
+                            "lap_time": 113.326
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 6,
+                            "lap_time": 113.657
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 7,
+                            "lap_time": 114.123
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 8,
+                            "lap_time": 114.752
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 9,
+                            "lap_time": 115.757
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 10,
+                            "lap_time": 116.587
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 11,
+                            "lap_time": 116.674
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 12,
+                            "lap_time": 117.058
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 13,
+                            "lap_time": 114.848
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -384,7 +2506,104 @@
                     "lap_end": 44,
                     "laps": 19,
                     "slope": 0.04221,
-                    "intercept": 111.8597
+                    "intercept": 111.8597,
+                    "points": [
+                        {
+                            "lap": 26,
+                            "tyre_age": 1,
+                            "lap_time": 111.394
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 2,
+                            "lap_time": 111.76
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 3,
+                            "lap_time": 111.945
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 4,
+                            "lap_time": 112.147
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 5,
+                            "lap_time": 112.482
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 6,
+                            "lap_time": 112.222
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 7,
+                            "lap_time": 111.997
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 8,
+                            "lap_time": 112.133
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 9,
+                            "lap_time": 112.411
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 10,
+                            "lap_time": 112.48
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 11,
+                            "lap_time": 112.317
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 12,
+                            "lap_time": 112.21
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 13,
+                            "lap_time": 113.457
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 14,
+                            "lap_time": 112.467
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 15,
+                            "lap_time": 112.298
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 16,
+                            "lap_time": 112.243
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 17,
+                            "lap_time": 112.367
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 18,
+                            "lap_time": 112.554
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 19,
+                            "lap_time": 112.469
+                        }
+                    ]
                 }
             ]
         },
@@ -402,7 +2621,34 @@
                     "lap_end": 7,
                     "laps": 5,
                     "slope": 0.0722,
-                    "intercept": 114.5222
+                    "intercept": 114.5222,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 114.821
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 113.907
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 115.004
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 115.653
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 114.309
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -411,7 +2657,79 @@
                     "lap_end": 23,
                     "laps": 14,
                     "slope": 0.29393,
-                    "intercept": 112.178
+                    "intercept": 112.178,
+                    "points": [
+                        {
+                            "lap": 9,
+                            "tyre_age": 1,
+                            "lap_time": 111.937
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 2,
+                            "lap_time": 111.774
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 3,
+                            "lap_time": 113.93
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 4,
+                            "lap_time": 113.815
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 5,
+                            "lap_time": 113.705
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 6,
+                            "lap_time": 113.822
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 7,
+                            "lap_time": 114.522
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 8,
+                            "lap_time": 115.068
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 9,
+                            "lap_time": 114.996
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 10,
+                            "lap_time": 114.701
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 11,
+                            "lap_time": 115.183
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 12,
+                            "lap_time": 116.307
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 13,
+                            "lap_time": 116.16
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 14,
+                            "lap_time": 115.435
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -420,7 +2738,49 @@
                     "lap_end": 33,
                     "laps": 8,
                     "slope": 0.36331,
-                    "intercept": 110.8514
+                    "intercept": 110.8514,
+                    "points": [
+                        {
+                            "lap": 25,
+                            "tyre_age": 1,
+                            "lap_time": 111.432
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 2,
+                            "lap_time": 111.563
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 3,
+                            "lap_time": 111.888
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 4,
+                            "lap_time": 112.076
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 5,
+                            "lap_time": 112.691
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 6,
+                            "lap_time": 113.203
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 7,
+                            "lap_time": 112.731
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 8,
+                            "lap_time": 114.306
+                        }
+                    ]
                 },
                 {
                     "stint": 4,
@@ -429,7 +2789,59 @@
                     "lap_end": 44,
                     "laps": 10,
                     "slope": 0.16542,
-                    "intercept": 110.7444
+                    "intercept": 110.7444,
+                    "points": [
+                        {
+                            "lap": 35,
+                            "tyre_age": 1,
+                            "lap_time": 109.841
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 2,
+                            "lap_time": 110.82
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 3,
+                            "lap_time": 111.065
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 4,
+                            "lap_time": 111.575
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 5,
+                            "lap_time": 112.918
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 6,
+                            "lap_time": 112.75
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 7,
+                            "lap_time": 112.064
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 8,
+                            "lap_time": 112.918
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 9,
+                            "lap_time": 111.14
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 10,
+                            "lap_time": 111.451
+                        }
+                    ]
                 }
             ]
         },
@@ -447,7 +2859,34 @@
                     "lap_end": 7,
                     "laps": 5,
                     "slope": 0.0788,
-                    "intercept": 115.3122
+                    "intercept": 115.3122,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 115.929
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 115.198
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 114.639
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 116.11
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 115.867
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -456,7 +2895,89 @@
                     "lap_end": 25,
                     "laps": 16,
                     "slope": 0.2446,
-                    "intercept": 112.6033
+                    "intercept": 112.6033,
+                    "points": [
+                        {
+                            "lap": 9,
+                            "tyre_age": 1,
+                            "lap_time": 112.422
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 2,
+                            "lap_time": 113.904
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 3,
+                            "lap_time": 112.645
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 4,
+                            "lap_time": 113.303
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 5,
+                            "lap_time": 113.733
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 6,
+                            "lap_time": 113.927
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 7,
+                            "lap_time": 114.979
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 8,
+                            "lap_time": 114.295
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 9,
+                            "lap_time": 114.886
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 10,
+                            "lap_time": 115.003
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 11,
+                            "lap_time": 115.516
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 12,
+                            "lap_time": 115.451
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 13,
+                            "lap_time": 115.811
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 14,
+                            "lap_time": 118.747
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 15,
+                            "lap_time": 115.68
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 16,
+                            "lap_time": 114.616
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -465,7 +2986,99 @@
                     "lap_end": 44,
                     "laps": 18,
                     "slope": 0.05336,
-                    "intercept": 111.7237
+                    "intercept": 111.7237,
+                    "points": [
+                        {
+                            "lap": 27,
+                            "tyre_age": 1,
+                            "lap_time": 110.188
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 2,
+                            "lap_time": 111.466
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 3,
+                            "lap_time": 112.052
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 4,
+                            "lap_time": 112.82
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 5,
+                            "lap_time": 112.35
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 6,
+                            "lap_time": 112.247
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 7,
+                            "lap_time": 111.506
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 8,
+                            "lap_time": 112.052
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 9,
+                            "lap_time": 112.507
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 10,
+                            "lap_time": 112.809
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 11,
+                            "lap_time": 112.981
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 12,
+                            "lap_time": 113.446
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 13,
+                            "lap_time": 113.017
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 14,
+                            "lap_time": 111.884
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 15,
+                            "lap_time": 113.108
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 16,
+                            "lap_time": 111.69
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 17,
+                            "lap_time": 112.023
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 18,
+                            "lap_time": 112.006
+                        }
+                    ]
                 }
             ]
         },
@@ -483,7 +3096,59 @@
                     "lap_end": 12,
                     "laps": 10,
                     "slope": -0.09554,
-                    "intercept": 115.6833
+                    "intercept": 115.6833,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 115.743
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 115.176
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 114.581
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 115.53
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 115.923
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 115.607
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 114.741
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 115.36
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 9,
+                            "lap_time": 114.655
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 10,
+                            "lap_time": 114.262
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -492,7 +3157,59 @@
                     "lap_end": 24,
                     "laps": 10,
                     "slope": 0.16562,
-                    "intercept": 113.4443
+                    "intercept": 113.4443,
+                    "points": [
+                        {
+                            "lap": 14,
+                            "tyre_age": 1,
+                            "lap_time": 112.348
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 2,
+                            "lap_time": 115.586
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 3,
+                            "lap_time": 113.91
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 4,
+                            "lap_time": 114.852
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 5,
+                            "lap_time": 112.937
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 6,
+                            "lap_time": 113.743
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 7,
+                            "lap_time": 114.393
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 8,
+                            "lap_time": 114.691
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 9,
+                            "lap_time": 117.8
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 10,
+                            "lap_time": 113.292
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -501,7 +3218,104 @@
                     "lap_end": 44,
                     "laps": 19,
                     "slope": 0.26292,
-                    "intercept": 110.5857
+                    "intercept": 110.5857,
+                    "points": [
+                        {
+                            "lap": 26,
+                            "tyre_age": 1,
+                            "lap_time": 109.907
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 2,
+                            "lap_time": 111.225
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 3,
+                            "lap_time": 111.545
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 4,
+                            "lap_time": 111.844
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 5,
+                            "lap_time": 112.495
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 6,
+                            "lap_time": 112.588
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 7,
+                            "lap_time": 112.332
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 8,
+                            "lap_time": 112.601
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 9,
+                            "lap_time": 113.056
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 10,
+                            "lap_time": 113.676
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 11,
+                            "lap_time": 113.401
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 12,
+                            "lap_time": 113.019
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 13,
+                            "lap_time": 113.621
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 14,
+                            "lap_time": 113.522
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 15,
+                            "lap_time": 115.26
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 16,
+                            "lap_time": 113.845
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 17,
+                            "lap_time": 116.987
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 18,
+                            "lap_time": 115.314
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 19,
+                            "lap_time": 114.845
+                        }
+                    ]
                 }
             ]
         },
@@ -519,7 +3333,29 @@
                     "lap_end": 6,
                     "laps": 4,
                     "slope": 0.2503,
-                    "intercept": 114.3745
+                    "intercept": 114.3745,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 115.421
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 113.76
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 114.967
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 115.853
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -528,7 +3364,94 @@
                     "lap_end": 25,
                     "laps": 17,
                     "slope": 0.22496,
-                    "intercept": 112.2684
+                    "intercept": 112.2684,
+                    "points": [
+                        {
+                            "lap": 8,
+                            "tyre_age": 1,
+                            "lap_time": 112.486
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 2,
+                            "lap_time": 113.128
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 3,
+                            "lap_time": 112.232
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 4,
+                            "lap_time": 112.962
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 5,
+                            "lap_time": 113.238
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 6,
+                            "lap_time": 113.389
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 7,
+                            "lap_time": 114.085
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 8,
+                            "lap_time": 114.456
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 9,
+                            "lap_time": 113.606
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 10,
+                            "lap_time": 113.702
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 11,
+                            "lap_time": 114.951
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 12,
+                            "lap_time": 115.886
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 13,
+                            "lap_time": 116.533
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 14,
+                            "lap_time": 116.379
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 15,
+                            "lap_time": 117.125
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 16,
+                            "lap_time": 115.109
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 17,
+                            "lap_time": 113.714
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -537,7 +3460,99 @@
                     "lap_end": 44,
                     "laps": 18,
                     "slope": 0.02669,
-                    "intercept": 111.475
+                    "intercept": 111.475,
+                    "points": [
+                        {
+                            "lap": 27,
+                            "tyre_age": 1,
+                            "lap_time": 110.439
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 2,
+                            "lap_time": 110.774
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 3,
+                            "lap_time": 112.095
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 4,
+                            "lap_time": 111.758
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 5,
+                            "lap_time": 111.807
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 6,
+                            "lap_time": 111.595
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 7,
+                            "lap_time": 111.864
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 8,
+                            "lap_time": 112.092
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 9,
+                            "lap_time": 112.727
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 10,
+                            "lap_time": 112.533
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 11,
+                            "lap_time": 111.809
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 12,
+                            "lap_time": 111.484
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 13,
+                            "lap_time": 111.869
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 14,
+                            "lap_time": 111.876
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 15,
+                            "lap_time": 111.098
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 16,
+                            "lap_time": 111.71
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 17,
+                            "lap_time": 111.664
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 18,
+                            "lap_time": 111.92
+                        }
+                    ]
                 }
             ]
         },
@@ -555,7 +3570,59 @@
                     "lap_end": 12,
                     "laps": 10,
                     "slope": 0.13388,
-                    "intercept": 112.4779
+                    "intercept": 112.4779,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 113.02
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 112.454
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 112.506
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 112.717
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 113.813
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 113.43
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 113.276
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 113.472
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 9,
+                            "lap_time": 113.381
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 10,
+                            "lap_time": 114.073
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -564,7 +3631,74 @@
                     "lap_end": 27,
                     "laps": 13,
                     "slope": 0.08199,
-                    "intercept": 112.5609
+                    "intercept": 112.5609,
+                    "points": [
+                        {
+                            "lap": 14,
+                            "tyre_age": 1,
+                            "lap_time": 111.523
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 2,
+                            "lap_time": 112.126
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 3,
+                            "lap_time": 112.215
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 4,
+                            "lap_time": 112.421
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 5,
+                            "lap_time": 112.764
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 6,
+                            "lap_time": 112.953
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 7,
+                            "lap_time": 115.105
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 8,
+                            "lap_time": 116.302
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 9,
+                            "lap_time": 116.499
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 10,
+                            "lap_time": 112.296
+                        },
+                        {
+                            "lap": 24,
+                            "tyre_age": 11,
+                            "lap_time": 111.998
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 12,
+                            "lap_time": 112.191
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 13,
+                            "lap_time": 112.36
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -573,7 +3707,74 @@
                     "lap_end": 42,
                     "laps": 13,
                     "slope": 0.09708,
-                    "intercept": 110.5698
+                    "intercept": 110.5698,
+                    "points": [
+                        {
+                            "lap": 29,
+                            "tyre_age": 1,
+                            "lap_time": 110.283
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 2,
+                            "lap_time": 110.923
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 3,
+                            "lap_time": 111.134
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 4,
+                            "lap_time": 110.935
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 5,
+                            "lap_time": 111.136
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 6,
+                            "lap_time": 111.05
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 7,
+                            "lap_time": 111.65
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 8,
+                            "lap_time": 111.224
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 9,
+                            "lap_time": 111.428
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 10,
+                            "lap_time": 111.109
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 11,
+                            "lap_time": 111.408
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 12,
+                            "lap_time": 112.166
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 13,
+                            "lap_time": 111.796
+                        }
+                    ]
                 }
             ]
         },
@@ -591,7 +3792,34 @@
                     "lap_end": 7,
                     "laps": 5,
                     "slope": 0.8282,
-                    "intercept": 113.4042
+                    "intercept": 113.4042,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 114.247
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 114.718
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 116.245
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 116.974
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 117.26
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -600,7 +3828,79 @@
                     "lap_end": 23,
                     "laps": 14,
                     "slope": 0.37518,
-                    "intercept": 113.2619
+                    "intercept": 113.2619,
+                    "points": [
+                        {
+                            "lap": 9,
+                            "tyre_age": 1,
+                            "lap_time": 113.138
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 2,
+                            "lap_time": 113.893
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 3,
+                            "lap_time": 115.201
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 4,
+                            "lap_time": 115.119
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 5,
+                            "lap_time": 114.907
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 6,
+                            "lap_time": 115.076
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 7,
+                            "lap_time": 115.834
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 8,
+                            "lap_time": 117.532
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 9,
+                            "lap_time": 116.062
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 10,
+                            "lap_time": 116.221
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 11,
+                            "lap_time": 117.541
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 12,
+                            "lap_time": 116.426
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 13,
+                            "lap_time": 120.162
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 14,
+                            "lap_time": 117.949
+                        }
+                    ]
                 }
             ]
         },
@@ -618,7 +3918,109 @@
                     "lap_end": 22,
                     "laps": 20,
                     "slope": 0.0476,
-                    "intercept": 114.2919
+                    "intercept": 114.2919,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 115.207
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 114.15
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 115.162
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 115.531
+                        },
+                        {
+                            "lap": 6,
+                            "tyre_age": 5,
+                            "lap_time": 116.057
+                        },
+                        {
+                            "lap": 7,
+                            "tyre_age": 6,
+                            "lap_time": 113.791
+                        },
+                        {
+                            "lap": 8,
+                            "tyre_age": 7,
+                            "lap_time": 113.789
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 8,
+                            "lap_time": 113.972
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 9,
+                            "lap_time": 114.1
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 10,
+                            "lap_time": 114.008
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 11,
+                            "lap_time": 113.983
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 12,
+                            "lap_time": 114.611
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 13,
+                            "lap_time": 114.012
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 14,
+                            "lap_time": 115.729
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 15,
+                            "lap_time": 114.828
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 16,
+                            "lap_time": 113.66
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 17,
+                            "lap_time": 114.223
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 18,
+                            "lap_time": 114.726
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 19,
+                            "lap_time": 116.771
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 20,
+                            "lap_time": 117.525
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -627,7 +4029,114 @@
                     "lap_end": 44,
                     "laps": 21,
                     "slope": 0.04324,
-                    "intercept": 111.2262
+                    "intercept": 111.2262,
+                    "points": [
+                        {
+                            "lap": 24,
+                            "tyre_age": 1,
+                            "lap_time": 110.843
+                        },
+                        {
+                            "lap": 25,
+                            "tyre_age": 2,
+                            "lap_time": 110.603
+                        },
+                        {
+                            "lap": 26,
+                            "tyre_age": 3,
+                            "lap_time": 111.424
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 4,
+                            "lap_time": 111.588
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 5,
+                            "lap_time": 111.742
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 6,
+                            "lap_time": 111.813
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 7,
+                            "lap_time": 112.221
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 8,
+                            "lap_time": 111.805
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 9,
+                            "lap_time": 111.273
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 10,
+                            "lap_time": 111.524
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 11,
+                            "lap_time": 111.75
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 12,
+                            "lap_time": 111.796
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 13,
+                            "lap_time": 111.842
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 14,
+                            "lap_time": 111.89
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 15,
+                            "lap_time": 111.828
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 16,
+                            "lap_time": 111.966
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 17,
+                            "lap_time": 111.757
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 18,
+                            "lap_time": 111.982
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 19,
+                            "lap_time": 112.009
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 20,
+                            "lap_time": 112.072
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 21,
+                            "lap_time": 112.012
+                        }
+                    ]
                 }
             ]
         },
@@ -645,7 +4154,29 @@
                     "lap_end": 6,
                     "laps": 4,
                     "slope": 0.071,
-                    "intercept": 115.2255
+                    "intercept": 115.2255,
+                    "points": [
+                        {
+                            "lap": 2,
+                            "tyre_age": 1,
+                            "lap_time": 115.608
+                        },
+                        {
+                            "lap": 3,
+                            "tyre_age": 2,
+                            "lap_time": 114.834
+                        },
+                        {
+                            "lap": 4,
+                            "tyre_age": 3,
+                            "lap_time": 115.571
+                        },
+                        {
+                            "lap": 5,
+                            "tyre_age": 4,
+                            "lap_time": 115.599
+                        }
+                    ]
                 },
                 {
                     "stint": 2,
@@ -654,7 +4185,89 @@
                     "lap_end": 24,
                     "laps": 16,
                     "slope": 0.19716,
-                    "intercept": 112.8772
+                    "intercept": 112.8772,
+                    "points": [
+                        {
+                            "lap": 8,
+                            "tyre_age": 1,
+                            "lap_time": 112.919
+                        },
+                        {
+                            "lap": 9,
+                            "tyre_age": 2,
+                            "lap_time": 113.499
+                        },
+                        {
+                            "lap": 10,
+                            "tyre_age": 3,
+                            "lap_time": 113.782
+                        },
+                        {
+                            "lap": 11,
+                            "tyre_age": 4,
+                            "lap_time": 113.53
+                        },
+                        {
+                            "lap": 12,
+                            "tyre_age": 5,
+                            "lap_time": 113.411
+                        },
+                        {
+                            "lap": 13,
+                            "tyre_age": 6,
+                            "lap_time": 113.924
+                        },
+                        {
+                            "lap": 14,
+                            "tyre_age": 7,
+                            "lap_time": 113.719
+                        },
+                        {
+                            "lap": 15,
+                            "tyre_age": 8,
+                            "lap_time": 115.311
+                        },
+                        {
+                            "lap": 16,
+                            "tyre_age": 9,
+                            "lap_time": 114.537
+                        },
+                        {
+                            "lap": 17,
+                            "tyre_age": 10,
+                            "lap_time": 114.71
+                        },
+                        {
+                            "lap": 18,
+                            "tyre_age": 11,
+                            "lap_time": 114.982
+                        },
+                        {
+                            "lap": 19,
+                            "tyre_age": 12,
+                            "lap_time": 115.107
+                        },
+                        {
+                            "lap": 20,
+                            "tyre_age": 13,
+                            "lap_time": 115.526
+                        },
+                        {
+                            "lap": 21,
+                            "tyre_age": 14,
+                            "lap_time": 117.084
+                        },
+                        {
+                            "lap": 22,
+                            "tyre_age": 15,
+                            "lap_time": 116.219
+                        },
+                        {
+                            "lap": 23,
+                            "tyre_age": 16,
+                            "lap_time": 114.59
+                        }
+                    ]
                 },
                 {
                     "stint": 3,
@@ -663,7 +4276,104 @@
                     "lap_end": 44,
                     "laps": 19,
                     "slope": 0.05759,
-                    "intercept": 111.5403
+                    "intercept": 111.5403,
+                    "points": [
+                        {
+                            "lap": 26,
+                            "tyre_age": 1,
+                            "lap_time": 110.515
+                        },
+                        {
+                            "lap": 27,
+                            "tyre_age": 2,
+                            "lap_time": 111.131
+                        },
+                        {
+                            "lap": 28,
+                            "tyre_age": 3,
+                            "lap_time": 111.46
+                        },
+                        {
+                            "lap": 29,
+                            "tyre_age": 4,
+                            "lap_time": 111.672
+                        },
+                        {
+                            "lap": 30,
+                            "tyre_age": 5,
+                            "lap_time": 111.904
+                        },
+                        {
+                            "lap": 31,
+                            "tyre_age": 6,
+                            "lap_time": 112.128
+                        },
+                        {
+                            "lap": 32,
+                            "tyre_age": 7,
+                            "lap_time": 112.898
+                        },
+                        {
+                            "lap": 33,
+                            "tyre_age": 8,
+                            "lap_time": 113.414
+                        },
+                        {
+                            "lap": 34,
+                            "tyre_age": 9,
+                            "lap_time": 112.188
+                        },
+                        {
+                            "lap": 35,
+                            "tyre_age": 10,
+                            "lap_time": 112.412
+                        },
+                        {
+                            "lap": 36,
+                            "tyre_age": 11,
+                            "lap_time": 112.391
+                        },
+                        {
+                            "lap": 37,
+                            "tyre_age": 12,
+                            "lap_time": 112.129
+                        },
+                        {
+                            "lap": 38,
+                            "tyre_age": 13,
+                            "lap_time": 112.077
+                        },
+                        {
+                            "lap": 39,
+                            "tyre_age": 14,
+                            "lap_time": 112.396
+                        },
+                        {
+                            "lap": 40,
+                            "tyre_age": 15,
+                            "lap_time": 112.344
+                        },
+                        {
+                            "lap": 41,
+                            "tyre_age": 16,
+                            "lap_time": 112.363
+                        },
+                        {
+                            "lap": 42,
+                            "tyre_age": 17,
+                            "lap_time": 112.382
+                        },
+                        {
+                            "lap": 43,
+                            "tyre_age": 18,
+                            "lap_time": 112.17
+                        },
+                        {
+                            "lap": 44,
+                            "tyre_age": 19,
+                            "lap_time": 112.234
+                        }
+                    ]
                 }
             ]
         },

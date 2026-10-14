@@ -21,8 +21,10 @@ class DriverRepository(
         if (!forceRefresh) {
             val cached = db?.fastPilotDBQueries?.selectDriversBySession(sessionKey.toLong())?.executeAsList().orEmpty()
             if (cached.isNotEmpty()) {
-                val age = Clock.System.now().toEpochMilliseconds() - cached.first().cached_at
-                if (age < CACHE_TTL_MS) {
+                val cachedAt = cached.first().cached_at
+                val age = Clock.System.now().toEpochMilliseconds() - cachedAt
+                // Data downloaded after the session ended never changes: kept until the 30-day cleanup
+                if (age < CACHE_TTL_MS || api.sessionRegistry.isFinal(sessionKey, cachedAt)) {
                     return cached.map { it.toDriver() }
                 }
             }
