@@ -6,7 +6,10 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.fastpilot.data.polling.LivePollingManager
 import com.fastpilot.data.repository.SessionRepository
+import com.fastpilot.data.repository.defaultSession
+import com.fastpilot.data.repository.getRecentSessions
 import com.fastpilot.db.FastPilotDB
+import com.fastpilot.network.OpenF1Api
 import com.fastpilot.network.RequestStats
 import com.fastpilot.network.clearPlatformHttpCache
 import com.fastpilot.ui.screens.dashboard.DashboardViewModel
@@ -183,9 +186,7 @@ class LoadBenchmark(
         repeat(config.runsWithoutPolling) { runAll(it + 1, polling = false) }
 
         // Same session the screens select by default: the most recent race
-        val sessionKey = koin.get<SessionRepository>().let { repo ->
-            (repo.getSessions(2025) + repo.getSessions(2024)).firstOrNull { it.sessionType == "Race" }?.sessionKey
-        }
+        val sessionKey = koin.get<SessionRepository>().getRecentSessions().defaultSession()?.sessionKey
         val polling = sessionKey?.let { startPolling(scope, it) }
 
         phase("idle_polling_on")
@@ -200,14 +201,25 @@ class LoadBenchmark(
         _progress.value = "Concluído"
     }
 
-    /** The Dashboard's live mode: positions and intervals every 4 s, race control every 5 s, weather every 60 s. */
+    /**
+     * The Dashboard's live mode on a past race: positions and intervals every 4 s, race control
+     * every 10 s, pit stops and overtakes every 15 s, weather every 60 s. The API is called
+     * directly because the repositories answer a finished race from the local cache.
+     */
     private fun startPolling(scope: CoroutineScope, sessionKey: Int): Job {
-        val live = koin.get<LivePollingManager>()
+        val api = koin.get<OpenF1Api>()
+        fun CoroutineScope.every(periodMs: Long, request: suspend () -> Unit) = launch {
+            while (true) {
+                try { request() } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) {}
+                delay(periodMs)
+            }
+        }
         return scope.launch {
-            launch { live.observePositions(sessionKey).collect {} }
-            launch { live.observeIntervals(sessionKey).collect {} }
-            launch { live.observeRaceControl(sessionKey).collect {} }
-            launch { live.observeWeather(sessionKey).collect {} }
+            every(LivePollingManager.POSITION_POLL_MS) { api.getPositions(sessionKey = sessionKey) }
+            every(LivePollingManager.POSITION_POLL_MS) { api.getIntervals(sessionKey) }
+            every(LivePollingManager.RACE_CONTROL_POLL_MS) { api.getRaceControl(sessionKey = sessionKey) }
+            every(LivePollingManager.RACE_EVENTS_POLL_MS) { api.getPitStops(sessionKey); api.getOvertakes(sessionKey) }
+            every(LivePollingManager.WEATHER_POLL_MS) { api.getWeather(sessionKey = sessionKey) }
         }
     }
 

@@ -21,15 +21,15 @@ val repositoryModule = module {
     single { LapRepository(get(), getOrNull()) }
     single { StintRepository(get(), getOrNull()) }
     single { TelemetryRepository(get(), getOrNull()) }
-    single { PositionRepository(get()) }
-    single { IntervalRepository(get()) }
-    single { RaceControlRepository(get()) }
-    single { WeatherRepository(get()) }
-    single { TeamRadioRepository(get()) }
-    single { PitStopRepository(get()) }
+    single { PositionRepository(get(), getOrNull()) }
+    single { IntervalRepository(get(), getOrNull()) }
+    single { RaceControlRepository(get(), getOrNull()) }
+    single { WeatherRepository(get(), getOrNull()) }
+    single { TeamRadioRepository(get(), getOrNull()) }
+    single { PitStopRepository(get(), getOrNull()) }
     single { MeetingRepository(get()) }
     single { LocationRepository(get(), getOrNull()) }
-    single { OvertakeRepository(get()) }
+    single { OvertakeRepository(get(), getOrNull()) }
     single { CacheMaintenance(getOrNull()) }
     single { StandingsRepository(get(), getOrNull()) }
 }

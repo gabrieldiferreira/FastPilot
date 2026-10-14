@@ -4,6 +4,7 @@ import com.fastpilot.db.FastPilotDB
 import com.fastpilot.model.Stint
 import com.fastpilot.network.OpenF1Api
 import kotlinx.datetime.Clock
+import kotlinx.serialization.builtins.ListSerializer
 
 /**
  * Cache-first repository. [db] is null on platforms without a local database (Web),
@@ -64,11 +65,18 @@ class StintRepository(
         }
     }
 
-    suspend fun getAllStints(sessionKey: Int): List<Stint> {
-        val cached = db?.fastPilotDBQueries?.selectStintsBySession(sessionKey.toLong())?.executeAsList().orEmpty()
-        if (cached.isNotEmpty()) return cached.map { it.toStint() }
-        return try { api.getStints(sessionKey = sessionKey) } catch (_: Exception) { emptyList() }
-    }
+    private val sessionCache = SamplesCache(db, api.sessionRegistry)
+
+    /**
+     * Stints of every driver; a finished session's are kept in the cache. (cached_stint is
+     * not used here: it may hold only the drivers opened one by one.)
+     */
+    suspend fun getAllStints(sessionKey: Int): List<Stint> =
+        try {
+            sessionCache.getOrFetchSession("stints", sessionKey, ListSerializer(Stint.serializer())) {
+                api.getStints(sessionKey = sessionKey)
+            }
+        } catch (_: Exception) { emptyList() }
 }
 
 private fun com.fastpilot.db.Cached_stint.toStint() = Stint(

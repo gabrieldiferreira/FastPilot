@@ -14,6 +14,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Air
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.Compress
+import androidx.compose.material.icons.filled.Umbrella
+import androidx.compose.material.icons.filled.WaterDrop
+import androidx.compose.material.icons.filled.WbSunny
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.fastpilot.model.Weather
 import com.fastpilot.ui.components.SessionPicker
 import com.fastpilot.ui.theme.*
@@ -55,9 +64,11 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
             Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = CardSurface),
                 shape = RoundedCornerShape(12.dp)) {
                 Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        if ((weather.rainfall ?: 0) > 0) "🌧️" else "☀️",
-                        fontSize = 32.sp
+                    Icon(
+                        if ((weather.rainfall ?: 0) > 0) Icons.Default.Umbrella else Icons.Default.WbSunny,
+                        contentDescription = null,
+                        tint = if ((weather.rainfall ?: 0) > 0) SpeedBlue else FlagYellow,
+                        modifier = Modifier.size(32.dp)
                     )
                     Spacer(Modifier.width(12.dp))
                     Column {
@@ -84,20 +95,20 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
             }
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                WeatherInfoCard("💧 Humidade", "${weather.humidity ?: "--"}%", Modifier.weight(1f))
+                WeatherInfoCard(Icons.Default.WaterDrop, "Umidade", "${weather.humidity ?: "--"}%", Modifier.weight(1f))
                 WeatherInfoCard(
-                    if ((weather.rainfall ?: 0) > 0) "🌧️ Chuva" else "☀️ Seco",
+                    Icons.Default.Umbrella, "Chuva",
                     if ((weather.rainfall ?: 0) > 0) "Sim" else "Não",
                     Modifier.weight(1f)
                 )
             }
             Spacer(Modifier.height(12.dp))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                WeatherInfoCard("🌬️ Vento", "${weather.windSpeed ?: "--"} km/h", Modifier.weight(1f))
+                WeatherInfoCard(Icons.Default.Air, "Vento", "${weather.windSpeed ?: "--"} km/h", Modifier.weight(1f))
                 WindDirection(weather.windDirection ?: 0, Modifier.weight(1f))
             }
             Spacer(Modifier.height(12.dp))
-            WeatherInfoCard("📊 Pressão", "${weather.pressure ?: "--"} hPa", Modifier.fillMaxWidth())
+            WeatherInfoCard(Icons.Default.Compress, "Pressão", "${weather.pressure ?: "--"} hPa", Modifier.fillMaxWidth())
 
             // History stats
             if (uiState.weatherHistory.size > 1) {
@@ -134,7 +145,7 @@ fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
         } else {
             Box(Modifier.fillMaxWidth().height(200.dp), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("🌤️", fontSize = 40.sp)
+                    Icon(Icons.Default.Cloud, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(40.dp))
                     Spacer(Modifier.height(8.dp))
                     Text("Sem dados de clima", color = TextSecondary)
                     Text("Selecione outra sessão acima", color = TextTertiary, fontSize = 12.sp)
@@ -170,11 +181,15 @@ private fun WeatherGauge(label: String, value: String, color: Color, modifier: M
 }
 
 @Composable
-private fun WeatherInfoCard(label: String, value: String, modifier: Modifier) {
+private fun WeatherInfoCard(icon: ImageVector, label: String, value: String, modifier: Modifier) {
     Card(modifier, colors = CardDefaults.cardColors(containerColor = CardSurface),
         shape = RoundedCornerShape(12.dp)) {
         Column(Modifier.padding(14.dp)) {
-            Text(label, fontSize = 13.sp, color = TextSecondary)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(icon, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(14.dp))
+                Spacer(Modifier.width(4.dp))
+                Text(label, fontSize = 13.sp, color = TextSecondary)
+            }
             Spacer(Modifier.height(4.dp))
             Text(value, fontWeight = FontWeight.Bold, fontSize = 18.sp, color = TextPrimary)
         }
@@ -188,8 +203,8 @@ private fun WindDirection(degrees: Int, modifier: Modifier) {
         Column(Modifier.padding(14.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Direção do Vento", fontSize = 13.sp, color = TextSecondary)
             Spacer(Modifier.height(4.dp))
-            Text("↑", fontSize = 28.sp, color = DRSGreen,
-                modifier = Modifier.rotate(degrees.toFloat()))
+            Icon(Icons.Default.ArrowUpward, contentDescription = null, tint = DRSGreen,
+                modifier = Modifier.size(28.dp).rotate(degrees.toFloat()))
             Text("${degrees}°", color = TextPrimary, fontWeight = FontWeight.Bold)
         }
     }

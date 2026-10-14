@@ -51,87 +51,132 @@ class TelemetryRepository(
 
 /**
  * Repository for position data (polling-friendly).
+ * The final order of a finished session is kept in the local cache ([SamplesCache]).
  */
-class PositionRepository(private val api: OpenF1Api) {
+class PositionRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
     suspend fun getPositions(sessionKey: Int, driverNumber: Int? = null): List<Position> =
         api.getPositions(sessionKey = sessionKey, driverNumber = driverNumber)
 
-    suspend fun getLatestPositions(sessionKey: Int): List<Position> {
-        val all = api.getPositions(sessionKey = sessionKey)
-        // Group by driver, keep last position for each
-        return all.groupBy { it.driverNumber }
-            .mapValues { (_, positions) -> positions.last() }
-            .values
-            .sortedBy { it.position }
-    }
+    suspend fun getLatestPositions(sessionKey: Int): List<Position> =
+        cache.getOrFetchSession("position_latest", sessionKey, ListSerializer(Position.serializer())) {
+            val all = api.getPositions(sessionKey = sessionKey)
+            // Group by driver, keep last position for each
+            all.groupBy { it.driverNumber }
+                .mapValues { (_, positions) -> positions.last() }
+                .values
+                .sortedBy { it.position }
+        }
 }
 
 /**
  * Repository for interval/gap data (polling-friendly).
  */
-class IntervalRepository(private val api: OpenF1Api) {
+class IntervalRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
     suspend fun getIntervals(sessionKey: Int, driverNumber: Int? = null): List<Interval> =
         api.getIntervals(sessionKey, driverNumber)
 
-    suspend fun getLatestIntervals(sessionKey: Int): List<Interval> {
-        val all = api.getIntervals(sessionKey)
-        return all.groupBy { it.driverNumber }
-            .mapValues { (_, intervals) -> intervals.last() }
-            .values
-            .toList()
-    }
+    /** Last gap of each driver; only these are cached (a race has ~20 000 interval samples). */
+    suspend fun getLatestIntervals(sessionKey: Int): List<Interval> =
+        cache.getOrFetchSession("intervals_latest", sessionKey, ListSerializer(Interval.serializer())) {
+            api.getIntervals(sessionKey).groupBy { it.driverNumber }
+                .mapValues { (_, intervals) -> intervals.last() }
+                .values
+                .toList()
+        }
 }
 
 /**
  * Repository for race control messages.
  */
-class RaceControlRepository(private val api: OpenF1Api) {
+class RaceControlRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
     suspend fun getRaceControl(sessionKey: Int): List<RaceControlMessage> =
-        api.getRaceControl(sessionKey = sessionKey)
+        cache.getOrFetchSession("race_control", sessionKey, ListSerializer(RaceControlMessage.serializer())) {
+            api.getRaceControl(sessionKey = sessionKey)
+        }
 
     suspend fun getFlags(sessionKey: Int): List<RaceControlMessage> =
-        api.getRaceControl(sessionKey = sessionKey).filter { it.category == "Flag" }
+        getRaceControl(sessionKey).filter { it.category == "Flag" }
 }
 
 /**
  * Repository for weather data.
  */
-class WeatherRepository(private val api: OpenF1Api) {
+class WeatherRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
     suspend fun getWeather(sessionKey: Int): List<Weather> =
-        api.getWeather(sessionKey = sessionKey)
+        cache.getOrFetchSession("weather", sessionKey, ListSerializer(Weather.serializer())) {
+            api.getWeather(sessionKey = sessionKey)
+        }
 
     suspend fun getLatestWeather(sessionKey: Int): Weather? =
-        api.getWeather(sessionKey = sessionKey).lastOrNull()
+        getWeather(sessionKey).lastOrNull()
 }
 
 /**
  * Repository for team radio communications.
  */
-class TeamRadioRepository(private val api: OpenF1Api) {
+class TeamRadioRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
+    /** The message list of a finished session is cached; the audio files always come from the network. */
     suspend fun getTeamRadio(sessionKey: Int, driverNumber: Int? = null): List<TeamRadio> =
-        api.getTeamRadio(sessionKey, driverNumber)
+        if (driverNumber != null) api.getTeamRadio(sessionKey, driverNumber)
+        else cache.getOrFetchSession("team_radio", sessionKey, ListSerializer(TeamRadio.serializer())) {
+            api.getTeamRadio(sessionKey, null)
+        }
 }
 
 /**
  * Repository for pit stop data.
  */
-class PitStopRepository(private val api: OpenF1Api) {
+class PitStopRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
     suspend fun getPitStops(sessionKey: Int, driverNumber: Int? = null): List<PitStop> =
-        api.getPitStops(sessionKey, driverNumber)
+        if (driverNumber != null) api.getPitStops(sessionKey, driverNumber)
+        else cache.getOrFetchSession("pit", sessionKey, ListSerializer(PitStop.serializer())) {
+            api.getPitStops(sessionKey, null)
+        }
 }
 
 /**
  * Repository for overtakes (passes between two cars).
  */
-class OvertakeRepository(private val api: OpenF1Api) {
+class OvertakeRepository(
+    private val api: OpenF1Api,
+    db: FastPilotDB? = null
+) {
+    private val cache = SamplesCache(db, api.sessionRegistry)
 
-    suspend fun getOvertakes(sessionKey: Int): List<Overtake> = api.getOvertakes(sessionKey)
+    suspend fun getOvertakes(sessionKey: Int): List<Overtake> =
+        cache.getOrFetchSession("overtakes", sessionKey, ListSerializer(Overtake.serializer())) {
+            api.getOvertakes(sessionKey)
+        }
 }
 
 /**
@@ -166,6 +211,9 @@ class LocationRepository(
     }
 }
 
+/** Driver number of whole-session entries in cached_samples (no car has number 0). */
+private const val ALL_DRIVERS = 0
+
 /** End of [lap] plus one second of margin, or null without a start or a lap time. */
 private fun lapEnd(lap: Lap): String? {
     val start = lap.dateStart?.let(Instant::parse) ?: return null
@@ -174,13 +222,23 @@ private fun lapEnd(lap: Lap): String? {
 }
 
 /**
- * Raw samples (telemetry, track position) of one driver in one time window (TCC I §4.5).
- * Only samples of a finished session are stored, as they no longer change; they are read
- * back before any request, also offline, until the 30-day cleanup ([CacheMaintenance]).
- * Without a database (Web) every call goes to the network.
+ * Raw API data of a finished session, stored as JSON (TCC I §4.5): the samples (telemetry,
+ * track position) of one driver in one time window, or a whole-session list (positions,
+ * race control, weather...). Only finished sessions are stored, as their data no longer
+ * changes; it is read back before any request, also offline, until the 30-day cleanup
+ * ([CacheMaintenance]). Live sessions always go to the network. Without a database (Web)
+ * every call goes to the network.
  */
-private class SamplesCache(private val db: FastPilotDB?, private val sessions: SessionRegistry) {
+internal class SamplesCache(private val db: FastPilotDB?, private val sessions: SessionRegistry) {
     private val json = Json { ignoreUnknownKeys = true }
+
+    /** A whole-session list (no driver, no time window). */
+    suspend fun <T> getOrFetchSession(
+        endpoint: String,
+        sessionKey: Int,
+        serializer: KSerializer<List<T>>,
+        fetch: suspend () -> List<T>
+    ): List<T> = getOrFetch(endpoint, sessionKey, ALL_DRIVERS, "", "", serializer, fetch)
 
     suspend fun <T> getOrFetch(
         endpoint: String,

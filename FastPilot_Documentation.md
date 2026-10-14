@@ -62,12 +62,12 @@ O projeto tem dois módulos Gradle: `shared` (dados e domínio) e `composeApp` (
   | Sessões | 24 h (temporadas passadas: sem prazo) |
   | Pilotos | 6 h |
   | Voltas, stints | 1 h |
-  | Telemetria e posição na pista de uma volta (`cached_samples`) | só sessões encerradas |
+  | Dados brutos da sessão (`cached_samples`): telemetria e posições na pista de cada volta; voltas e stints de todos os pilotos; posições e intervalos finais; direção de prova, clima, rádio, pit stops, ultrapassagens | só sessões encerradas, sem prazo |
   | Classificação | 7 dias (temporada atual: 1 h, pois muda a cada corrida) |
 
-* **Corrida encerrada não é baixada de novo (TCC I §4.5):** pilotos, voltas, stints e amostras baixados depois do fim da sessão (`dateEnd` + 1 h, `SessionRegistry.isFinal`) valem sem prazo; dados baixados durante a sessão seguem a validade da tabela. A telemetria bruta e as posições na pista de cada volta ficam guardadas como o JSON da API (schema v3, migração `2.sqm`). Esses dados também servem offline.
+* **Corrida encerrada não é baixada de novo (TCC I §4.5):** pilotos, voltas, stints e amostras baixados depois do fim da sessão (`dateEnd` + 1 h, `SessionRegistry.isFinal`) valem sem prazo; dados baixados durante a sessão seguem a validade da tabela. Os dados brutos ficam guardados como o JSON da API (`SamplesCache`, schema v3, migração `2.sqm`). Com isso, uma corrida já aberta funciona sem internet em todas as telas (teste em `metrics/offline/README.md`); só os áudios de rádio precisam de rede.
 * **Limpeza de 30 dias:** ao abrir o app, `CacheMaintenance` apaga pilotos, voltas, stints e amostras baixados há mais de 30 dias. O calendário e a classificação são pequenos e ficam.
-* **Sempre da rede:** posições, intervalos, race control, clima, rádio, pit stops, ultrapassagens e meetings (`LiveRepositories.kt`), que mudam a cada poucos segundos. A OpenF1 responde `404 {"detail":"No results found."}` quando não há resultado; `OpenF1Api` trata isso como lista vazia.
+* **Sessão ao vivo:** tudo vem da rede, nada é guardado (os dados ainda mudam). A OpenF1 responde `404 {"detail":"No results found."}` quando não há resultado; `OpenF1Api` trata isso como lista vazia.
 * **Web sem cache:** o SQLDelight não tem driver síncrono para o navegador, então no Web o banco não é registrado no Koin (`db = null`) e todo carregamento vai à rede.
 * **Temporadas:** as telas listam de 2023 (início da OpenF1) até a temporada atual, calculada pela data do aparelho (`availableSeasons`), só com sessões que já começaram (a OpenF1 lista o calendário inteiro com antecedência), da mais nova para a mais antiga. Abrem na sessão ao vivo ou, sem ela, na corrida mais recente (`RecentSessions.kt`). A Classificação usa as mesmas temporadas.
 * `LiveSessionDetector` considera ao vivo a sessão em que `dateStart ≤ agora ≤ dateEnd + 30 min`, a mesma janela de tempo real da OpenF1 (cobre atrasos e a classificação final). Com a tela aberta, o Dashboard confere a cada 30 s se uma sessão começou, abrindo-a ao vivo se o usuário não escolheu outra, ou terminou, voltando a uma carga única.
@@ -119,7 +119,6 @@ Todas em Kotlin puro, sem dependência de plataforma, com testes unitários:
 * **Limite da OpenF1:** telas que disparam muitas requisições ao mesmo tempo recebem `429` e dependem das novas tentativas. O benchmark de desempenho (§6) mediu o polling com race control a cada 5 s (hoje 10 s).
 * **Tempo real depende da assinatura:** sem o proxy configurado (ou com a assinatura vencida), uma sessão ao vivo só mostra dados quando a OpenF1 os libera, 30 min depois do fim. A cota Sponsor (60 req/min) é dividida entre todos os usuários; o cache de 4 s do proxy limita o consumo por endpoint, não por usuário.
 * **Telemetria, Estratégia e Duelo** carregam uma sessão ao vivo uma vez (sem polling); para atualizar, basta selecioná-la de novo.
-* **Ícones no Web:** o Skiko não traz fonte de emoji; alguns emojis restantes (seletor de ano, Dashboard) aparecem como □.
 * **Precisão do delta na volta:** com amostragem de ~3,7 Hz, a linha traçada fica 1–3% mais curta que o traçado oficial, porque corta as curvas; o erro de fechamento contra a diferença oficial fica entre 3 e 113 ms.
 
 ---

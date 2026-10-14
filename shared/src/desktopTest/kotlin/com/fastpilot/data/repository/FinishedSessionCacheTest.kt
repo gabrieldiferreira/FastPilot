@@ -32,6 +32,8 @@ class FinishedSessionCacheTest {
         when {
             request.url.encodedPath.endsWith("/laps") ->
                 respondJson("""[{"driver_number":1,"lap_number":1,"lap_duration":90.0}]""")
+            request.url.encodedPath.endsWith("/stints") ->
+                respondJson("""[{"driver_number":1,"stint_number":1,"lap_start":1,"lap_end":20,"compound":"SOFT"}]""")
             request.url.encodedPath.endsWith("/car_data") ->
                 respondJson("""[{"driver_number":1,"date":"2024-12-08T13:05:00+00:00","speed":300}]""")
             else -> respondJson("[]")
@@ -99,6 +101,28 @@ class FinishedSessionCacheTest {
 
         repository.getLapCarData(live.sessionKey, lap(live.sessionKey))
         repository.getLapCarData(live.sessionKey, lap(live.sessionKey))
+
+        assertEquals(2, requests)
+    }
+
+    @Test
+    fun `whole-session lists of a finished session also work offline`() = runTest {
+        val repository = StintRepository(api, db)
+
+        repository.getAllStints(finished.sessionKey)
+        // Second call from the cache: the network is not used
+        val stints = repository.getAllStints(finished.sessionKey)
+
+        assertEquals("SOFT", stints.single().compound)
+        assertEquals(1, requests)
+    }
+
+    @Test
+    fun `whole-session lists of a live session are always downloaded`() = runTest {
+        val repository = StintRepository(api, db)
+
+        repository.getAllStints(live.sessionKey)
+        repository.getAllStints(live.sessionKey)
 
         assertEquals(2, requests)
     }

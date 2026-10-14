@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsCar
 import com.fastpilot.domain.usecase.PositionWithDriver
 import com.fastpilot.domain.usecase.RaceEvent
 import com.fastpilot.model.Driver
@@ -72,7 +74,7 @@ fun DashboardScreen(
         } else if (uiState.positions.isEmpty()) {
             Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("🏎️", fontSize = 40.sp)
+                    Icon(Icons.Default.DirectionsCar, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(40.dp))
                     Spacer(Modifier.height(8.dp))
                     Text("Nenhuma posição encontrada", color = TextSecondary)
                     Text("Selecione outra sessão acima", color = TextTertiary, fontSize = 12.sp)

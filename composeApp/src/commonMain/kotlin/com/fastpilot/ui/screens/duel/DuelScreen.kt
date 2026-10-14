@@ -17,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CompareArrows
 import com.fastpilot.domain.usecase.DeltaPoint
 import com.fastpilot.domain.usecase.LapDelta
 import com.fastpilot.domain.usecase.LapDeltaPoint
@@ -83,7 +85,7 @@ fun DuelScreen(
             Spacer(Modifier.height(32.dp))
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("⚔️", fontSize = 48.sp)
+                    Icon(Icons.Default.CompareArrows, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(48.dp))
                     Spacer(Modifier.height(8.dp))
                     Text("Selecione dois pilotos acima", color = TextSecondary)
                     Text("para comparar o desempenho", color = TextTertiary, fontSize = 12.sp)

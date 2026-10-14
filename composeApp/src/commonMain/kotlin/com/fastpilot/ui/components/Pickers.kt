@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.filled.Flag
 import com.fastpilot.data.repository.availableSeasons
 import com.fastpilot.model.Session
 import com.fastpilot.ui.theme.*
@@ -59,8 +60,10 @@ fun SessionPicker(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        Icon(Icons.Default.Flag, contentDescription = null, tint = TextSecondary, modifier = Modifier.size(16.dp))
+                        Spacer(Modifier.width(6.dp))
                         Text(
-                            "🏁 $selectedYear",
+                            "$selectedYear",
                             fontSize = 14.sp,
                             color = TextPrimary,
                             fontWeight = FontWeight.Medium,

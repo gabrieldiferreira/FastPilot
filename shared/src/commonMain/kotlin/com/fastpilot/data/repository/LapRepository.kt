@@ -4,6 +4,7 @@ import com.fastpilot.db.FastPilotDB
 import com.fastpilot.model.Lap
 import com.fastpilot.network.OpenF1Api
 import kotlinx.datetime.Clock
+import kotlinx.serialization.builtins.ListSerializer
 
 /**
  * Cache-first repository. [db] is null on platforms without a local database (Web),
@@ -67,9 +68,14 @@ class LapRepository(
         }
     }
 
+    private val sessionCache = SamplesCache(db, api.sessionRegistry)
+
+    /** Laps of every driver (strategy metrics); a finished session's are kept in the cache. */
     suspend fun getAllLaps(sessionKey: Int): List<Lap> {
         return try {
-            api.getLaps(sessionKey = sessionKey)
+            sessionCache.getOrFetchSession("laps", sessionKey, ListSerializer(Lap.serializer())) {
+                api.getLaps(sessionKey = sessionKey)
+            }
         } catch (_: Exception) { emptyList() }
     }
 }

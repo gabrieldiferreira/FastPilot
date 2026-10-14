@@ -17,6 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Radio
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Warning
 import com.fastpilot.model.TeamRadio
 import com.fastpilot.ui.components.SessionPicker
 import com.fastpilot.ui.theme.*
@@ -86,7 +90,7 @@ fun RadioScreen(viewModel: RadioViewModel = koinViewModel()) {
         } else if (filtered.isEmpty()) {
             Box(Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("📻", fontSize = 40.sp)
+                    Icon(Icons.Default.Radio, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(40.dp))
                     Spacer(Modifier.height(8.dp))
                     Text("Nenhuma comunicação de rádio", color = TextSecondary)
                     Text("encontrada para esta sessão", color = TextTertiary, fontSize = 12.sp)
@@ -153,7 +157,11 @@ private fun RadioCard(
                     // Timestamp
                     val timestamp = radio.date?.let { parseTimestamp(it) } ?: ""
                     if (timestamp.isNotEmpty()) {
-                        Text("🕐 $timestamp", fontSize = 11.sp, color = TextTertiary)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.Schedule, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(12.dp))
+                            Spacer(Modifier.width(4.dp))
+                            Text(timestamp, fontSize = 11.sp, color = TextTertiary)
+                        }
                     }
                 }
             }
@@ -191,7 +199,11 @@ private fun RadioCard(
                     }
                 }
             } ?: run {
-                Text("⚠️ URL do áudio não disponível", color = TextTertiary, fontSize = 12.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Warning, contentDescription = null, tint = TextTertiary, modifier = Modifier.size(14.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text("URL do áudio não disponível", color = TextTertiary, fontSize = 12.sp)
+                }
             }
         }
     }

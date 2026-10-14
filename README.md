@@ -96,7 +96,7 @@ FastPilot/
 
 The project follows Clean Architecture: `shared` holds the data layer (Ktor clients for OpenF1 and Jolpica, cache-first repositories backed by SQLDelight) and the domain layer (use cases, pure Kotlin); `composeApp` holds the presentation layer (one ViewModel per screen exposing `StateFlow` UI state).
 
-**Offline cache.** On Android, iOS and Desktop, repositories read from SQLite first and only hit the network on a miss. Data downloaded after a session ended — drivers, laps, stints and each lap's raw telemetry and track positions — never expires and is never downloaded again; race data is deleted 30 days after it was downloaded. SQLDelight has no synchronous driver for the browser, so on **Web the app runs without the local cache** and every load goes to the network.
+**Offline cache.** On Android, iOS and Desktop, repositories read from SQLite first and only hit the network on a miss. Data downloaded after a session ended — drivers, laps, stints, final positions and gaps, race control, weather, team radio list, pit stops, overtakes and each lap's raw telemetry and track positions — never expires and is never downloaded again, so a race opened once works offline on every screen; race data is deleted 30 days after it was downloaded. Live sessions are never cached. SQLDelight has no synchronous driver for the browser, so on **Web the app runs without the local cache** and every load goes to the network.
 
 **Networking.** OpenF1's free tier allows about 30 requests per minute. The shared `HttpClient` retries 429/5xx responses with exponential backoff (2, 4, 8, 16, 16 s) and counts requests and rate-limited responses for the performance benchmark.
 
