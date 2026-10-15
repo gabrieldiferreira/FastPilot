@@ -18,7 +18,7 @@ seguinte a `3d8ac08`, com as duas correções abaixo):
 | Telemetria | ✅ voltas, volta teórica e gráficos | `3_offline_telemetria.png` |
 | Estratégia | ✅ stints, degradação e ritmo limpo | `4_offline_estrategia.png`, `4b_offline_estrategia_ritmo.png` |
 | Duelo | ✅ delta acumulado e delta na volta mais rápida | `5_offline_duelo.png` |
-| Rádio | ✅ lista das 32 mensagens; ⚠️ o áudio não toca (fica nos servidores da F1) e o app não avisa | `6_offline_radio.png`, `6b_offline_radio_play.png` |
+| Rádio | ✅ lista das 32 mensagens; o áudio não toca (fica nos servidores da F1) e o app avisa "Não foi possível tocar o áudio. Verifique sua conexão." | `6_offline_radio.png`, `6b_offline_radio_play.png` |
 | Clima | ✅ | `7_offline_clima.png` |
 | Classificação | ✅ | `8_offline_classificacao.png` |
 | Sessão nunca aberta com internet | ✅ mostra o erro em poucos segundos | `9_offline_sessao_nao_aberta.png` |
@@ -31,7 +31,7 @@ Rádio e Clima davam erro de rede. Agora as 7 telas funcionam, porque o cache gu
 posições e intervalos finais, pit stops, ultrapassagens, direção de prova, clima, lista de rádios e as voltas e
 stints de todos os pilotos (`SamplesCache.getOrFetchSession`).
 
-**Problemas encontrados e corrigidos neste teste:**
+**Problemas encontrados e corrigidos a partir deste teste:**
 
 1. **Rádio dava "Request timeout has expired" mesmo com internet** ao abrir as telas em sequência. Abrir as 7
    telas passa da cota grátis da OpenF1 (30 requisições por minuto); as requisições esperam na fila do limitador,
@@ -42,6 +42,13 @@ stints de todos os pilotos (`SamplesCache.getOrFetchSession`).
    da carga única esperando uma nova tentativa que nunca vinha. Agora uma falha sem resposta é repetida uma vez
    só (teste `without network a request fails after one quick retry`) e o Dashboard mostra o erro
    (`GetLivePositionsUseCase.once`). As respostas `429`/`5xx` continuam com as 5 tentativas.
+
+3. **O áudio do rádio sem internet aparecia como "Reproduzindo"** sem tocar nada (e, com internet, continuava
+   "Reproduzindo" depois do fim da mensagem). O `AudioPlayer` de cada plataforma agora avisa quando a gravação
+   termina ou falha (Android: `MediaPlayer`, com checagem de rede antes de tentar — sem ela o `MediaPlayer`
+   insiste ~25 s; iOS: estado do `AVPlayerItem`, com limite de 15 s; Web: evento `error` do `<audio>`), e a tela
+   volta para "Ouvir" e mostra o aviso no cartão da mensagem (`RadioPlayback`, testes em `RadioPlaybackTest`).
+   Conferido no emulador Android e no Chrome (modo offline); no iOS só compilado e testado em unidade.
 
 **Limites:** os áudios de rádio sempre precisam de internet; uma sessão só funciona sem internet depois de aberta
 uma vez com internet, e só se já tiver terminado (sessões ao vivo não são guardadas). A versão Web não tem banco

@@ -166,6 +166,7 @@ object EnUsStrings : Strings {
     override val playing = "Playing natively..."
     override val listenInApp = "Play message in the app"
     override val audioUnavailable = "Audio URL not available"
+    override val audioFailed = "Couldn't play the audio. Check your connection."
 
     override val weatherTitle = "Weather Conditions"
     override val loadingWeather = "Loading weather data..."

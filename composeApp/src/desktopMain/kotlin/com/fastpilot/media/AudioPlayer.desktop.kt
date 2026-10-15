@@ -2,6 +2,8 @@ package com.fastpilot.media
 
 class DesktopAudioPlayer : AudioPlayer {
     private var currentPlayingUrl: String? = null
+    // Playback is only simulated on desktop: nothing ends or fails
+    override var onEvent: ((AudioEvent) -> Unit)? = null
 
     override fun play(url: String) {
         println("Simulating playing audio on desktop: $url")

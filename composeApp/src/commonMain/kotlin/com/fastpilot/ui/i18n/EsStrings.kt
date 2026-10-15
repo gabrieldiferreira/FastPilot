@@ -166,6 +166,7 @@ object EsStrings : Strings {
     override val playing = "Reproduciendo de forma nativa..."
     override val listenInApp = "Escuchar comunicación en la app"
     override val audioUnavailable = "URL del audio no disponible"
+    override val audioFailed = "No se pudo reproducir el audio. Revisa tu conexión."
 
     override val weatherTitle = "Condiciones Meteorológicas"
     override val loadingWeather = "Cargando datos meteorológicos..."

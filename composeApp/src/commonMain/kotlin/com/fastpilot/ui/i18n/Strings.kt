@@ -140,6 +140,8 @@ interface Strings {
     val playing: String
     val listenInApp: String
     val audioUnavailable: String
+    /** A recording that could not be played (no network, unreachable file). */
+    val audioFailed: String
 
     // ── Weather ────────────────────────────────────────────────────────
     val weatherTitle: String

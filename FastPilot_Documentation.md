@@ -137,7 +137,7 @@ Todas em Kotlin puro, sem dependência de plataforma, com testes unitários:
 * **Limite da OpenF1:** a cota grátis (30 requisições por minuto) é do usuário inteiro. Navegar rápido por várias telas no Web (sem cache local) pode esgotá-la; o app então espera a janela liberar. O polling ao vivo sozinho usa ~46 requisições por minuto, por isso só funciona pelo proxy com a assinatura Sponsor (60/min).
 * **Tempo real depende da assinatura:** sem o proxy configurado (ou com a assinatura vencida), uma sessão ao vivo só mostra dados quando a OpenF1 os libera, 30 min depois do fim. A cota Sponsor (60 req/min) é dividida entre todos os usuários; o cache de 4 s do proxy limita o consumo por endpoint, não por usuário.
 * **Telemetria, Estratégia e Duelo** carregam uma sessão ao vivo uma vez (sem polling); para atualizar, basta selecioná-la de novo.
-* **Áudio do rádio sem internet:** a lista de mensagens funciona offline, mas os áudios ficam nos servidores da F1; sem internet o botão mostra "Reproduzindo" e nada toca, sem aviso de erro.
+* **Áudio do rádio sem internet:** a lista de mensagens funciona offline, mas os áudios ficam nos servidores da F1 e não tocam; o app avisa no cartão da mensagem ("Não foi possível tocar o áudio. Verifique sua conexão.").
 * **Sem internet:** uma sessão só abre offline se já tiver terminado e tiver sido aberta antes com internet; caso contrário a tela mostra o erro de conexão (`metrics/offline/README.md`).
 * **Voltas apagadas:** a OpenF1 não marca a volta apagada; o app lê as mensagens "LAP DELETED" da direção de prova. Uma volta apagada sem mensagem entraria na melhor volta.
 * **Tradução das mensagens da FIA:** formatos novos, que não estejam no vocabulário, aparecem em inglês até serem acrescentados.

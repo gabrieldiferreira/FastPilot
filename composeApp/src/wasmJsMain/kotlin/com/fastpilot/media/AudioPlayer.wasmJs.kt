@@ -6,6 +6,7 @@ import org.w3c.dom.HTMLAudioElement
 class WebAudioPlayer : AudioPlayer {
     private var audio: HTMLAudioElement? = null
     private var currentPlayingUrl: String? = null
+    override var onEvent: ((AudioEvent) -> Unit)? = null
 
     override fun play(url: String) {
         // Toggle pause/play
@@ -17,6 +18,15 @@ class WebAudioPlayer : AudioPlayer {
         stop()
         currentPlayingUrl = url
         audio = (document.createElement("audio") as HTMLAudioElement).apply {
+            // Without network (or a file the browser cannot load) the element fires "error"
+            addEventListener("error") {
+                if (currentPlayingUrl == url) currentPlayingUrl = null
+                onEvent?.invoke(AudioEvent.Failed(url))
+            }
+            addEventListener("ended") {
+                if (currentPlayingUrl == url) currentPlayingUrl = null
+                onEvent?.invoke(AudioEvent.Finished(url))
+            }
             src = url
             play()
         }

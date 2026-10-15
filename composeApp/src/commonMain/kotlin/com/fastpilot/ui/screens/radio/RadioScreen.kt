@@ -27,15 +27,16 @@ import com.fastpilot.ui.components.SessionPicker
 import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.time.localClock
 import com.fastpilot.ui.theme.*
-import com.fastpilot.media.AudioPlayer
+import com.fastpilot.media.RadioPlayback
 import com.fastpilot.media.createAudioPlayer
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun RadioScreen(viewModel: RadioViewModel = koinViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
-    val audioPlayer = remember { createAudioPlayer() }
-    var currentPlayingUrl by remember { mutableStateOf<String?>(null) }
+    // Follows the player, so a recording that ends or cannot be played stops showing as playing
+    val playback = remember { RadioPlayback(createAudioPlayer()) }
+    DisposableEffect(playback) { onDispose { playback.release() } }
 
     Column(Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
         Spacer(Modifier.height(12.dp))
@@ -109,16 +110,9 @@ fun RadioScreen(viewModel: RadioViewModel = koinViewModel()) {
                     RadioCard(
                         radio = radio, 
                         driver = uiState.drivers.find { it.driverNumber == radio.driverNumber },
-                        isPlaying = currentPlayingUrl == radio.recordingUrl,
-                        onPlayClicked = { url ->
-                            if (currentPlayingUrl == url) {
-                                audioPlayer.pause()
-                                currentPlayingUrl = null
-                            } else {
-                                audioPlayer.play(url)
-                                currentPlayingUrl = url
-                            }
-                        }
+                        isPlaying = playback.playingUrl == radio.recordingUrl,
+                        failed = playback.failedUrl == radio.recordingUrl,
+                        onPlayClicked = { url -> playback.toggle(url) }
                     )
                 }
                 item { Spacer(Modifier.height(80.dp)) }
@@ -139,6 +133,7 @@ private fun RadioCard(
     radio: TeamRadio, 
     driver: com.fastpilot.model.Driver?,
     isPlaying: Boolean,
+    failed: Boolean,
     onPlayClicked: (String) -> Unit
 ) {
     val tc = driver?.teamColour?.let { TeamColors.fromHex(it) } ?: TextSecondary
@@ -200,6 +195,14 @@ private fun RadioCard(
                             Text(url, color = TextTertiary, fontSize = 10.sp,
                                 maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
+                    }
+                }
+                if (failed) {
+                    Spacer(Modifier.height(6.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.Warning, contentDescription = null, tint = SafetyCarAmber, modifier = Modifier.size(14.dp))
+                        Spacer(Modifier.width(4.dp))
+                        Text(strings.audioFailed, color = SafetyCarAmber, fontSize = 12.sp)
                     }
                 }
             } ?: run {

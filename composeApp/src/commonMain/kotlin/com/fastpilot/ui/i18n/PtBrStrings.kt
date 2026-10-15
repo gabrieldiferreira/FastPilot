@@ -166,6 +166,7 @@ object PtBrStrings : Strings {
     override val playing = "Reproduzindo nativamente..."
     override val listenInApp = "Ouvir comunicação no App"
     override val audioUnavailable = "URL do áudio não disponível"
+    override val audioFailed = "Não foi possível tocar o áudio. Verifique sua conexão."
 
     override val weatherTitle = "Condições Climáticas"
     override val loadingWeather = "Carregando dados climáticos..."
