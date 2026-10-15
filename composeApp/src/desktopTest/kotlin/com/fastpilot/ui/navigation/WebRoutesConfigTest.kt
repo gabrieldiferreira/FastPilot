@@ -19,7 +19,9 @@ class WebRoutesConfigTest {
 
     @Test
     fun vercelAndTheLocalServerServeEveryScreenPath() {
-        val vercel = routePattern("vercel.json", Regex(""""source": "/\(([a-z|-]+)\)/\?""""))
+        // Vercel reads "source" with path-to-regexp: a named parameter, "/:route(a|b)". A bare "/(a|b)/?"
+        // is rejected ("Unexpected MODIFIER"), which made the whole vercel.json invalid and every deploy fail
+        val vercel = routePattern("vercel.json", Regex(""""source": "/:route\(([a-z|-]+)\)""""))
         val local = routePattern("scripts/serve_web.py", Regex("""ROUTES = re\.compile\(r"\^/\(([a-z|-]+)\)/\?\$"\)"""))
         for (path in ALL_PATHS) {
             assertTrue(vercel.matches(path), "vercel.json does not serve $path")

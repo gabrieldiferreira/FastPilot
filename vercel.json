@@ -4,13 +4,14 @@
   "installCommand": "echo 'Dependencies are fetched by Gradle during the build'",
   "buildCommand": "bash scripts/vercel_build.sh",
   "outputDirectory": "composeApp/build/dist/wasmJs/productionExecutable",
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/openf1/v1/:endpoint",
       "destination": "/api/openf1?endpoint=:endpoint"
     },
     {
-      "source": "/(entrar|login|acceder|painel|dashboard|panel|telemetria|telemetry|estrategia|strategy|duelo|duel|radio|clima|weather|classificacao|standings|clasificacion)/?",
+      "source": "/:route(entrar|login|acceder|painel|dashboard|panel|telemetria|telemetry|estrategia|strategy|duelo|duel|radio|clima|weather|classificacao|standings|clasificacion)",
       "destination": "/index.html"
     }
   ],
