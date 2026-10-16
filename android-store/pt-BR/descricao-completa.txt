@@ -1,0 +1,40 @@
+O FastPilot reúne os dados de cada sessão de corrida em um só lugar: posições, telemetria, estratégia de pneus, rádio das equipes, clima e classificação do campeonato. Acompanhe a sessão ao vivo ou volte a qualquer corrida, treino ou classificação das temporadas anteriores.
+
+PAINEL
+• Ordem dos pilotos com intervalo e diferença para o líder
+• Eventos da sessão em tempo real: pit stops, ultrapassagens e mensagens da direção de prova
+• Indicador de sessão ao vivo
+
+TELEMETRIA
+• Gráficos de velocidade, acelerador, freio e marcha, volta a volta
+• Volta teórica: a soma dos melhores setores comparada com a melhor volta real
+
+ESTRATÉGIA DE PNEUS
+• Stints de cada piloto, com o composto e as voltas de uso
+• Degradação calculada a partir das voltas limpas de cada stint
+• Ritmo limpo: sem volta de largada, entradas e saídas de box, safety car e bandeira vermelha
+
+DUELO
+• Compare dois pilotos lado a lado
+• Delta acumulado ao longo da corrida, ritmo médio, melhor volta e voltas válidas
+
+RÁDIO DE EQUIPE
+• Ouça as comunicações entre pilotos e engenheiros direto no app
+• Filtre por piloto
+
+CLIMA
+• Temperatura do ar e da pista, umidade, chuva, vento e pressão
+• Histórico das medições ao longo da sessão
+
+CLASSIFICAÇÃO
+• Tabela de pilotos e de equipes, temporada por temporada
+
+FEITO PARA O DIA DE CORRIDA
+• Funciona sem internet: as sessões já abertas ficam salvas no aparelho
+• Disponível em português, inglês e espanhol
+• Entre com a sua conta Google ou use como convidado, sem cadastro
+• Sem anúncios e sem rastreamento
+
+Os dados vêm de fontes públicas e abertas (OpenF1 e Jolpica). O FastPilot é um projeto independente e não tem relação com a Formula 1, a FIA ou as equipes. Os nomes e marcas citados pertencem aos seus donos.
+
+Política de privacidade: https://fastpilot.vercel.app/privacidade

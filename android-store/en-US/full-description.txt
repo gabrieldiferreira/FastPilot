@@ -1,0 +1,40 @@
+FastPilot brings every race session together in one place: positions, telemetry, tire strategy, team radio, weather and championship standings. Follow the session live or go back to any race, practice or qualifying from past seasons.
+
+DASHBOARD
+• Running order with the interval and the gap to the leader
+• Session events as they happen: pit stops, overtakes and race control messages
+• Live session indicator
+
+TELEMETRY
+• Speed, throttle, brake and gear charts, lap by lap
+• Theoretical best lap: the sum of the best sectors compared with the best actual lap
+
+TIRE STRATEGY
+• Each driver's stints, with the compound and the laps of use
+• Degradation calculated from the clean laps of each stint
+• Clean pace: no opening lap, pit entries and exits, safety car or red flag
+
+DRIVER DUEL
+• Compare two drivers side by side
+• Cumulative delta across the race, average pace, best lap and valid laps
+
+TEAM RADIO
+• Listen to the messages between drivers and engineers right in the app
+• Filter by driver
+
+WEATHER
+• Air and track temperature, humidity, rain, wind and pressure
+• History of the readings throughout the session
+
+STANDINGS
+• Drivers' and constructors' tables, season by season
+
+BUILT FOR RACE DAY
+• Works offline: sessions you have already opened are saved on your device
+• Available in English, Portuguese and Spanish
+• Sign in with your Google account or use it as a guest, no sign-up needed
+• No ads and no tracking
+
+Data comes from public, open sources (OpenF1 and Jolpica). FastPilot is an independent project and is not associated with Formula 1, the FIA or any team. All names and trademarks belong to their owners.
+
+Privacy policy: https://fastpilot.vercel.app/privacy

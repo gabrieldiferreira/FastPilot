@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- FastPilot icon: speedometer (same drawing as the Play Store icon, android-store/icone-512.png) -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M31,31h46v46h-46z" />
+    <path android:pathData="M37.03,73.97 A24,24 0 1 1 70.97,73.97" android:strokeColor="#34344F" android:strokeWidth="8" android:strokeLineCap="round" />
+    <path android:pathData="M37.03,73.97 A24,24 0 1 1 74.78,45.0" android:strokeColor="#E10600" android:strokeWidth="8" android:strokeLineCap="round" />
+    <path android:pathData="M39.0,57.0 L42.5,57.0 M43.39,46.39 L45.87,48.87 M54.0,42.0 L54.0,45.5" android:strokeColor="#707088" android:strokeWidth="2" android:strokeLineCap="round" />
+    <path android:pathData="M54,57 L68.97,45.3" android:strokeColor="#F5F5F5" android:strokeWidth="4" android:strokeLineCap="round" />
+    <path android:pathData="M48.5,57 a5.5,5.5 0 1,0 11,0 a5.5,5.5 0 1,0 -11,0" android:fillColor="#F5F5F5" />
+    <path android:pathData="M51.8,57 a2.2,2.2 0 1,0 4.4,0 a2.2,2.2 0 1,0 -4.4,0" android:fillColor="#E10600" />
 </vector>
