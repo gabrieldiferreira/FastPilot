@@ -2,6 +2,7 @@ package com.fastpilot.app
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
+import com.fastpilot.auth.WebAuthService
 import com.fastpilot.ui.App
 import com.fastpilot.ui.navigation.UrlRouter
 import com.fastpilot.ui.di.appModules
@@ -22,7 +23,7 @@ fun main() {
         .firstOrNull { it == "perf" || it.startsWith("perf=") }
         ?.let { "web" to it.substringAfter('=', "").replace("%3A", ":").replace("%2C", ",") }
     ComposeViewport(document.body!!) {
-        App(benchmark, BrowserRouter)
+        App(benchmark, BrowserRouter, WebAuthService)
     }
 }
 

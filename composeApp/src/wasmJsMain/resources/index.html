@@ -7,6 +7,46 @@
     <style>
         html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; background: #0D0D0D; }
     </style>
+    <script>
+        // Google sign-in (Firebase Authentication), used by WebAuthService.kt. The config is public:
+        // access is limited by the authorized domains in Firebase. Analytics is not loaded.
+        window.fastpilotAuthReady = (async () => {
+            const sdk = 'https://www.gstatic.com/firebasejs/11.0.2/';
+            const [{ initializeApp }, firebaseAuth] = await Promise.all([
+                import(sdk + 'firebase-app.js'),
+                import(sdk + 'firebase-auth.js'),
+            ]);
+            const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, deleteUser } = firebaseAuth;
+            const auth = getAuth(initializeApp({
+                apiKey: 'AIzaSyBCIq_sS_O98B1OMLwwde8Vzs4mJuNxoHU',
+                authDomain: 'fastpilot-510914.firebaseapp.com',
+                projectId: 'fastpilot-510914',
+                storageBucket: 'fastpilot-510914.firebasestorage.app',
+                messagingSenderId: '827133891918',
+                appId: '1:827133891918:web:e9303a476220fd13a7fa1f',
+            }));
+            // The saved session is read asynchronously: wait for it before answering current()
+            await auth.authStateReady();
+
+            const user = u => u && { uid: u.uid, name: u.displayName, email: u.email, photoUrl: u.photoURL };
+            const CANCELLED = ['auth/popup-closed-by-user', 'auth/cancelled-popup-request', 'auth/user-cancelled'];
+            const error = e => CANCELLED.includes(e.code)
+                ? { status: 'cancelled' }
+                : { status: 'error', detail: e.code === 'auth/requires-recent-login' ? 'sign out, sign in again and retry' : (e.code || e.message) };
+
+            return {
+                current: () => user(auth.currentUser),
+                signIn: () => signInWithPopup(auth, new GoogleAuthProvider())
+                    .then(r => ({ status: 'ok', user: user(r.user) }), error),
+                signOut: () => signOut(auth).catch(() => {}),
+                deleteAccount: () => auth.currentUser
+                    ? deleteUser(auth.currentUser).then(() => ({ status: 'ok' }), error)
+                    : Promise.resolve({ status: 'ok' }),
+            };
+        })();
+        // Offline the SDK does not download: the app keeps working as guest
+        window.fastpilotAuthReady.catch(e => console.warn('Firebase Auth unavailable:', e));
+    </script>
     <script type="application/javascript" src="composeApp.js"></script>
 </head>
 <body>

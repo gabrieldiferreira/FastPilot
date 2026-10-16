@@ -7,6 +7,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -20,15 +25,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
+import com.fastpilot.auth.LocalAccount
+import com.fastpilot.auth.SignInResult
 import com.fastpilot.ui.theme.DarkGradientColors
 import com.fastpilot.ui.theme.F1Red
 import com.fastpilot.ui.i18n.AppLanguage
 import com.fastpilot.ui.i18n.Flag
 import com.fastpilot.ui.i18n.LanguageState
 import com.fastpilot.ui.i18n.strings
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(onLoginSuccess: () -> Unit) {
+    val account = LocalAccount.current
+    val scope = rememberCoroutineScope()
+    var signingIn by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -56,49 +70,72 @@ fun LoginScreen(onLoginSuccess: () -> Unit) {
                 modifier = Modifier.padding(top = 8.dp, bottom = 48.dp)
             )
 
-            // Botão do Google
-            Button(
-                onClick = {
-                    // TODO: Aqui é onde chamaremos a função nativa KMP para abrir o Google Sign In Intent.
-                    // Quando o Firebase retornar sucesso, chamamos:
-                    onLoginSuccess()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black
-                )
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    // Ícone simulado do Google (G)
-                    Text(
-                        text = "G",
-                        color = Color.Blue,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(end = 12.dp)
+            // Botão do Google (só onde o login está disponível: Android e iOS)
+            if (account.auth.isAvailable) {
+                Button(
+                    onClick = {
+                        error = null
+                        signingIn = true
+                        scope.launch {
+                            when (val result = account.signInWithGoogle()) {
+                                is SignInResult.Success -> onLoginSuccess()
+                                is SignInResult.Failed -> error = result.detail
+                                SignInResult.Cancelled -> {}
+                            }
+                            signingIn = false
+                        }
+                    },
+                    enabled = !signingIn,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Black,
+                        disabledContainerColor = Color.White.copy(alpha = 0.7f),
+                        disabledContentColor = Color.Black
                     )
+                ) {
+                    if (signingIn) {
+                        CircularProgressIndicator(color = Color.Black, strokeWidth = 2.dp, modifier = Modifier.size(22.dp))
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "G",
+                                color = Color.Blue,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp,
+                                modifier = Modifier.padding(end = 12.dp)
+                            )
+                            Text(
+                                text = strings.loginWithGoogle,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
+                }
+
+                error?.let {
                     Text(
-                        text = strings.loginWithGoogle,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
+                        text = strings.signInFailed(it),
+                        color = F1Red,
+                        fontSize = 13.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(top = 12.dp)
                     )
                 }
             }
-            
+
             Spacer(modifier = Modifier.height(24.dp))
             
             TextButton(
-                onClick = { 
-                    // ByPass option para desenvolvimento rápido sem Firebase no momento.
-                    onLoginSuccess() 
-                }
+                onClick = onLoginSuccess,
+                enabled = !signingIn
             ) {
                 Text(
                     text = strings.loginAsGuest,

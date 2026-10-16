@@ -91,7 +91,13 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.koin.android)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.play.services.auth)
+            // Google sign-in: Credential Manager picks the account, Firebase signs in with its ID token
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.auth)
+            implementation(libs.androidx.credentials)
+            implementation(libs.androidx.credentials.play.services)
+            implementation(libs.googleid)
+            implementation(libs.kotlinx.coroutines.play.services)
         }
 
         val desktopMain by getting {

@@ -11,6 +11,17 @@ interface Strings {
     val loginTagline: String
     val loginWithGoogle: String
     val loginAsGuest: String
+    fun signInFailed(detail: String): String
+
+    // ── Account (menu on the dashboard) ────────────────────────────────
+    val account: String
+    val signIn: String
+    val signOut: String
+    val deleteAccount: String
+    val deleteAccountQuestion: String
+    val deleteAccountWarning: String
+    val cancel: String
+    fun deleteAccountFailed(detail: String): String
     val language: String
 
     /** Web address of each screen in this language (no accents: they would show as %C3%A7 in the address bar). */

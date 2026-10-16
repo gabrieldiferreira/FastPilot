@@ -5,6 +5,15 @@ object EnUsStrings : Strings {
     override val loginTagline = "Elite telemetry in your hands"
     override val loginWithGoogle = "Continue with Google"
     override val loginAsGuest = "Continue as Guest"
+    override fun signInFailed(detail: String) = "Could not sign in with Google: $detail"
+    override val account = "Account"
+    override val signIn = "Sign in with Google"
+    override val signOut = "Sign out"
+    override val deleteAccount = "Delete account"
+    override val deleteAccountQuestion = "Delete your account?"
+    override val deleteAccountWarning = "Your FastPilot account will be erased. You can keep using the app as a guest or sign in again later."
+    override val cancel = "Cancel"
+    override fun deleteAccountFailed(detail: String) = "Could not delete the account: $detail"
     override val language = "Language"
 
     override val routes = Routes(

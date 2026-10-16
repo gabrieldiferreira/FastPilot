@@ -1,6 +1,8 @@
 package com.fastpilot.app
 
 import androidx.compose.ui.window.ComposeUIViewController
+import com.fastpilot.auth.IosAuthBridge
+import com.fastpilot.auth.IosAuthService
 import com.fastpilot.db.DatabaseDriverFactory
 import com.fastpilot.db.FastPilotDB
 import com.fastpilot.ui.App
@@ -12,7 +14,8 @@ import platform.UIKit.UIViewController
 
 private var koinStarted = false
 
-fun MainViewController(): UIViewController {
+/** [authBridge]: Google sign-in through Firebase, implemented in Swift (FirebaseAuthBridge). */
+fun MainViewController(authBridge: IosAuthBridge): UIViewController {
     if (!koinStarted) {
         koinStarted = true
         startKoin {
@@ -28,5 +31,6 @@ fun MainViewController(): UIViewController {
     val arguments = NSProcessInfo.processInfo.arguments.map { it.toString() }
     val benchmark = arguments.indexOf("-perf").takeIf { it >= 0 }
         ?.let { "ios" to arguments.getOrElse(it + 1) { "" } }
-    return ComposeUIViewController { App(benchmark) }
+    val auth = IosAuthService(authBridge)
+    return ComposeUIViewController { App(benchmark, auth = auth) }
 }

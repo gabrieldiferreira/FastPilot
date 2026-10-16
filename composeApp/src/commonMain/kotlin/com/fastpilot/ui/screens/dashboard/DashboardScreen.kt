@@ -29,6 +29,7 @@ import com.fastpilot.model.Driver
 import com.fastpilot.model.RaceControlMessage
 import com.fastpilot.ui.components.SessionPicker
 import com.fastpilot.ui.i18n.oneDecimal
+import com.fastpilot.ui.components.AccountButton
 import com.fastpilot.ui.i18n.strings
 import com.fastpilot.ui.time.localClock
 import com.fastpilot.ui.time.localizeTrackTimes
@@ -218,6 +219,7 @@ private fun LiveTimingHeader(sessionName: String, circuitName: String, countryNa
                 Text(sessionName, style = MaterialTheme.typography.titleMedium, color = TextPrimary, fontWeight = FontWeight.Bold)
                 Text("$circuitName • $countryName", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
             }
+            AccountButton()
         }
     }
 }

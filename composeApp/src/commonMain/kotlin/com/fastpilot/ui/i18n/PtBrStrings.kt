@@ -5,6 +5,15 @@ object PtBrStrings : Strings {
     override val loginTagline = "Telemetria de elite nas suas mãos"
     override val loginWithGoogle = "Continuar com o Google"
     override val loginAsGuest = "Continuar como Convidado"
+    override fun signInFailed(detail: String) = "Não foi possível entrar com o Google: $detail"
+    override val account = "Conta"
+    override val signIn = "Entrar com o Google"
+    override val signOut = "Sair"
+    override val deleteAccount = "Excluir conta"
+    override val deleteAccountQuestion = "Excluir sua conta?"
+    override val deleteAccountWarning = "Sua conta do FastPilot será apagada. Você poderá continuar usando o app como convidado ou entrar de novo depois."
+    override val cancel = "Cancelar"
+    override fun deleteAccountFailed(detail: String) = "Não foi possível excluir a conta: $detail"
     override val language = "Idioma"
 
     override val routes = Routes(

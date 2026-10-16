@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.fastpilot.auth.AndroidAuthService
 import com.fastpilot.db.DatabaseDriverFactory
 import com.fastpilot.db.FastPilotDB
 import com.fastpilot.ui.App
@@ -30,8 +31,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // adb shell am start -n com.fastpilot.app/.MainActivity -e perf "off:5,on:3"
         val benchmark = intent.getStringExtra("perf")?.let { "android" to it }
+        val auth = AndroidAuthService(this)
         setContent {
-            App(benchmark)
+            App(benchmark, auth = auth)
         }
     }
 }
