@@ -2,6 +2,7 @@ package com.fastpilot.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -55,8 +56,13 @@ fun AccountButton() {
                 (user.name ?: user.email)?.let { title ->
                     DropdownMenuItem(
                         text = {
-                            Text(title, fontWeight = FontWeight.SemiBold)
-                            if (user.name != null && user.email != null) Text(user.email, fontSize = 12.sp)
+                            // The item's text slot is a Box: without the Column both lines overlap
+                            Column {
+                                Text(title, fontWeight = FontWeight.SemiBold, color = TextPrimary)
+                                if (user.name != null && user.email != null) {
+                                    Text(user.email, fontSize = 12.sp, color = TextSecondary)
+                                }
+                            }
                         },
                         onClick = {},
                         enabled = false
