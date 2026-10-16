@@ -11,6 +11,18 @@
       "destination": "/api/openf1?endpoint=:endpoint"
     },
     {
+      "source": "/privacidade",
+      "destination": "/privacidade.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacidade.html"
+    },
+    {
+      "source": "/privacidad",
+      "destination": "/privacidade.html"
+    },
+    {
       "source": "/:route(entrar|login|acceder|painel|dashboard|panel|telemetria|telemetry|estrategia|strategy|duelo|duel|radio|clima|weather|classificacao|standings|clasificacion)",
       "destination": "/index.html"
     }
