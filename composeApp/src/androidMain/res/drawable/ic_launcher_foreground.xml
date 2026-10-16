@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- FastPilot icon: speedometer (same drawing as the Play Store icon, android-store/icone-512.png) -->
+<!-- FastPilot icon: the F1 car of the splash screen (SplashScreen.kt), same pieces and colors.
+     Also the Play Store icon (android-store/icone-512.png). -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path android:pathData="M37.03,73.97 A24,24 0 1 1 70.97,73.97" android:strokeColor="#34344F" android:strokeWidth="8" android:strokeLineCap="round" />
-    <path android:pathData="M37.03,73.97 A24,24 0 1 1 74.78,45.0" android:strokeColor="#E10600" android:strokeWidth="8" android:strokeLineCap="round" />
-    <path android:pathData="M39.0,57.0 L42.5,57.0 M43.39,46.39 L45.87,48.87 M54.0,42.0 L54.0,45.5" android:strokeColor="#707088" android:strokeWidth="2" android:strokeLineCap="round" />
-    <path android:pathData="M54,57 L68.97,45.3" android:strokeColor="#F5F5F5" android:strokeWidth="4" android:strokeLineCap="round" />
-    <path android:pathData="M48.5,57 a5.5,5.5 0 1,0 11,0 a5.5,5.5 0 1,0 -11,0" android:fillColor="#F5F5F5" />
-    <path android:pathData="M51.8,57 a2.2,2.2 0 1,0 4.4,0 a2.2,2.2 0 1,0 -4.4,0" android:fillColor="#E10600" />
+    <path android:fillColor="#1C1C1C" android:pathData="M71.820,44.760 h7.260 a1.320,1.320 0 0 1 1.320,1.320 v2.640 a1.320,1.320 0 0 1 -1.320,1.320 h-7.260 a1.320,1.320 0 0 1 -1.320,-1.320 v-2.640 a1.320,1.320 0 0 1 1.320,-1.320 z" />
+    <path android:fillColor="#1C1C1C" android:pathData="M71.820,57.960 h7.260 a1.320,1.320 0 0 1 1.320,1.320 v2.640 a1.320,1.320 0 0 1 -1.320,1.320 h-7.260 a1.320,1.320 0 0 1 -1.320,-1.320 v-2.640 a1.320,1.320 0 0 1 1.320,-1.320 z" />
+    <path android:fillColor="#1C1C1C" android:pathData="M29.580,43.440 h9.240 a1.980,1.980 0 0 1 1.980,1.980 v2.640 a1.980,1.980 0 0 1 -1.980,1.980 h-9.240 a1.980,1.980 0 0 1 -1.980,-1.980 v-2.640 a1.980,1.980 0 0 1 1.980,-1.980 z" />
+    <path android:fillColor="#1C1C1C" android:pathData="M29.580,57.960 h9.240 a1.980,1.980 0 0 1 1.980,1.980 v2.640 a1.980,1.980 0 0 1 -1.980,1.980 h-9.240 a1.980,1.980 0 0 1 -1.980,-1.980 v-2.640 a1.980,1.980 0 0 1 1.980,-1.980 z" />
+    <path android:fillColor="#E10600" android:pathData="M78.420,47.400 h3.960 a1.320,1.320 0 0 1 1.320,1.320 v10.560 a1.320,1.320 0 0 1 -1.320,1.320 h-3.960 a1.320,1.320 0 0 1 -1.320,-1.320 v-10.560 a1.320,1.320 0 0 1 1.320,-1.320 z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M67.200,50.040 h9.900 a3.300,3.300 0 0 1 3.300,3.300 v1.320 a3.300,3.300 0 0 1 -3.300,3.300 h-9.900 a3.300,3.300 0 0 1 -3.300,-3.300 v-1.320 a3.300,3.300 0 0 1 3.300,-3.300 z" />
+    <path android:fillColor="#E10600" android:pathData="M43.440,50.040 h21.120 a2.640,2.640 0 0 1 2.640,2.640 v2.640 a2.640,2.640 0 0 1 -2.640,2.640 h-21.120 a2.640,2.640 0 0 1 -2.640,-2.640 v-2.640 a2.640,2.640 0 0 1 2.640,-2.640 z" />
+    <path android:fillColor="#E10600" android:pathData="M48.060,46.080 h8.580 a3.960,3.960 0 0 1 3.960,3.960 v7.920 a3.960,3.960 0 0 1 -3.960,3.960 h-8.580 a3.960,3.960 0 0 1 -3.960,-3.960 v-7.920 a3.960,3.960 0 0 1 3.960,-3.960 z" />
+    <path android:fillColor="#0D0D0D" android:pathData="M55.980,51.888 h2.640 a1.980,1.980 0 0 1 1.980,1.980 v0.264 a1.980,1.980 0 0 1 -1.980,1.980 h-2.640 a1.980,1.980 0 0 1 -1.980,-1.980 v-0.264 a1.980,1.980 0 0 1 1.980,-1.980 z" />
+    <path android:fillColor="#E10600" android:pathData="M25.620,46.080 h3.960 a1.320,1.320 0 0 1 1.320,1.320 v13.200 a1.320,1.320 0 0 1 -1.320,1.320 h-3.960 a1.320,1.320 0 0 1 -1.320,-1.320 v-13.200 a1.320,1.320 0 0 1 1.320,-1.320 z" />
 </vector>

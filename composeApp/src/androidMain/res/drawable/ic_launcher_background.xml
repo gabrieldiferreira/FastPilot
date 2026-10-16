@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Same vertical gradient as the splash screen (DarkGradientColors) -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
@@ -9,10 +10,10 @@
         <aapt:attr name="android:fillColor">
             <gradient
                 android:type="linear"
-                android:startX="0" android:startY="0"
-                android:endX="108" android:endY="108"
-                android:startColor="#22223A"
-                android:endColor="#0D0D0D" />
+                android:startX="54" android:startY="0"
+                android:endX="54" android:endY="108"
+                android:startColor="#0D0D0D"
+                android:endColor="#1A1A2E" />
         </aapt:attr>
     </path>
 </vector>
