@@ -5,6 +5,7 @@ import com.fastpilot.domain.usecase.CalculateChampionshipGapsUseCase
 import com.fastpilot.network.JolpicaApi
 import com.fastpilot.testing.mockHttpClient
 import com.fastpilot.testing.respondJson
+import com.fastpilot.ui.ScreenDispatchers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -30,10 +31,16 @@ class StandingsViewModelTest {
     private var failRequests = false
 
     @BeforeTest
-    fun setUp() = Dispatchers.setMain(dispatcher)
+    fun setUp() {
+        Dispatchers.setMain(dispatcher)
+        ScreenDispatchers.background = dispatcher
+    }
 
     @AfterTest
-    fun tearDown() = Dispatchers.resetMain()
+    fun tearDown() {
+        Dispatchers.resetMain()
+        ScreenDispatchers.background = Dispatchers.Default
+    }
 
     private fun driverStandings(season: String, leaderPoints: Int) = """
         {"MRData":{"StandingsTable":{"StandingsLists":[{"season":"$season","round":"22",
@@ -50,7 +57,7 @@ class StandingsViewModelTest {
     """.trimIndent()
 
     private fun viewModel(): StandingsViewModel {
-        val api = JolpicaApi(mockHttpClient(dispatcher) { request ->
+        val api = JolpicaApi(proxyUrl = "", client = mockHttpClient(dispatcher) { request ->
             val path = request.url.encodedPath
             requestedPaths += path
             if (failRequests) error("offline")

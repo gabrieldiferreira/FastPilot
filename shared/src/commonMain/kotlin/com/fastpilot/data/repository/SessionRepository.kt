@@ -22,10 +22,12 @@ class SessionRepository(
     /** Sessions loaded in this run, by year, with when they were fetched: the only cache on Web. */
     private val memory = mutableMapOf<Int, Pair<List<Session>, Long>>()
     private val seasonsMutex = Mutex()
+    // Screens load in the background, on several threads: guards [memory] and the session registry
+    private val memoryMutex = Mutex()
 
     /** Sessions of [year], newest first. Also tells the API which of them can be live. */
     suspend fun getSessions(year: Int, forceRefresh: Boolean = false): List<Session> =
-        loadSessions(year, forceRefresh).also { api.sessionRegistry.track(it) }
+        loadSessions(year, forceRefresh).also { memoryMutex.withLock { api.sessionRegistry.track(it) } }
 
     /**
      * Sessions of every year in [years], newest first by year. The years not cached yet come
@@ -59,30 +61,30 @@ class SessionRepository(
             } catch (_: Exception) {
             }
         }
-        years.flatMap { byYear[it].orEmpty() }.also { api.sessionRegistry.track(it) }
+        years.flatMap { byYear[it].orEmpty() }.also { memoryMutex.withLock { api.sessionRegistry.track(it) } }
     }
 
     /** The cached sessions of [year] while still valid: memory first, then the database. */
-    private fun cachedSessions(year: Int): List<Session>? {
+    private suspend fun cachedSessions(year: Int): List<Session>? {
         val now = Clock.System.now().toEpochMilliseconds()
         // The calendar of a past season no longer changes
         fun valid(cachedAt: Long) = now - cachedAt < CACHE_TTL_MS || year < availableSeasons().first()
-        memory[year]?.let { (sessions, cachedAt) -> if (valid(cachedAt)) return sessions }
+        memoryMutex.withLock { memory[year] }?.let { (sessions, cachedAt) -> if (valid(cachedAt)) return sessions }
         val cached = db?.fastPilotDBQueries?.selectSessionsByYear(year.toLong())?.executeAsList().orEmpty()
         // Rows cached before v4 have no time zone: fetched again once
         if (cached.isNotEmpty() && valid(cached.first().cached_at) && cached.none { it.gmt_offset.isEmpty() }) {
-            return cached.map { it.toSession() }.also { memory[year] = it to cached.first().cached_at }
+            return cached.map { it.toSession() }.also { memoryMutex.withLock { memory[year] = it to cached.first().cached_at } }
         }
         return null
     }
 
     /** Keeps [sessions] of [year] in memory and in the database, and returns them newest first. */
-    private fun store(year: Int, sessions: List<Session>): List<Session> {
+    private suspend fun store(year: Int, sessions: List<Session>): List<Session> {
         // Newest first, the same order as selectSessionsByYear: screens pick the first race,
         // which must not change depending on whether the list came from the cache
         val sorted = sessions.sortedByDescending { it.dateStart.orEmpty() }
         val now = Clock.System.now().toEpochMilliseconds()
-        memory[year] = sorted to now
+        memoryMutex.withLock { memory[year] = sorted to now }
         sorted.forEach { session ->
             db?.fastPilotDBQueries?.insertSession(
                 session_key = session.sessionKey.toLong(),

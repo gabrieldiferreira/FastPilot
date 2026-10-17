@@ -15,6 +15,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.fastpilot.ui.ScreenDispatchers
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 
 data class DuelUiState(
     val isLoading: Boolean = true,
@@ -45,45 +48,46 @@ class DuelViewModel(
 
     init { loadSessions() }
 
+    // Picking the session (and the jobs it starts) stays on the main thread; the loading runs in the background
     private fun loadSessions() {
         viewModelScope.launch {
             try {
-                val all = sessionRepo.getRecentSessions()
-                _uiState.value = _uiState.value.copy(sessions = all, isLoading = false)
+                val all = withContext(ScreenDispatchers.background) { sessionRepo.getRecentSessions() }
+                _uiState.update { it.copy(sessions = all, isLoading = false) }
                 val auto = all.defaultSession()
                 auto?.let { selectSession(it) }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message))
+                _uiState.update { it.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message)) }
             }
         }
     }
 
     fun selectSession(session: Session) {
-        _uiState.value = _uiState.value.copy(
+        _uiState.update { it.copy(
             selectedSession = session, isLoading = true,
             drivers = emptyList(), driver1 = null, driver2 = null, duelData = null, lapDelta = null, lapDeltaUnavailable = false, error = null
-        )
-        viewModelScope.launch {
+        ) }
+        viewModelScope.launch(ScreenDispatchers.background) {
             try {
                 val drivers = driverRepo.getDriversBySession(session.sessionKey)
-                _uiState.value = _uiState.value.copy(drivers = drivers, isLoading = false)
+                _uiState.update { it.copy(drivers = drivers, isLoading = false) }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.DRIVERS, e.message))
+                _uiState.update { it.copy(isLoading = false, error = UiError(ErrorKind.DRIVERS, e.message)) }
             }
         }
     }
 
     fun selectDriver1(driver: Driver) {
-        _uiState.value = _uiState.value.copy(driver1 = driver, duelData = null, lapDelta = null, lapDeltaUnavailable = false)
+        _uiState.update { it.copy(driver1 = driver, duelData = null, lapDelta = null, lapDeltaUnavailable = false) }
         tryComputeDuel()
     }
 
     fun selectDriver2(driver: Driver) {
-        _uiState.value = _uiState.value.copy(driver2 = driver, duelData = null, lapDelta = null, lapDeltaUnavailable = false)
+        _uiState.update { it.copy(driver2 = driver, duelData = null, lapDelta = null, lapDeltaUnavailable = false) }
         tryComputeDuel()
     }
 
@@ -93,19 +97,19 @@ class DuelViewModel(
         val d2 = _uiState.value.driver2 ?: return
         if (d1.driverNumber == d2.driverNumber) return
 
-        _uiState.value = _uiState.value.copy(isComputing = true, error = null)
-        viewModelScope.launch {
+        _uiState.update { it.copy(isComputing = true, error = null) }
+        viewModelScope.launch(ScreenDispatchers.background) {
             try {
                 val duelData = duelUseCase.invoke(sessionKey, d1.driverNumber, d2.driverNumber)
-                _uiState.value = _uiState.value.copy(duelData = duelData, isComputing = false)
+                _uiState.update { it.copy(duelData = duelData, isComputing = false) }
                 computeLapDelta(sessionKey, duelData)
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
+                _uiState.update { it.copy(
                     isComputing = false,
                     error = UiError(ErrorKind.DUEL, e.message)
-                )
+                ) }
             }
         }
     }
@@ -114,17 +118,17 @@ class DuelViewModel(
         val fastest1 = duel.lapsDriver1.minByOrNull { it.lapDuration!! } ?: return
         val fastest2 = duel.lapsDriver2.minByOrNull { it.lapDuration!! } ?: return
 
-        _uiState.value = _uiState.value.copy(isComputingLapDelta = true, lapDeltaUnavailable = false)
+        _uiState.update { it.copy(isComputingLapDelta = true, lapDeltaUnavailable = false) }
         try {
             val lapDelta = lapDeltaUseCase(sessionKey, fastest1, fastest2)
-            _uiState.value = _uiState.value.copy(
+            _uiState.update { it.copy(
                 lapDelta = lapDelta, isComputingLapDelta = false, lapDeltaUnavailable = lapDelta == null
-            )
+            ) }
         } catch (e: kotlinx.coroutines.CancellationException) {
             throw e
         } catch (_: Exception) {
             // The lap-by-lap comparison is still useful without position data
-            _uiState.value = _uiState.value.copy(isComputingLapDelta = false, lapDeltaUnavailable = true)
+            _uiState.update { it.copy(isComputingLapDelta = false, lapDeltaUnavailable = true) }
         }
     }
 }

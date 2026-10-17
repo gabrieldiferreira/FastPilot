@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.fastpilot.ui.ScreenDispatchers
+import kotlinx.coroutines.flow.update
 
 enum class StandingsMode { DRIVERS, CONSTRUCTORS }
 
@@ -43,24 +45,25 @@ class StandingsViewModel(
     init { selectSeason(SEASONS.first()) }
 
     fun selectSeason(season: Int, forceRefresh: Boolean = false) {
-        _uiState.value = _uiState.value.copy(
+        _uiState.update { it.copy(
             selectedSeason = season, isLoading = true, tables = null, error = null
-        )
+        ) }
         loadJob?.cancel()
-        loadJob = viewModelScope.launch {
+        loadJob = viewModelScope.launch(ScreenDispatchers.background) {
             try {
-                val standings = standingsRepo.getStandings(season, forceRefresh)
-                _uiState.value = _uiState.value.copy(
-                    tables = calculateGaps(standings),
-                    isLoading = false
-                )
+                // The cached table shows at once; a fresh one replaces it when Jolpica answers
+                standingsRepo.observeStandings(season, forceRefresh).collect { standings ->
+                    val tables = calculateGaps(standings)
+                    _uiState.update { it.copy(tables = tables, isLoading = false, error = null) }
+                }
+                _uiState.update { it.copy(isLoading = false) }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
+                _uiState.update { it.copy(
                     isLoading = false,
                     error = UiError(ErrorKind.STANDINGS, e.message)
-                )
+                ) }
             }
         }
     }
@@ -68,6 +71,6 @@ class StandingsViewModel(
     fun refresh() = selectSeason(_uiState.value.selectedSeason, forceRefresh = true)
 
     fun selectMode(mode: StandingsMode) {
-        _uiState.value = _uiState.value.copy(mode = mode)
+        _uiState.update { it.copy(mode = mode) }
     }
 }

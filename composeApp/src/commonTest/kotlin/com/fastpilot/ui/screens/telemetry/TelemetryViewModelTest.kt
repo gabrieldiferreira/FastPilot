@@ -9,6 +9,7 @@ import com.fastpilot.domain.usecase.CalculateTheoreticalBestUseCase
 import com.fastpilot.network.OpenF1Api
 import com.fastpilot.testing.mockHttpClient
 import com.fastpilot.testing.respondJson
+import com.fastpilot.ui.ScreenDispatchers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -29,10 +30,16 @@ class TelemetryViewModelTest {
     private val dispatcher = StandardTestDispatcher()
 
     @BeforeTest
-    fun setUp() = Dispatchers.setMain(dispatcher)
+    fun setUp() {
+        Dispatchers.setMain(dispatcher)
+        ScreenDispatchers.background = dispatcher
+    }
 
     @AfterTest
-    fun tearDown() = Dispatchers.resetMain()
+    fun tearDown() {
+        Dispatchers.resetMain()
+        ScreenDispatchers.background = Dispatchers.Default
+    }
 
     // Best S1 on lap 2, best S2 on lap 3, best S3 on lap 4; the pit-out lap 1 has the fastest
     // S3 on paper but is not a flying lap

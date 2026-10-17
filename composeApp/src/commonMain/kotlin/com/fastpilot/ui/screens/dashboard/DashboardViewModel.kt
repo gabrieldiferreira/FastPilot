@@ -24,6 +24,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.datetime.Clock
+import com.fastpilot.ui.ScreenDispatchers
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 
 data class DashboardUiState(
     val isLoading: Boolean = true,
@@ -74,33 +77,34 @@ class DashboardViewModel(
         loadSessions()
     }
 
+    // Session selection and the jobs it starts stay on the main thread; the loading runs in the background
     private fun loadSessions() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+            _uiState.update { it.copy(isLoading = true, error = null) }
             try {
-                seasonSessions = sessionRepo.getSeasonSessions()
+                seasonSessions = withContext(ScreenDispatchers.background) { sessionRepo.getSeasonSessions() }
                 val allSessions = seasonSessions.startedBy()
 
                 // Default: live session > most recent race > newest session
                 val defaultSession = allSessions.defaultSession()
                 if (defaultSession == null) {
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         isLoading = false,
                         error = UiError(ErrorKind.NO_SESSIONS)
-                    )
+                    ) }
                     return@launch
                 }
 
-                _uiState.value = _uiState.value.copy(sessions = allSessions, isLoading = false)
+                _uiState.update { it.copy(sessions = allSessions, isLoading = false) }
                 showSession(defaultSession)
                 watchLiveSessions()
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
+                _uiState.update { it.copy(
                     isLoading = false,
                     error = UiError(ErrorKind.SESSIONS, e.message)
-                )
+                ) }
             }
         }
     }
@@ -118,7 +122,7 @@ class DashboardViewModel(
                 val now = Clock.System.now()
                 val started = seasonSessions.startedBy(now)
                 if (started.size != _uiState.value.sessions.size) {
-                    _uiState.value = _uiState.value.copy(sessions = started)
+                    _uiState.update { it.copy(sessions = started) }
                 }
                 val state = _uiState.value
                 val current = state.currentSession ?: continue
@@ -138,7 +142,7 @@ class DashboardViewModel(
 
     private fun showSession(session: Session) {
         val isLive = LiveSessionDetector.isLive(session)
-        _uiState.value = _uiState.value.copy(
+        _uiState.update { it.copy(
             currentSession = session,
             isLive = isLive,
             positions = emptyList(),
@@ -148,7 +152,7 @@ class DashboardViewModel(
             events = emptyList(),
             isLoading = true,
             error = null
-        )
+        ) }
         loadSessionData(session)
     }
 
@@ -165,12 +169,12 @@ class DashboardViewModel(
 
         // OpenF1 only has intervals for races and sprints: practice and qualifying show lap times
         if (!session.isRace()) {
-            lapsJob = viewModelScope.launch {
+            lapsJob = viewModelScope.launch(ScreenDispatchers.background) {
                 while (true) {
                     // Fetched before reading the state: copying a state read before the request would
                     // undo whatever arrived meanwhile (race control, intervals...)
                     val laps = lapRepo.getAllLaps(sessionKey)
-                    _uiState.value = _uiState.value.copy(laps = laps)
+                    _uiState.update { it.copy(laps = laps) }
                     if (!isLive) break
                     delay(LivePollingManager.RACE_EVENTS_POLL_MS)
                 }
@@ -184,79 +188,79 @@ class DashboardViewModel(
 
         if (isLive) {
             // ── LIVE MODE: continuous polling ───────────────────────
-            pollingJob = viewModelScope.launch {
+            pollingJob = viewModelScope.launch(ScreenDispatchers.background) {
                 getPositions.invoke(sessionKey, pollIntervalMs = LivePollingManager.POSITION_POLL_MS).collect { positions ->
-                    _uiState.value = _uiState.value.copy(positions = positions, isLoading = false)
+                    _uiState.update { it.copy(positions = positions, isLoading = false) }
                     positionsShown.complete(Unit)
                 }
             }
 
-            intervalPollingJob = viewModelScope.launch {
+            intervalPollingJob = viewModelScope.launch(ScreenDispatchers.background) {
                 afterPositions()
                 livePolling.observeIntervals(sessionKey).collect { intervals ->
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         intervals = intervals.associateBy { it.driverNumber }
-                    )
+                    ) }
                 }
             }
 
-            raceControlPollingJob = viewModelScope.launch {
+            raceControlPollingJob = viewModelScope.launch(ScreenDispatchers.background) {
                 afterPositions()
                 livePolling.observeRaceControl(sessionKey).collect { messages ->
-                    _uiState.value = _uiState.value.copy(raceControlMessages = messages)
+                    _uiState.update { it.copy(raceControlMessages = messages) }
                 }
             }
 
-            eventsJob = viewModelScope.launch {
+            eventsJob = viewModelScope.launch(ScreenDispatchers.background) {
                 afterPositions()
                 getRaceEvents.observe(sessionKey, LivePollingManager.RACE_EVENTS_POLL_MS).collect { events ->
-                    _uiState.value = _uiState.value.copy(events = events)
+                    _uiState.update { it.copy(events = events) }
                 }
             }
         } else {
             // ── HISTORICAL MODE: one-shot fetch ────────────────────
-            pollingJob = viewModelScope.launch {
+            pollingJob = viewModelScope.launch(ScreenDispatchers.background) {
                 try {
                     // Once: without network and without the session in the cache this fails right away
                     // and the error is shown (a flow that retries would keep the spinner forever)
                     val positions = getPositions.once(sessionKey)
-                    _uiState.value = _uiState.value.copy(positions = positions, isLoading = false)
+                    _uiState.update { it.copy(positions = positions, isLoading = false) }
                     positionsShown.complete(Unit)
                 } catch (e: kotlinx.coroutines.CancellationException) {
                     throw e
                 } catch (e: Exception) {
                     positionsShown.complete(Unit)
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         isLoading = false,
                         error = UiError(ErrorKind.POSITIONS, e.message)
-                    )
+                    ) }
                 }
             }
 
             // Intervals (one-shot); kept in a job so that switching sessions cancels it
-            intervalPollingJob = viewModelScope.launch {
+            intervalPollingJob = viewModelScope.launch(ScreenDispatchers.background) {
                 afterPositions()
                 try {
                     val intervals = intervalRepo.getLatestIntervals(sessionKey)
-                    _uiState.value = _uiState.value.copy(
+                    _uiState.update { it.copy(
                         intervals = intervals.associateBy { it.driverNumber }
-                    )
+                    ) }
                 } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) {}
             }
 
             // Pit stops and overtakes (one-shot)
-            eventsJob = viewModelScope.launch {
+            eventsJob = viewModelScope.launch(ScreenDispatchers.background) {
                 afterPositions()
                 val events = getRaceEvents(sessionKey)
-                _uiState.value = _uiState.value.copy(events = events)
+                _uiState.update { it.copy(events = events) }
             }
 
             // Race control (one-shot)
-            raceControlPollingJob = viewModelScope.launch {
+            raceControlPollingJob = viewModelScope.launch(ScreenDispatchers.background) {
                 afterPositions()
                 try {
                     val messages = raceControlRepo.getRaceControl(sessionKey)
-                    _uiState.value = _uiState.value.copy(raceControlMessages = messages)
+                    _uiState.update { it.copy(raceControlMessages = messages) }
                 } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) {}
             }
         }

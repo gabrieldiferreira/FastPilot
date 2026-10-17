@@ -5,14 +5,19 @@ import com.fastpilot.model.ConstructorStandingEntry
 import com.fastpilot.model.DriverStandingEntry
 import com.fastpilot.model.Standings
 import com.fastpilot.network.JolpicaApi
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.coroutineScope
 import kotlinx.datetime.Clock
 
 /**
  * Cache-first repository for championship standings (Jolpica).
  * Standings only change after each race, so the cache lives for 7 days.
- * [db] is null on platforms without a local database (Web).
+ * [db] is null on platforms without a local database (Web), which keeps them in memory only.
  */
 class StandingsRepository(
     private val api: JolpicaApi,
@@ -24,13 +29,41 @@ class StandingsRepository(
         private const val CURRENT_SEASON_TTL_MS = 60 * 60 * 1000L // 1 hour
     }
 
+    /** The standings of [season] loaded in this run: the only cache on Web. */
+    private val memory = mutableMapOf<Int, Pair<Standings, Long>>()
+    private val memoryMutex = Mutex()
+
+    /**
+     * The cached standings right away, then fresh ones when the cache is missing, stale or
+     * [forceRefresh]: Jolpica can take 20 s or more to answer, so the table never waits for it
+     * when there is something to show. Throws only when there is nothing cached and the
+     * request fails.
+     */
+    fun observeStandings(season: Int, forceRefresh: Boolean = false): Flow<Standings> = flow {
+        val cached = readCache(season)
+        if (cached != null) emit(cached.first)
+        if (!forceRefresh && cached != null && isFresh(season, cached.second)) return@flow
+        val remote = try {
+            fetchRemote(season)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            // Keeps showing the cached table
+            if (cached != null) return@flow else throw e
+        }
+        writeCache(remote)
+        if (remote != cached?.first) emit(remote)
+    }
+
+    private fun isFresh(season: Int, cachedAt: Long): Boolean {
+        val age = Clock.System.now().toEpochMilliseconds() - cachedAt
+        val ttl = if (season >= availableSeasons().first()) CURRENT_SEASON_TTL_MS else CACHE_TTL_MS
+        return age < ttl
+    }
+
     suspend fun getStandings(season: Int, forceRefresh: Boolean = false): Standings {
         val cached = readCache(season)
-        if (!forceRefresh && cached != null) {
-            val age = Clock.System.now().toEpochMilliseconds() - cached.second
-            val ttl = if (season >= availableSeasons().first()) CURRENT_SEASON_TTL_MS else CACHE_TTL_MS
-            if (age < ttl) return cached.first
-        }
+        if (!forceRefresh && cached != null && isFresh(season, cached.second)) return cached.first
 
         return try {
             val remote = fetchRemote(season)
@@ -78,7 +111,8 @@ class StandingsRepository(
     }
 
     /** Returns the cached standings and their cache timestamp, or null if nothing is cached. */
-    private fun readCache(season: Int): Pair<Standings, Long>? {
+    private suspend fun readCache(season: Int): Pair<Standings, Long>? {
+        memoryMutex.withLock { memory[season] }?.let { return it }
         val queries = db?.fastPilotDBQueries ?: return null
         val drivers = queries.selectDriverStandingsBySeason(season.toLong()).executeAsList()
         val constructors = queries.selectConstructorStandingsBySeason(season.toLong()).executeAsList()
@@ -110,10 +144,11 @@ class StandingsRepository(
             }
         )
         val cachedAt = (drivers.map { it.cached_at } + constructors.map { it.cached_at }).min()
-        return standings to cachedAt
+        return (standings to cachedAt).also { memoryMutex.withLock { memory[season] = it } }
     }
 
-    private fun writeCache(standings: Standings) {
+    private suspend fun writeCache(standings: Standings) {
+        memoryMutex.withLock { memory[standings.season] = standings to Clock.System.now().toEpochMilliseconds() }
         val queries = db?.fastPilotDBQueries ?: return
         val season = standings.season.toLong()
         val round = standings.round.toLong()

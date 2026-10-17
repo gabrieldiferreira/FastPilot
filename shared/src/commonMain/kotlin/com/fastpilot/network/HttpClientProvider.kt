@@ -20,6 +20,10 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 
 /**
  * Creates a configured HTTP client with JSON serialization and logging.
@@ -100,6 +104,10 @@ private val RequestCounter = createClientPlugin("RequestCounter") {
 /**
  * Lets at most [permits] requests start in any [windowMs] window, delaying the others.
  * A request that waits is cheaper than a 429, whose retry waits at least 2 s.
+ *
+ * When requests are waiting, the newest goes first: the screen the user just opened is served
+ * before the backlog a screen opened earlier left in the queue (with 30 requests a minute, a
+ * screen with many requests used to hold the next one back for a minute or more).
  */
 internal class RateLimiter(
     private val permits: Int,
@@ -108,13 +116,50 @@ internal class RateLimiter(
 ) {
     private val mutex = Mutex()
     private val starts = ArrayDeque<TimeMark>()
+    /** Requests waiting for a permit, oldest first; only the last one may take the next permit. */
+    private val waiting = ArrayList<Any>()
+    /** Bumped whenever [waiting] changes, to wake the requests waiting for their turn. */
+    private val changes = MutableStateFlow(0L)
 
-    suspend fun acquire() = mutex.withLock {
-        if (starts.size >= permits) {
-            val wait = windowMs - starts.removeFirst().elapsedNow().inWholeMilliseconds
-            if (wait > 0) delay(wait)
+    suspend fun acquire() {
+        val ticket = Any()
+        mutex.withLock { waiting.add(ticket); changes.value++ }
+        var granted = false
+        // The start this request already waited a whole window for: it counts as out of the window
+        var waitedFor: TimeMark? = null
+        try {
+            while (true) {
+                val seen = changes.value
+                // null: a newer request goes first; 0: permit taken; otherwise ms until one frees up
+                val waitMs: Long? = mutex.withLock {
+                    if (waiting.last() !== ticket) return@withLock null
+                    while (starts.isNotEmpty() && (starts.first() === waitedFor ||
+                            starts.first().elapsedNow().inWholeMilliseconds >= windowMs)) {
+                        starts.removeFirst()
+                    }
+                    if (starts.size < permits) {
+                        starts.addLast(timeSource.markNow())
+                        waiting.remove(ticket)
+                        granted = true
+                        changes.value++
+                        0L
+                    } else {
+                        waitedFor = starts.first()
+                        windowMs - starts.first().elapsedNow().inWholeMilliseconds
+                    }
+                }
+                when {
+                    granted -> return
+                    waitMs == null -> changes.first { it != seen }
+                    else -> delay(waitMs)
+                }
+            }
+        } finally {
+            // A cancelled request leaves the queue, so the next one is not held back by it
+            if (!granted) withContext(NonCancellable) {
+                mutex.withLock { waiting.remove(ticket); changes.value++ }
+            }
         }
-        starts.addLast(timeSource.markNow())
     }
 }
 

@@ -3,6 +3,7 @@ package com.fastpilot.data.repository
 import com.fastpilot.network.JolpicaApi
 import com.fastpilot.testing.mockHttpClient
 import com.fastpilot.testing.respondJson
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,7 +33,7 @@ class StandingsRepositoryTest {
     """.trimIndent()
 
     private fun repository() = StandingsRepository(
-        JolpicaApi(mockHttpClient { request ->
+        JolpicaApi(proxyUrl = "", client = mockHttpClient { request ->
             if ("constructorStandings" in request.url.encodedPath) respondJson(constructorStandingsJson)
             else respondJson(driverStandingsJson)
         }),
@@ -71,10 +72,44 @@ class StandingsRepositoryTest {
     @Test
     fun `without cache a network error is propagated`() = runTest {
         val repo = StandingsRepository(
-            JolpicaApi(mockHttpClient { throw IllegalStateException("offline") }),
+            JolpicaApi(proxyUrl = "", client = mockHttpClient { throw IllegalStateException("offline") }),
             db = null
         )
 
         assertFailsWith<Exception> { repo.getStandings(2025) }
+    }
+
+    private var requests = 0
+    private var offline = false
+
+    private fun countingRepository() = StandingsRepository(
+        JolpicaApi(proxyUrl = "", client = mockHttpClient { request ->
+            requests++
+            if (offline) throw IllegalStateException("offline")
+            if ("constructorStandings" in request.url.encodedPath) respondJson(constructorStandingsJson)
+            else respondJson(driverStandingsJson)
+        }),
+        db = null
+    )
+
+    @Test
+    fun `a past season already loaded shows from memory without asking Jolpica again`() = runTest {
+        val repo = countingRepository()
+        assertEquals(1, repo.observeStandings(2025).toList().size)
+        assertEquals(2, requests)
+
+        val again = repo.observeStandings(2025).toList()
+        assertEquals(1, again.size)
+        assertEquals(2, requests)
+    }
+
+    @Test
+    fun `on refresh the cached table shows first and stays when Jolpica fails`() = runTest {
+        val repo = countingRepository()
+        val first = repo.observeStandings(2025).toList().single()
+
+        offline = true
+        val refreshed = repo.observeStandings(2025, forceRefresh = true).toList()
+        assertEquals(listOf(first), refreshed)
     }
 }

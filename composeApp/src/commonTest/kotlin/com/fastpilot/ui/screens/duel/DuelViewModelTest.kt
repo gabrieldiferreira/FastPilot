@@ -11,6 +11,7 @@ import com.fastpilot.domain.usecase.GetLapDeltaUseCase
 import com.fastpilot.network.OpenF1Api
 import com.fastpilot.testing.mockHttpClient
 import com.fastpilot.testing.respondJson
+import com.fastpilot.ui.ScreenDispatchers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -40,10 +41,16 @@ class DuelViewModelTest {
     private var locationAvailable = true
 
     @BeforeTest
-    fun setUp() = Dispatchers.setMain(dispatcher)
+    fun setUp() {
+        Dispatchers.setMain(dispatcher)
+        ScreenDispatchers.background = dispatcher
+    }
 
     @AfterTest
-    fun tearDown() = Dispatchers.resetMain()
+    fun tearDown() {
+        Dispatchers.resetMain()
+        ScreenDispatchers.background = Dispatchers.Default
+    }
 
     // Lap 2 is each driver's fastest: 90.0 s for #1, 90.5 s for #44
     private val lapTimes = mapOf(1 to listOf(91.0, 90.0, 91.2), 44 to listOf(91.5, 90.5, 91.0))

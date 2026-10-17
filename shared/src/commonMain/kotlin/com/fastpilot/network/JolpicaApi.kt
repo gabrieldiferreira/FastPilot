@@ -2,7 +2,12 @@ package com.fastpilot.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.retry
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
+import io.ktor.http.isSuccess
+import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,27 +15,51 @@ import kotlinx.serialization.Serializable
  * Client for the Jolpica API (Ergast-compatible).
  * Provides historical F1 data like race results, standings, and season info.
  * Base URL: https://api.jolpi.ca/ergast/f1/
+ *
+ * Requests go first through [proxyUrl] (Vercel function api/jolpica.mjs), whose CDN keeps
+ * the answers: Jolpica itself takes from 0.5 s to over 20 s when its own cache has expired.
+ * When the proxy fails or is slow, the request goes straight to Jolpica. Blank = no proxy.
  */
-class JolpicaApi(private val client: HttpClient) {
+class JolpicaApi(
+    private val client: HttpClient,
+    private val proxyUrl: String = JOLPICA_PROXY_URL
+) {
 
     companion object {
         private const val BASE_URL = "https://api.jolpi.ca/ergast/f1"
+        private const val PROXY_TIMEOUT_MS = 10_000L
     }
 
-    suspend fun getSeasons(): JolpicaResponse<SeasonTable> =
-        client.get("$BASE_URL/seasons.json?limit=100").body()
+    private suspend inline fun <reified T> get(path: String): T {
+        if (proxyUrl.isNotBlank()) {
+            try {
+                val response = client.get(proxyUrl) {
+                    parameter("path", path)
+                    // A failing proxy falls back at once instead of waiting for the retries
+                    retry { noRetry() }
+                    timeout { requestTimeoutMillis = PROXY_TIMEOUT_MS }
+                }
+                if (response.status.isSuccess()) return response.body()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+            }
+        }
+        return client.get("$BASE_URL/$path").body()
+    }
 
-    suspend fun getRaces(year: Int): JolpicaResponse<RaceTable> =
-        client.get("$BASE_URL/$year/races.json").body()
+    suspend fun getSeasons(): JolpicaResponse<SeasonTable> = get("seasons.json?limit=100")
+
+    suspend fun getRaces(year: Int): JolpicaResponse<RaceTable> = get("$year/races.json")
 
     suspend fun getRaceResults(year: Int, round: Int): JolpicaResponse<RaceTable> =
-        client.get("$BASE_URL/$year/$round/results.json").body()
+        get("$year/$round/results.json")
 
     suspend fun getDriverStandings(year: Int): JolpicaResponse<StandingsTable> =
-        client.get("$BASE_URL/$year/driverStandings.json").body()
+        get("$year/driverStandings.json")
 
     suspend fun getConstructorStandings(year: Int): JolpicaResponse<StandingsTable> =
-        client.get("$BASE_URL/$year/constructorStandings.json").body()
+        get("$year/constructorStandings.json")
 }
 
 // ── Response wrapper models ─────────────────────────────────────────────

@@ -12,6 +12,7 @@ import com.fastpilot.domain.usecase.GetTyreDegradationUseCase
 import com.fastpilot.network.OpenF1Api
 import com.fastpilot.testing.mockHttpClient
 import com.fastpilot.testing.respondJson
+import com.fastpilot.ui.ScreenDispatchers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -36,10 +37,16 @@ class StrategyViewModelTest {
     private var safetyCar = false
 
     @BeforeTest
-    fun setUp() = Dispatchers.setMain(dispatcher)
+    fun setUp() {
+        Dispatchers.setMain(dispatcher)
+        ScreenDispatchers.background = dispatcher
+    }
 
     @AfterTest
-    fun tearDown() = Dispatchers.resetMain()
+    fun tearDown() {
+        Dispatchers.resetMain()
+        ScreenDispatchers.background = Dispatchers.Default
+    }
 
     private val sessionStart = Instant.parse("2024-11-03T16:00:00Z")
 

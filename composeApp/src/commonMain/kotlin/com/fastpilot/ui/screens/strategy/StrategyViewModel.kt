@@ -14,6 +14,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.fastpilot.ui.ScreenDispatchers
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 
 data class StrategyUiState(
     val isLoading: Boolean = true,
@@ -51,44 +54,45 @@ class StrategyViewModel(
 
     init { loadSessions() }
 
+    // Picking the session (and the jobs it starts) stays on the main thread; the loading runs in the background
     private fun loadSessions() {
         viewModelScope.launch {
             try {
-                val all = sessionRepo.getRecentSessions()
-                _uiState.value = _uiState.value.copy(sessions = all, isLoading = false)
+                val all = withContext(ScreenDispatchers.background) { sessionRepo.getRecentSessions() }
+                _uiState.update { it.copy(sessions = all, isLoading = false) }
                 val auto = all.defaultSession()
                 auto?.let { selectSession(it) }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message))
+                _uiState.update { it.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message)) }
             }
         }
     }
 
     fun selectSession(session: Session) {
-        _uiState.value = _uiState.value.copy(
+        _uiState.update { it.copy(
             selectedSession = session, isLoading = true,
             stintsByDriver = emptyMap(), pitStops = emptyList(),
             cleanPace = emptyList(), degradationByDriver = emptyMap(),
             isLoadingMetrics = false, metricsWithoutRaceControl = false, error = null
-        )
-        viewModelScope.launch {
+        ) }
+        viewModelScope.launch(ScreenDispatchers.background) {
             try {
                 val drivers = driverRepo.getDriversBySession(session.sessionKey)
                 val allStints = stintRepo.getAllStints(session.sessionKey)
                 val pitStops = try { pitStopRepo.getPitStops(session.sessionKey) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { emptyList() }
-                _uiState.value = _uiState.value.copy(
+                _uiState.update { it.copy(
                     drivers = drivers,
                     stintsByDriver = allStints.groupBy { it.driverNumber },
                     pitStops = pitStops,
                     isLoading = false
-                )
+                ) }
                 if (session.sessionType == "Race") loadMetrics(session.sessionKey, allStints)
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.GENERIC, e.message))
+                _uiState.update { it.copy(isLoading = false, error = UiError(ErrorKind.GENERIC, e.message)) }
             }
         }
     }
@@ -98,7 +102,7 @@ class StrategyViewModel(
      * race control periods) and the safety car / VSC / red flag messages.
      */
     private suspend fun loadMetrics(sessionKey: Int, stints: List<Stint>) {
-        _uiState.value = _uiState.value.copy(isLoadingMetrics = true)
+        _uiState.update { it.copy(isLoadingMetrics = true) }
         val laps = lapRepo.getAllLaps(sessionKey)
         val raceControl = try {
             raceControlRepo.getRaceControl(sessionKey)
@@ -120,11 +124,11 @@ class StrategyViewModel(
 
         // The user may have picked another session meanwhile
         if (_uiState.value.selectedSession?.sessionKey != sessionKey) return
-        _uiState.value = _uiState.value.copy(
+        _uiState.update { it.copy(
             cleanPace = cleanPace,
             degradationByDriver = degradation,
             isLoadingMetrics = false,
             metricsWithoutRaceControl = raceControl == null && laps.isNotEmpty()
-        )
+        ) }
     }
 }

@@ -20,6 +20,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.fastpilot.ui.ScreenDispatchers
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.withContext
 
 data class RadioUiState(
     val isLoading: Boolean = true,
@@ -43,41 +46,42 @@ class RadioViewModel(
 
     init { loadSessions() }
 
+    // Picking the session (and the jobs it starts) stays on the main thread; the loading runs in the background
     private fun loadSessions() {
         viewModelScope.launch {
             try {
-                val all = sessionRepo.getRecentSessions()
-                _uiState.value = _uiState.value.copy(sessions = all, isLoading = false)
+                val all = withContext(ScreenDispatchers.background) { sessionRepo.getRecentSessions() }
+                _uiState.update { it.copy(sessions = all, isLoading = false) }
                 val auto = all.defaultSession()
                 auto?.let { selectSession(it) }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message))
+                _uiState.update { it.copy(isLoading = false, error = UiError(ErrorKind.SESSIONS, e.message)) }
             }
         }
     }
 
     fun selectSession(session: Session) {
         liveJob?.cancel()
-        _uiState.value = _uiState.value.copy(
+        _uiState.update { it.copy(
             selectedSession = session, isLoading = true,
             radios = emptyList(), selectedDriver = null, error = null
-        )
-        liveJob = viewModelScope.launch {
+        ) }
+        liveJob = viewModelScope.launch(ScreenDispatchers.background) {
             try {
                 val drivers = driverRepo.getDriversBySession(session.sessionKey)
                 val radios = radioRepo.getTeamRadio(session.sessionKey)
-                _uiState.value = _uiState.value.copy(
+                _uiState.update { it.copy(
                     drivers = drivers, radios = radios, isLoading = false
-                )
+                ) }
                 // Live session: new messages are fetched every 15 s while it lasts
                 while (LiveSessionDetector.isLive(session)) {
                     delay(LivePollingManager.TEAM_RADIO_POLL_MS)
                     try {
                         // Fetched before reading the state, which may change during the request
                         val radios = radioRepo.getTeamRadio(session.sessionKey)
-                        _uiState.value = _uiState.value.copy(radios = radios)
+                        _uiState.update { it.copy(radios = radios) }
                     } catch (e: kotlinx.coroutines.CancellationException) {
                         throw e
                     } catch (_: Exception) { /* retry on next poll */ }
@@ -85,14 +89,14 @@ class RadioViewModel(
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
+                _uiState.update { it.copy(
                     isLoading = false, error = UiError(ErrorKind.RADIO, e.message)
-                )
+                ) }
             }
         }
     }
 
     fun filterByDriver(driver: Driver?) {
-        _uiState.value = _uiState.value.copy(selectedDriver = driver)
+        _uiState.update { it.copy(selectedDriver = driver) }
     }
 }

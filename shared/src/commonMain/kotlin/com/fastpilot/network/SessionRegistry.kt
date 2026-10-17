@@ -2,6 +2,7 @@ package com.fastpilot.network
 
 import com.fastpilot.domain.usecase.LiveSessionDetector
 import com.fastpilot.model.Session
+import kotlin.concurrent.Volatile
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.time.Duration.Companion.hours
@@ -18,6 +19,8 @@ class SessionRegistry {
         val FINAL_AFTER_END = 1.hours
     }
 
+    // Read from any thread; written only by SessionRepository, one call at a time (memoryMutex)
+    @Volatile
     private var sessions: Map<Int, Session> = emptyMap()
 
     fun track(list: List<Session>) {

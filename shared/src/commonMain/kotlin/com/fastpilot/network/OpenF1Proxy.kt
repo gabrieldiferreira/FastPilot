@@ -12,3 +12,10 @@ package com.fastpilot.network
  * OpenF1 makes it free, after the session.
  */
 const val OPENF1_PROXY_URL = ""
+
+/**
+ * The Jolpica proxy (Vercel function api/jolpica.mjs): Jolpica answers through the Vercel CDN,
+ * which keeps each answer and refreshes it in the background, so the standings do not wait for
+ * a slow Jolpica. Absolute, as the mobile apps use it too.
+ */
+const val JOLPICA_PROXY_URL = "https://fastpilot.vercel.app/api/jolpica"
