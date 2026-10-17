@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "175607825703",
-    "project_id": "fastpilot",
-    "storage_bucket": "fastpilot.firebasestorage.app"
+    "project_number": "827133891918",
+    "project_id": "fastpilot-510914",
+    "storage_bucket": "fastpilot-510914.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:175607825703:android:172f9feec38ac95f669502",
+        "mobilesdk_app_id": "1:827133891918:android:dd1f7010002d05a0a7fa1f",
         "android_client_info": {
           "package_name": "com.fastpilot.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "175607825703-7g0s7fa5voadbgtl1vv72nib157f3kvl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fastpilot.app",
-            "certificate_hash": "6f837821a9c16e7c4536796424076c1c37209afd"
-          }
-        },
-        {
-          "client_id": "175607825703-ut4dnpbhr53fiq8al078pm9dcv4t17tl.apps.googleusercontent.com",
+          "client_id": "827133891918-qpa53ino1orbn66vshmu742pffdnruqc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAuVRDfkJgpvetydd42pVSYAXs7z0JtfUU"
+          "current_key": "AIzaSyBRpkha6wakG2SFZVvEr8cuyB3zLZ1WO9I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "175607825703-ut4dnpbhr53fiq8al078pm9dcv4t17tl.apps.googleusercontent.com",
+              "client_id": "827133891918-qpa53ino1orbn66vshmu742pffdnruqc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
