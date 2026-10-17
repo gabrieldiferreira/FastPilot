@@ -62,9 +62,10 @@ fun DuelScreen(
         // ── Driver Selectors ────────────────────────────────────
         if (uiState.drivers.isNotEmpty()) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                // A driver picked on one side is not offered on the other: a duel needs two drivers
                 DriverSelector(
                     label = strings.driverN(1),
-                    drivers = uiState.drivers,
+                    drivers = uiState.drivers.filter { it.driverNumber != uiState.driver2?.driverNumber },
                     selectedDriver = uiState.driver1,
                     onDriverSelected = { viewModel.selectDriver1(it) },
                     modifier = Modifier.weight(1f)
@@ -73,7 +74,7 @@ fun DuelScreen(
                     modifier = Modifier.align(Alignment.CenterVertically))
                 DriverSelector(
                     label = strings.driverN(2),
-                    drivers = uiState.drivers,
+                    drivers = uiState.drivers.filter { it.driverNumber != uiState.driver1?.driverNumber },
                     selectedDriver = uiState.driver2,
                     onDriverSelected = { viewModel.selectDriver2(it) },
                     modifier = Modifier.weight(1f)

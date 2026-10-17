@@ -148,4 +148,20 @@ class DuelViewModelTest {
 
         assertNull(vm.uiState.value.lapDelta)
     }
+
+    @Test
+    fun `the same driver cannot be picked on both sides`() = runTest(dispatcher) {
+        val vm = viewModel()
+        selectBothDrivers(vm)
+        val drivers = vm.uiState.value.drivers
+
+        vm.selectDriver2(drivers.first { it.driverNumber == 1 }) // already driver 1
+        vm.selectDriver1(drivers.first { it.driverNumber == 44 }) // already driver 2
+        advanceUntilIdle()
+
+        val state = vm.uiState.value
+        assertEquals(1, state.driver1?.driverNumber)
+        assertEquals(44, state.driver2?.driverNumber)
+        assertNotNull(state.duelData)
+    }
 }

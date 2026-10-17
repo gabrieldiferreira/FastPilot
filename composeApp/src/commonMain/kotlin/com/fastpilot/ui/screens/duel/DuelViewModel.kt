@@ -81,12 +81,16 @@ class DuelViewModel(
         }
     }
 
+    /** Ignored when [driver] is already the other driver: a driver cannot duel with himself. */
     fun selectDriver1(driver: Driver) {
+        if (driver.driverNumber == _uiState.value.driver2?.driverNumber) return
         _uiState.update { it.copy(driver1 = driver, duelData = null, lapDelta = null, lapDeltaUnavailable = false) }
         tryComputeDuel()
     }
 
+    /** Ignored when [driver] is already the other driver: a driver cannot duel with himself. */
     fun selectDriver2(driver: Driver) {
+        if (driver.driverNumber == _uiState.value.driver1?.driverNumber) return
         _uiState.update { it.copy(driver2 = driver, duelData = null, lapDelta = null, lapDeltaUnavailable = false) }
         tryComputeDuel()
     }
