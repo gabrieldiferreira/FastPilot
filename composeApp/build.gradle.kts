@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
@@ -121,7 +123,23 @@ android {
         versionName = "1.0.0"
     }
 
+    // Upload key for Google Play, read from keystore.properties (never committed; see
+    // keystore.properties.example). Without that file the release build comes out unsigned.
+    val keystoreProperties = rootProject.file("keystore.properties").takeIf { it.exists() }
+        ?.let { file -> Properties().apply { file.inputStream().use { load(it) } } }
+    if (keystoreProperties != null) {
+        signingConfigs.create("release") {
+            storeFile = file(keystoreProperties.getProperty("storeFile").replaceFirst("~", System.getProperty("user.home")))
+            storePassword = keystoreProperties.getProperty("storePassword")
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+        }
+    }
+
     buildTypes {
+        getByName("release") {
+            if (keystoreProperties != null) signingConfig = signingConfigs.getByName("release")
+        }
         // Release build installable without a release key, used for the performance measurements
         create("benchmark") {
             initWith(getByName("release"))

@@ -19,6 +19,11 @@ xcuserdata/
 # Android developer verification
 adi-registration.properties
 
+# Upload key passwords (keystore.properties.example shows the format)
+keystore.properties
+*.jks
+*.keystore
+
 # Benchmark scratch (metrics/performance keeps only the published round)
 metrics/performance/_*
 
