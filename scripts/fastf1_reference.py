@@ -112,6 +112,27 @@ def driver_metrics(laps: pd.DataFrame) -> dict:
     }
 
 
+def _delta_time_383(reference_lap, compare_lap):
+    """fastf1.utils.delta_time as in FastF1 3.8.3 (MIT licence), removed in FastF1 3.9."""
+    ref = reference_lap.get_car_data(interpolate_edges=True).add_distance()
+    comp = compare_lap.get_car_data(interpolate_edges=True).add_distance()
+
+    def mini_pro(stream):
+        dstream_start = stream[1] - stream[0]
+        dstream_end = stream[-1] - stream[-2]
+        return np.concatenate([[stream[0] - dstream_start], stream, [stream[-1] + dstream_end]])
+
+    ltime = mini_pro(comp["Time"].dt.total_seconds().to_numpy())
+    multiplier = ref.Distance.iat[-1] / comp.Distance.iat[-1]
+    ldistance = mini_pro(comp["Distance"].to_numpy()) * multiplier
+    lap_time = np.interp(ref["Distance"], ldistance, ltime)
+    return lap_time - ref["Time"].dt.total_seconds(), ref, comp
+
+
+# FastF1 >= 3.9 needs an F1 TV account for the timing archive and no longer has utils.delta_time
+delta_time = getattr(fastf1.utils, "delta_time", _delta_time_383)
+
+
 def lap_deltas(session, top3: list) -> list:
     """delta_time between the fastest laps of each pair of the top-3 finishers, on a normalised distance grid."""
     fastest = {n: session.laps.pick_drivers(n).pick_fastest() for n in top3}
@@ -119,7 +140,7 @@ def lap_deltas(session, top3: list) -> list:
     for ref, cmp_ in [(top3[0], top3[1]), (top3[0], top3[2]), (top3[1], top3[2])]:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            delta, ref_tel, _ = fastf1.utils.delta_time(fastest[ref], fastest[cmp_])
+            delta, ref_tel, _ = delta_time(fastest[ref], fastest[cmp_])
         distance = ref_tel["Distance"].to_numpy()
         out.append({
             "reference": int(ref),

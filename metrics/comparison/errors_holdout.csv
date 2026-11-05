@@ -1,0 +1,279 @@
+race,metric,item,fastpilot,fastf1,abs_error,ape_percent
+2023_japan,clean_pace_mean,#1,97.2691,97.26913,3e-05,3e-05
+2023_japan,clean_pace_median,#1,97.5955,97.5955,0.0,0.0
+2023_japan,theoretical_best,#1,94.183,94.183,0.0,0.0
+2023_japan,best_lap,#1,94.183,94.183,0.0,0.0
+2023_japan,degradation_slope,#1 stint 1 MEDIUM,0.13685,0.13685,0.0,0.00047
+2023_japan,degradation_slope,#1 stint 2 MEDIUM,0.01161,0.01161,0.0,0.00453
+2023_japan,degradation_slope,#1 stint 3 HARD,0.13615,0.13615,0.0,0.00262
+2023_japan,clean_pace_mean,#2,100.4628,100.46283,3e-05,3e-05
+2023_japan,clean_pace_median,#2,100.5935,100.5935,0.0,0.0
+2023_japan,theoretical_best,#2,98.848,98.848,0.0,0.0
+2023_japan,best_lap,#2,98.848,98.848,0.0,0.0
+2023_japan,degradation_slope,#2 stint 3 MEDIUM,0.08574,0.08574,0.0,0.0001
+2023_japan,clean_pace_mean,#4,97.5526,97.55263,3e-05,3e-05
+2023_japan,clean_pace_median,#4,97.7425,97.7425,0.0,0.0
+2023_japan,theoretical_best,#4,95.247,95.247,0.0,0.0
+2023_japan,best_lap,#4,95.247,95.247,0.0,0.0
+2023_japan,degradation_slope,#4 stint 1 MEDIUM,0.12868,0.12868,0.0,0.0031
+2023_japan,degradation_slope,#4 stint 2 HARD,0.0333,0.0333,0.0,0.00294
+2023_japan,degradation_slope,#4 stint 3 HARD,0.095,0.095,0.0,0.0031
+2023_japan,clean_pace_mean,#10,98.7004,98.70036,4e-05,4e-05
+2023_japan,clean_pace_median,#10,98.656,98.656,0.0,0.0
+2023_japan,theoretical_best,#10,96.371,96.371,0.0,0.0
+2023_japan,best_lap,#10,96.371,96.371,0.0,0.0
+2023_japan,degradation_slope,#10 stint 1 MEDIUM,0.01901,0.01901,0.0,0.01336
+2023_japan,degradation_slope,#10 stint 2 HARD,0.03858,0.03858,0.0,0.00627
+2023_japan,degradation_slope,#10 stint 3 HARD,0.20205,0.20205,0.0,0.00023
+2023_japan,clean_pace_mean,#11,100.384,100.384,0.0,0.0
+2023_japan,clean_pace_median,#11,100.466,100.466,0.0,0.0
+2023_japan,theoretical_best,#11,99.402,99.402,0.0,0.0
+2023_japan,best_lap,#11,99.704,99.704,0.0,0.0
+2023_japan,degradation_slope,#11 stint 2 HARD,0.10839,0.10839,0.0,0.00264
+2023_japan,clean_pace_mean,#14,98.7284,98.72844,4e-05,4e-05
+2023_japan,clean_pace_median,#14,98.637,98.637,0.0,0.0
+2023_japan,theoretical_best,#14,96.874,96.874,0.0,0.0
+2023_japan,best_lap,#14,97.203,97.203,0.0,0.0
+2023_japan,degradation_slope,#14 stint 1 SOFT,0.06129,0.06129,0.0,0.00699
+2023_japan,degradation_slope,#14 stint 2 HARD,0.27859,0.27859,0.0,0.00141
+2023_japan,degradation_slope,#14 stint 3 HARD,0.07091,0.07091,0.0,0.00036
+2023_japan,clean_pace_mean,#16,98.2019,98.20195,5e-05,5e-05
+2023_japan,clean_pace_median,#16,98.1675,98.1675,0.0,0.0
+2023_japan,theoretical_best,#16,96.343,96.343,0.0,0.0
+2023_japan,best_lap,#16,96.362,96.362,0.0,0.0
+2023_japan,degradation_slope,#16 stint 1 MEDIUM,0.0729,0.0729,0.0,0.00038
+2023_japan,degradation_slope,#16 stint 2 MEDIUM,0.04913,0.04913,0.0,0.00436
+2023_japan,degradation_slope,#16 stint 3 HARD,0.07278,0.07278,0.0,0.00684
+2023_japan,clean_pace_mean,#18,99.9102,99.91017,3e-05,3e-05
+2023_japan,clean_pace_median,#18,100.067,100.067,0.0,0.0
+2023_japan,theoretical_best,#18,98.948,98.948,0.0,0.0
+2023_japan,best_lap,#18,99.05,99.05,0.0,0.0
+2023_japan,degradation_slope,#18 stint 1 SOFT,0.01039,0.01039,0.0,0.02749
+2023_japan,degradation_slope,#18 stint 2 MEDIUM,0.0533,0.0533,0.0,0.0
+2023_japan,clean_pace_mean,#20,99.3126,99.31264,4e-05,4e-05
+2023_japan,clean_pace_median,#20,99.268,99.268,0.0,0.0
+2023_japan,theoretical_best,#20,97.438,97.438,0.0,0.0
+2023_japan,best_lap,#20,97.842,97.842,0.0,0.0
+2023_japan,degradation_slope,#20 stint 1 MEDIUM,0.10739,0.10739,0.0,0.00266
+2023_japan,degradation_slope,#20 stint 2 HARD,0.12245,0.12245,0.0,0.0024
+2023_japan,degradation_slope,#20 stint 3 HARD,0.07719,0.07719,0.0,0.00614
+2023_japan,clean_pace_mean,#22,99.3074,99.30739,1e-05,1e-05
+2023_japan,clean_pace_median,#22,99.2865,99.2865,0.0,0.0
+2023_japan,theoretical_best,#22,97.555,97.555,0.0,0.0
+2023_japan,best_lap,#22,97.768,97.768,0.0,0.0
+2023_japan,degradation_slope,#22 stint 1 SOFT,-0.0835,-0.0835,0.0,0.0
+2023_japan,degradation_slope,#22 stint 2 MEDIUM,0.09389,0.09389,0.0,0.00348
+2023_japan,degradation_slope,#22 stint 3 HARD,0.06495,0.06495,0.0,0.007
+2023_japan,clean_pace_mean,#23,100.4859,100.48589,1e-05,1e-05
+2023_japan,clean_pace_median,#23,100.339,100.339,0.0,0.0
+2023_japan,theoretical_best,#23,99.128,99.128,0.0,0.0
+2023_japan,best_lap,#23,99.185,99.185,0.0,0.0
+2023_japan,degradation_slope,#23 stint 2 MEDIUM,0.04139,0.04139,0.0,0.0069
+2023_japan,degradation_slope,#23 stint 3 SOFT,0.07161,0.07161,0.0,0.00127
+2023_japan,clean_pace_mean,#24,99.2572,99.25724,4e-05,4e-05
+2023_japan,clean_pace_median,#24,98.8775,98.8775,0.0,0.0
+2023_japan,theoretical_best,#24,97.743,97.743,0.0,0.0
+2023_japan,best_lap,#24,97.791,97.791,0.0,0.0
+2023_japan,degradation_slope,#24 stint 2 SOFT,0.0808,0.0808,0.0,0.0
+2023_japan,degradation_slope,#24 stint 3 SOFT,0.06911,0.06911,0.0,0.00197
+2023_japan,degradation_slope,#24 stint 4 HARD,0.00366,0.00366,0.0,0.04414
+2023_japan,clean_pace_mean,#27,98.7891,98.78906,4e-05,4e-05
+2023_japan,clean_pace_median,#27,98.605,98.605,0.0,0.0
+2023_japan,theoretical_best,#27,97.019,97.019,0.0,0.0
+2023_japan,best_lap,#27,97.25,97.25,0.0,0.0
+2023_japan,degradation_slope,#27 stint 1 SOFT,-0.1715,-0.1715,0.0,0.0
+2023_japan,degradation_slope,#27 stint 2 MEDIUM,0.13962,0.13962,0.0,0.00358
+2023_japan,degradation_slope,#27 stint 3 HARD,0.04205,0.04205,0.0,0.00131
+2023_japan,degradation_slope,#27 stint 4 MEDIUM,0.00445,0.00445,0.0,0.111
+2023_japan,clean_pace_mean,#31,99.2037,99.20366,4e-05,4e-05
+2023_japan,clean_pace_median,#31,98.758,98.758,0.0,0.0
+2023_japan,theoretical_best,#31,97.297,97.297,0.0,0.0
+2023_japan,best_lap,#31,97.398,97.398,0.0,0.0
+2023_japan,degradation_slope,#31 stint 2 HARD,0.01929,0.01929,0.0,0.01872
+2023_japan,degradation_slope,#31 stint 3 HARD,0.04282,0.04282,0.0,0.00406
+2023_japan,clean_pace_mean,#40,99.2168,99.21682,2e-05,2e-05
+2023_japan,clean_pace_median,#40,98.8105,98.8105,0.0,0.0
+2023_japan,theoretical_best,#40,98.03,98.03,0.0,0.0
+2023_japan,best_lap,#40,98.267,98.267,0.0,0.0
+2023_japan,degradation_slope,#40 stint 1 SOFT,0.1432,0.1432,0.0,0.0
+2023_japan,degradation_slope,#40 stint 2 MEDIUM,0.1562,0.1562,0.0,0.00044
+2023_japan,degradation_slope,#40 stint 3 HARD,0.00207,0.00207,0.0,0.02064
+2023_japan,clean_pace_mean,#44,98.2199,98.2199,0.0,0.0
+2023_japan,clean_pace_median,#44,98.335,98.335,0.0,0.0
+2023_japan,theoretical_best,#44,95.611,95.611,0.0,0.0
+2023_japan,best_lap,#44,95.611,95.611,0.0,0.0
+2023_japan,degradation_slope,#44 stint 1 MEDIUM,-0.02373,-0.02373,0.0,0.02062
+2023_japan,degradation_slope,#44 stint 2 HARD,0.02645,0.02645,0.0,0.01668
+2023_japan,degradation_slope,#44 stint 3 HARD,0.10038,0.10038,0.0,0.00286
+2023_japan,clean_pace_mean,#55,98.3357,98.33568,2e-05,3e-05
+2023_japan,clean_pace_median,#55,98.611,98.611,0.0,0.0
+2023_japan,theoretical_best,#55,96.08,96.08,0.0,0.0
+2023_japan,best_lap,#55,96.187,96.187,0.0,0.0
+2023_japan,degradation_slope,#55 stint 1 MEDIUM,0.04546,0.04546,0.0,0.00939
+2023_japan,degradation_slope,#55 stint 2 MEDIUM,0.0412,0.0412,0.0,0.01202
+2023_japan,degradation_slope,#55 stint 3 HARD,0.12455,0.12455,0.0,0.00309
+2023_japan,clean_pace_mean,#63,98.859,98.85895,5e-05,5e-05
+2023_japan,clean_pace_median,#63,98.9615,98.9615,0.0,0.0
+2023_japan,theoretical_best,#63,97.434,97.434,0.0,0.0
+2023_japan,best_lap,#63,97.653,97.653,0.0,0.0
+2023_japan,degradation_slope,#63 stint 1 MEDIUM,-0.00389,-0.00389,0.0,0.07661
+2023_japan,degradation_slope,#63 stint 2 HARD,0.05751,0.05751,0.0,0.0026
+2023_japan,clean_pace_mean,#77,122.755,122.755,0.0,0.0
+2023_japan,clean_pace_median,#77,122.755,122.755,0.0,0.0
+2023_japan,theoretical_best,#77,102.11,102.11,0.0,0.0
+2023_japan,best_lap,#77,106.852,106.852,0.0,0.0
+2023_japan,clean_pace_mean,#81,98.116,98.116,0.0,0.0
+2023_japan,clean_pace_median,#81,98.458,98.458,0.0,0.0
+2023_japan,theoretical_best,#81,96.087,96.087,0.0,0.0
+2023_japan,best_lap,#81,96.328,96.328,0.0,0.0
+2023_japan,degradation_slope,#81 stint 1 MEDIUM,0.13624,0.13624,0.0,0.0014
+2023_japan,degradation_slope,#81 stint 2 HARD,0.00215,0.00215,0.0,0.01749
+2023_japan,degradation_slope,#81 stint 3 HARD,0.03348,0.03348,0.0,0.00849
+2023_japan,lap_delta_curve,#1 L39 vs #4 L40,,,0.23142,
+2023_japan,lap_delta_final,#1 L39 vs #4 L40,1.064,1.064,0.0,
+2023_japan,lap_delta_curve,#1 L39 vs #81 L38,,,0.0588,
+2023_japan,lap_delta_final,#1 L39 vs #81 L38,2.145,2.145,0.0,
+2023_japan,lap_delta_curve,#4 L40 vs #81 L38,,,0.22268,
+2023_japan,lap_delta_final,#4 L40 vs #81 L38,1.081,1.081,0.0,
+2024_las_vegas,clean_pace_mean,#1,97.7307,97.73071,1e-05,1e-05
+2024_las_vegas,clean_pace_median,#1,97.678,97.678,0.0,0.0
+2024_las_vegas,theoretical_best,#1,95.666,95.666,0.0,0.0
+2024_las_vegas,best_lap,#1,96.248,96.248,0.0,0.0
+2024_las_vegas,degradation_slope,#1 stint 1 MEDIUM,0.05415,0.05415,0.0,0.0
+2024_las_vegas,degradation_slope,#1 stint 2 HARD,-0.04761,-0.04761,0.0,0.00208
+2024_las_vegas,degradation_slope,#1 stint 3 HARD,-0.04546,-0.04546,0.0,0.00415
+2024_las_vegas,clean_pace_mean,#4,97.9645,97.96449,1e-05,1e-05
+2024_las_vegas,clean_pace_median,#4,98.166,98.166,0.0,0.0
+2024_las_vegas,theoretical_best,#4,94.345,94.345,0.0,0.0
+2024_las_vegas,best_lap,#4,94.876,94.876,0.0,0.0
+2024_las_vegas,degradation_slope,#4 stint 1 MEDIUM,0.09964,0.09964,0.0,0.00287
+2024_las_vegas,degradation_slope,#4 stint 2 HARD,-0.02738,-0.02738,0.0,0.00256
+2024_las_vegas,degradation_slope,#4 stint 3 HARD,-0.12551,-0.12551,0.0,0.00211
+2024_las_vegas,clean_pace_mean,#10,99.7676,99.76764,4e-05,4e-05
+2024_las_vegas,clean_pace_median,#10,99.635,99.635,0.0,0.0
+2024_las_vegas,theoretical_best,#10,98.167,98.167,0.0,0.0
+2024_las_vegas,best_lap,#10,98.314,98.314,0.0,0.0
+2024_las_vegas,degradation_slope,#10 stint 1 MEDIUM,0.28249,0.28249,0.0,0.00067
+2024_las_vegas,degradation_slope,#10 stint 2 HARD,0.8135,0.8135,0.0,0.0
+2024_las_vegas,clean_pace_mean,#11,98.447,98.44705,5e-05,5e-05
+2024_las_vegas,clean_pace_median,#11,98.25,98.25,0.0,0.0
+2024_las_vegas,theoretical_best,#11,96.15,96.15,0.0,0.0
+2024_las_vegas,best_lap,#11,96.326,96.326,0.0,0.0
+2024_las_vegas,degradation_slope,#11 stint 1 HARD,0.03562,0.03562,0.0,0.00602
+2024_las_vegas,degradation_slope,#11 stint 2 MEDIUM,0.02777,0.02777,0.0,0.01701
+2024_las_vegas,degradation_slope,#11 stint 3 HARD,-0.03566,-0.03566,0.0,0.0088
+2024_las_vegas,clean_pace_mean,#14,98.6583,98.65827,3e-05,3e-05
+2024_las_vegas,clean_pace_median,#14,98.513,98.513,0.0,0.0
+2024_las_vegas,theoretical_best,#14,96.369,96.369,0.0,0.0
+2024_las_vegas,best_lap,#14,96.553,96.553,0.0,0.0
+2024_las_vegas,degradation_slope,#14 stint 2 HARD,0.04836,0.04836,0.0,0.00461
+2024_las_vegas,degradation_slope,#14 stint 3 HARD,-0.00077,-0.00077,0.0,0.2988
+2024_las_vegas,clean_pace_mean,#16,97.6339,97.63393,3e-05,3e-05
+2024_las_vegas,clean_pace_median,#16,97.448,97.448,0.0,0.0
+2024_las_vegas,theoretical_best,#16,95.103,95.103,0.0,0.0
+2024_las_vegas,best_lap,#16,95.674,95.674,0.0,0.0
+2024_las_vegas,degradation_slope,#16 stint 1 MEDIUM,0.39389,0.39389,0.0,0.00073
+2024_las_vegas,degradation_slope,#16 stint 2 HARD,-0.08097,-0.08097,0.0,0.00548
+2024_las_vegas,degradation_slope,#16 stint 3 HARD,-0.02514,-0.02514,0.0,0.0055
+2024_las_vegas,clean_pace_mean,#18,98.5973,98.59729,1e-05,1e-05
+2024_las_vegas,clean_pace_median,#18,98.598,98.598,0.0,0.0
+2024_las_vegas,theoretical_best,#18,97.016,97.016,0.0,0.0
+2024_las_vegas,best_lap,#18,97.179,97.179,0.0,0.0
+2024_las_vegas,degradation_slope,#18 stint 1 MEDIUM,-0.41464,-0.41464,0.0,0.00069
+2024_las_vegas,degradation_slope,#18 stint 2 HARD,-0.00994,-0.00994,0.0,0.03749
+2024_las_vegas,degradation_slope,#18 stint 3 HARD,-0.05076,-0.05076,0.0,0.00461
+2024_las_vegas,clean_pace_mean,#20,99.0687,99.0687,0.0,0.0
+2024_las_vegas,clean_pace_median,#20,98.923,98.923,0.0,0.0
+2024_las_vegas,theoretical_best,#20,96.466,96.466,0.0,0.0
+2024_las_vegas,best_lap,#20,96.557,96.557,0.0,0.0
+2024_las_vegas,degradation_slope,#20 stint 1 MEDIUM,0.14555,0.14555,0.0,0.0
+2024_las_vegas,degradation_slope,#20 stint 2 HARD,-0.07583,-0.07583,0.0,0.00472
+2024_las_vegas,clean_pace_mean,#22,98.5981,98.59812,2e-05,2e-05
+2024_las_vegas,clean_pace_median,#22,98.49,98.49,0.0,0.0
+2024_las_vegas,theoretical_best,#22,96.714,96.628,0.086,0.089
+2024_las_vegas,best_lap,#22,96.957,96.957,0.0,0.0
+2024_las_vegas,degradation_slope,#22 stint 1 MEDIUM,0.24933,0.24933,0.0,0.00134
+2024_las_vegas,degradation_slope,#22 stint 2 HARD,-0.01359,-0.01359,0.0,0.01299
+2024_las_vegas,degradation_slope,#22 stint 3 HARD,-0.05807,-0.05807,0.0,0.00634
+2024_las_vegas,clean_pace_mean,#23,99.3331,99.33311,1e-05,1e-05
+2024_las_vegas,clean_pace_median,#23,99.211,99.211,0.0,0.0
+2024_las_vegas,theoretical_best,#23,97.746,97.746,0.0,0.0
+2024_las_vegas,best_lap,#23,98.008,98.008,0.0,0.0
+2024_las_vegas,degradation_slope,#23 stint 1 MEDIUM,-0.45036,-0.45036,0.0,0.00063
+2024_las_vegas,degradation_slope,#23 stint 2 HARD,0.02397,0.02397,0.0,0.00321
+2024_las_vegas,clean_pace_mean,#24,98.7641,98.76415,5e-05,5e-05
+2024_las_vegas,clean_pace_median,#24,99.212,99.212,0.0,0.0
+2024_las_vegas,theoretical_best,#24,96.076,96.076,0.0,0.0
+2024_las_vegas,best_lap,#24,96.324,96.324,0.0,0.0
+2024_las_vegas,degradation_slope,#24 stint 1 MEDIUM,0.16925,0.16925,0.0,0.0
+2024_las_vegas,degradation_slope,#24 stint 2 HARD,0.0308,0.0308,0.0,0.01265
+2024_las_vegas,degradation_slope,#24 stint 3 HARD,-0.03915,-0.03915,0.0,0.00912
+2024_las_vegas,clean_pace_mean,#27,98.5643,98.56432,2e-05,2e-05
+2024_las_vegas,clean_pace_median,#27,98.481,98.481,0.0,0.0
+2024_las_vegas,theoretical_best,#27,96.136,96.136,0.0,0.0
+2024_las_vegas,best_lap,#27,96.585,96.585,0.0,0.0
+2024_las_vegas,degradation_slope,#27 stint 1 MEDIUM,0.18081,0.18081,0.0,0.00128
+2024_las_vegas,degradation_slope,#27 stint 2 HARD,0.03718,0.03718,0.0,0.00369
+2024_las_vegas,degradation_slope,#27 stint 3 HARD,-0.0687,-0.0687,0.0,0.0
+2024_las_vegas,clean_pace_mean,#30,99.1276,99.12759,1e-05,1e-05
+2024_las_vegas,clean_pace_median,#30,99.297,99.297,0.0,0.0
+2024_las_vegas,theoretical_best,#30,96.33,96.33,0.0,0.0
+2024_las_vegas,best_lap,#30,96.98,96.98,0.0,0.0
+2024_las_vegas,degradation_slope,#30 stint 1 MEDIUM,0.1253,0.1253,0.0,0.0
+2024_las_vegas,degradation_slope,#30 stint 2 HARD,0.03144,0.03144,0.0,0.01468
+2024_las_vegas,degradation_slope,#30 stint 3 HARD,-0.04215,-0.04215,0.0,0.01079
+2024_las_vegas,clean_pace_mean,#31,99.1855,99.18546,4e-05,4e-05
+2024_las_vegas,clean_pace_median,#31,99.182,99.182,0.0,0.0
+2024_las_vegas,theoretical_best,#31,96.494,96.494,0.0,0.0
+2024_las_vegas,best_lap,#31,96.511,96.511,0.0,0.0
+2024_las_vegas,degradation_slope,#31 stint 1 MEDIUM,0.17342,0.17342,0.0,0.00192
+2024_las_vegas,degradation_slope,#31 stint 3 HARD,0.0335,0.0335,0.0,0.00361
+2024_las_vegas,degradation_slope,#31 stint 4 SOFT,0.526,0.526,0.0,0.0
+2024_las_vegas,clean_pace_mean,#43,98.7806,98.78063,3e-05,3e-05
+2024_las_vegas,clean_pace_median,#43,98.333,98.333,0.0,0.0
+2024_las_vegas,theoretical_best,#43,96.526,96.526,0.0,0.0
+2024_las_vegas,best_lap,#43,96.867,96.867,0.0,0.0
+2024_las_vegas,degradation_slope,#43 stint 1 HARD,0.12909,0.12909,0.0,0.00349
+2024_las_vegas,degradation_slope,#43 stint 2 MEDIUM,-0.1692,-0.1692,0.0,0.00141
+2024_las_vegas,degradation_slope,#43 stint 3 HARD,-0.01389,-0.01389,0.0,0.01907
+2024_las_vegas,clean_pace_mean,#44,97.4881,97.48812,2e-05,2e-05
+2024_las_vegas,clean_pace_median,#44,97.275,97.275,0.0,0.0
+2024_las_vegas,theoretical_best,#44,95.092,95.092,0.0,0.0
+2024_las_vegas,best_lap,#44,95.48,95.48,0.0,0.0
+2024_las_vegas,degradation_slope,#44 stint 1 MEDIUM,0.00595,0.00595,0.0,0.07634
+2024_las_vegas,degradation_slope,#44 stint 2 HARD,-0.06232,-0.06232,0.0,0.00292
+2024_las_vegas,degradation_slope,#44 stint 3 HARD,0.01192,0.01192,0.0,0.00152
+2024_las_vegas,clean_pace_mean,#55,97.5839,97.58388,2e-05,2e-05
+2024_las_vegas,clean_pace_median,#55,97.524,97.524,0.0,0.0
+2024_las_vegas,theoretical_best,#55,95.263,95.263,0.0,0.0
+2024_las_vegas,best_lap,#55,95.875,95.875,0.0,0.0
+2024_las_vegas,degradation_slope,#55 stint 1 MEDIUM,0.16864,0.16864,0.0,0.00169
+2024_las_vegas,degradation_slope,#55 stint 2 HARD,-0.03053,-0.03053,0.0,0.00193
+2024_las_vegas,degradation_slope,#55 stint 3 HARD,-0.05623,-0.05623,0.0,0.00485
+2024_las_vegas,clean_pace_mean,#63,97.5339,97.5339,0.0,0.0
+2024_las_vegas,clean_pace_median,#63,97.621,97.621,0.0,0.0
+2024_las_vegas,theoretical_best,#63,95.104,95.104,0.0,0.0
+2024_las_vegas,best_lap,#63,95.717,95.717,0.0,0.0
+2024_las_vegas,degradation_slope,#63 stint 1 MEDIUM,-0.02387,-0.02387,0.0,0.01142
+2024_las_vegas,degradation_slope,#63 stint 2 HARD,-0.03171,-0.03171,0.0,0.01305
+2024_las_vegas,degradation_slope,#63 stint 3 HARD,-0.01897,-0.01897,0.0,0.0031
+2024_las_vegas,clean_pace_mean,#77,99.3824,99.38242,2e-05,3e-05
+2024_las_vegas,clean_pace_median,#77,99.475,99.475,0.0,0.0
+2024_las_vegas,theoretical_best,#77,95.88,95.963,0.083,0.08649
+2024_las_vegas,best_lap,#77,96.601,96.601,0.0,0.0
+2024_las_vegas,degradation_slope,#77 stint 1 HARD,0.16261,0.16261,0.0,0.00264
+2024_las_vegas,degradation_slope,#77 stint 2 MEDIUM,0.07201,0.07201,0.0,0.00572
+2024_las_vegas,degradation_slope,#77 stint 3 HARD,-0.00565,-0.00565,0.0,0.02918
+2024_las_vegas,clean_pace_mean,#81,98.2575,98.25754,4e-05,4e-05
+2024_las_vegas,clean_pace_median,#81,98.137,98.137,0.0,0.0
+2024_las_vegas,theoretical_best,#81,96.119,96.119,0.0,0.0
+2024_las_vegas,best_lap,#81,96.598,96.598,0.0,0.0
+2024_las_vegas,degradation_slope,#81 stint 1 MEDIUM,0.22899,0.22899,0.0,0.00083
+2024_las_vegas,degradation_slope,#81 stint 2 HARD,0.04179,0.04179,0.0,0.00289
+2024_las_vegas,degradation_slope,#81 stint 3 HARD,-0.03364,-0.03364,0.0,0.00129
+2024_las_vegas,lap_delta_curve,#63 L46 vs #44 L41,,,0.0651,
+2024_las_vegas,lap_delta_final,#63 L46 vs #44 L41,-0.237,-0.237,0.0,
+2024_las_vegas,lap_delta_curve,#63 L46 vs #55 L44,,,0.11063,
+2024_las_vegas,lap_delta_final,#63 L46 vs #55 L44,0.158,0.158,0.0,
+2024_las_vegas,lap_delta_curve,#44 L41 vs #55 L44,,,0.10965,
+2024_las_vegas,lap_delta_final,#44 L41 vs #55 L44,0.395,0.395,0.0,
