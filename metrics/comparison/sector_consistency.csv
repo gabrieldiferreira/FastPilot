@@ -1,0 +1,31 @@
+race,driver,lap,problem,s1,s2,s3,lap_duration,sum_minus_lap
+2023_bahrain,21,20,setor ausente,,43.332,24.408,99.182,
+2023_bahrain,1,25,setor ausente,,42.344,23.883,97.372,
+2023_bahrain,16,37,setor ausente,,42.385,23.715,97.17,
+2023_bahrain,55,49,setor ausente,,42.49,23.868,97.765,
+2024_monaco,77,56,setor ausente,,39.91,20.813,81.657,
+2024_brazil,27,27,setor ausente,,53.441,28.552,230.215,
+2024_brazil,11,54,setor ausente,,44.342,17.95,83.744,
+2024_brazil,30,62,setor ausente,,43.518,17.971,82.729,
+2023_japan,24,19,setor ausente,,44.583,19.109,99.809,
+2023_japan,31,39,setor ausente,,43.631,18.954,98.026,
+2023_japan,4,53,setor ausente,,43.055,18.896,96.755,
+2024_las_vegas,1,22,setor ausente,,32.843,36.934,97.679,
+2024_las_vegas,22,34,setor ausente,,33.401,36.418,98.088,
+2024_las_vegas,77,38,soma ≠ tempo da volta,27.653,31.876,37.055,97.092,-0.508
+2024_las_vegas,63,39,soma ≠ tempo da volta,27.625,31.804,36.337,96.275,-0.509
+2024_las_vegas,77,40,soma ≠ tempo da volta,29.896,32.362,36.841,99.608,-0.509
+2024_las_vegas,63,41,soma ≠ tempo da volta,27.864,31.735,36.451,96.559,-0.509
+2024_las_vegas,81,41,soma ≠ tempo da volta,27.96,32.278,36.438,97.188,-0.512
+2024_las_vegas,22,44,setor ausente,,32.485,37.377,97.976,
+2024_las_vegas,16,45,soma ≠ tempo da volta,27.647,31.964,35.91,96.031,-0.51
+2024_las_vegas,30,45,soma ≠ tempo da volta,27.778,31.918,36.771,96.98,-0.513
+2024_las_vegas,63,46,soma ≠ tempo da volta,27.305,31.481,36.418,95.717,-0.513
+2024_las_vegas,44,46,soma ≠ tempo da volta,27.327,31.86,36.176,95.877,-0.514
+2024_las_vegas,77,45,soma ≠ tempo da volta,27.66,31.959,36.625,96.762,-0.518
+2024_las_vegas,55,46,soma ≠ tempo da volta,27.399,31.926,36.299,96.139,-0.515
+2024_las_vegas,1,46,soma ≠ tempo da volta,27.674,31.948,36.794,96.929,-0.513
+2024_las_vegas,16,46,soma ≠ tempo da volta,28.033,31.943,35.846,96.333,-0.511
+2024_las_vegas,30,46,soma ≠ tempo da volta,27.83,31.94,36.823,97.106,-0.513
+2024_las_vegas,63,47,soma ≠ tempo da volta,27.52,31.784,36.547,96.36,-0.509
+2024_las_vegas,4,50,soma ≠ tempo da volta,26.777,31.506,36.089,94.876,-0.504
