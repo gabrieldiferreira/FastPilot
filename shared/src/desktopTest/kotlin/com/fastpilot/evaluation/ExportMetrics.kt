@@ -24,7 +24,8 @@ import kotlin.math.roundToLong
  * Runs FastPilot's metric use cases on the recorded fixtures (TCC II, Fase 4) and writes
  * metrics/comparison/fastpilot/<race>.json in the same shape as scripts/fastf1_reference.py.
  *
- * Run from the repository root: ./gradlew :shared:exportMetrics [--args=<output dir>]
+ * Run from the repository root: ./gradlew :shared:exportMetrics [--args="<output dir> [race,race,...]"]
+ * The race list defaults to the five comparison races; the hold-out races are passed explicitly.
  */
 private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 private val prettyJson = Json { prettyPrint = true }
@@ -49,7 +50,8 @@ fun main(args: Array<String>) {
     val theoreticalBest = CalculateTheoreticalBestUseCase()
     val lapDelta = CalculateLapDeltaUseCase()
 
-    for (race in races) {
+    val selected = args.getOrNull(1)?.split(",")?.map { it.trim() } ?: races
+    for (race in selected) {
         val dir = File(root, "$race/openf1")
         val laps = File(dir, "laps.json").decode<List<Lap>>()
         val stints = File(dir, "stints.json").decode<List<Stint>>()

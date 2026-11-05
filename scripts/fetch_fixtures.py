@@ -6,7 +6,7 @@ FastF1 comparison (TCC II, Fase 4) and stores them under fixtures/.
 Recorded responses make the evaluation reproducible and independent of API
 availability (TCC I, risk #2). Re-run with --force to refresh existing files.
 
-Usage: python3 scripts/fetch_fixtures.py [--force]
+Usage: python3 scripts/fetch_fixtures.py [--force] [--holdout]
 """
 import json
 import sys
@@ -27,6 +27,13 @@ RACES = [
     ("2023_singapore", 9165, 2023, 15),   # safety cars
     ("2024_monaco", 9523, 2024, 8),       # few overtakes
     ("2024_brazil", 9636, 2024, 21),      # rain + varied strategy
+]
+
+# Hold-out races, not used to tune the lap filters: in each season, the round after the last race
+# of RACES. Fetched only with --holdout.
+HOLDOUT_RACES = [
+    ("2023_japan", 9173, 2023, 16),       # round after Singapore 2023
+    ("2024_las_vegas", 9644, 2024, 22),   # round after São Paulo 2024
 ]
 
 # Everything the four metrics need; full car_data/location are left out (tens of MB per race)
@@ -114,7 +121,7 @@ def save_fastest_lap_locations(base: Path, session_key: int, force: bool, top: i
 
 def main():
     force = "--force" in sys.argv
-    for folder, session_key, season, rnd in RACES:
+    for folder, session_key, season, rnd in (HOLDOUT_RACES if "--holdout" in sys.argv else RACES):
         print(f"{folder} (session_key={session_key}, round={rnd})")
         base = ROOT / folder
         for endpoint in OPENF1_ENDPOINTS:

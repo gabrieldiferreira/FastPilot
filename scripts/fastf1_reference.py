@@ -15,10 +15,13 @@ TCC I §4.7, implemented with FastF1's own data and filters:
 
 Usage:
   python3 -m venv ~/.venvs/fastpilot-fastf1 && ~/.venvs/fastpilot-fastf1/bin/pip install fastf1
-  ~/.venvs/fastpilot-fastf1/bin/python scripts/fastf1_reference.py
+  ~/.venvs/fastpilot-fastf1/bin/python scripts/fastf1_reference.py [--holdout]
+Since 15 Oct 2026 the F1 live timing archive requires an F1 TV account: FastF1 >= 3.9 with
+F1_USERNAME/F1_PASSWORD (the five comparison races were fetched on 6 Oct 2026 with FastF1 3.8.3).
 Writes metrics/comparison/fastf1/<race>.json (FastF1 cache in ~/.cache/fastf1).
 """
 import json
+import sys
 import warnings
 from pathlib import Path
 
@@ -37,6 +40,12 @@ RACES = [
     ("2023_singapore", 2023, "Singapore"),
     ("2024_monaco", 2024, "Monaco"),
     ("2024_brazil", 2024, "São Paulo"),
+]
+
+# Hold-out races (HOLDOUT_RACES in scripts/fetch_fixtures.py), only with --holdout
+HOLDOUT_RACES = [
+    ("2023_japan", 2023, "Japan"),
+    ("2024_las_vegas", 2024, "Las Vegas"),
 ]
 
 NEUTRALISED = set("4567")  # SC, red flag, VSC, VSC ending
@@ -132,7 +141,7 @@ def main():
     fastf1.set_log_level("WARNING")
     OUT.mkdir(parents=True, exist_ok=True)
 
-    for folder, year, event in RACES:
+    for folder, year, event in (HOLDOUT_RACES if "--holdout" in sys.argv else RACES):
         print(f"{folder}: loading {year} {event}")
         session = fastf1.get_session(year, event, "R")
         session.load(laps=True, telemetry=True, weather=False, messages=False)

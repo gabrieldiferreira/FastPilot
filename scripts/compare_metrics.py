@@ -16,7 +16,7 @@ Error measures:
 Stints are paired by driver, compound and the largest overlap of their lap ranges (OpenF1 and
 FastF1 number stints differently in some races).
 
-Usage: python3 scripts/compare_metrics.py [--label NAME] [--fastpilot DIR] [--out NAME]
+Usage: python3 scripts/compare_metrics.py [--label NAME] [--fastpilot DIR] [--out NAME] [--holdout]
   e.g. --fastpilot metrics/comparison/fastpilot_baseline --out baseline
 """
 import csv
@@ -28,6 +28,10 @@ from statistics import mean, median
 ROOT = Path(__file__).resolve().parent.parent
 BASE = ROOT / "metrics" / "comparison"
 RACES = ["2023_bahrain", "2023_belgium", "2023_singapore", "2024_monaco", "2024_brazil"]
+# Hold-out races, not used to tune the lap filters (see scripts/fetch_fixtures.py)
+HOLDOUT_RACES = ["2023_japan", "2024_las_vegas"]
+if "--holdout" in sys.argv:
+    RACES = HOLDOUT_RACES
 SCALAR_METRICS = [
     ("clean_pace_mean", "Ritmo limpo (média)"),
     ("clean_pace_median", "Ritmo limpo (mediana)"),
