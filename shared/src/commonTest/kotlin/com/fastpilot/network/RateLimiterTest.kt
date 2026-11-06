@@ -25,7 +25,7 @@ class RateLimiterTest {
     }
 
     @Test
-    fun `the newest waiting request is served first, so a new screen does not wait for an old backlog`() = runTest {
+    fun `the newest waiting request is served first so a new screen does not wait for an old backlog`() = runTest {
         val limiter = RateLimiter(permits = 1, windowMs = 1_000, timeSource = testTimeSource)
         limiter.acquire() // quota used at 0
         val startedAt = mutableMapOf<String, Long>()

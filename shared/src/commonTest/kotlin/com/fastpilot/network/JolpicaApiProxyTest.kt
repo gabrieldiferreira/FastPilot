@@ -30,7 +30,7 @@ class JolpicaApiProxyTest {
     )
 
     @Test
-    fun `standings come through the proxy, which asks Jolpica for the given path`() = runTest {
+    fun `standings come through the proxy which asks Jolpica for the given path`() = runTest {
         var path: String? = null
         val api = JolpicaApi(
             client = HttpClient(MockEngine { request ->
@@ -48,7 +48,7 @@ class JolpicaApiProxyTest {
     }
 
     @Test
-    fun `a failing proxy falls back to Jolpica at once, without retrying the proxy`() = runTest {
+    fun `a failing proxy falls back to Jolpica at once without retrying the proxy`() = runTest {
         val response = api { respondJson("""{"detail":"bad gateway"}""", HttpStatusCode.BadGateway) }
             .getDriverStandings(2026)
 
