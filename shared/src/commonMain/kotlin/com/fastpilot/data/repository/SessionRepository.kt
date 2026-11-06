@@ -25,6 +25,9 @@ class SessionRepository(
     // Screens load in the background, on several threads: guards [memory] and the session registry
     private val memoryMutex = Mutex()
 
+    /** Forgets the sessions kept in memory (the benchmark's loads without cache). */
+    suspend fun clearMemory() = memoryMutex.withLock { memory.clear() }
+
     /** Sessions of [year], newest first. Also tells the API which of them can be live. */
     suspend fun getSessions(year: Int, forceRefresh: Boolean = false): List<Session> =
         loadSessions(year, forceRefresh).also { memoryMutex.withLock { api.sessionRegistry.track(it) } }

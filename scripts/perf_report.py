@@ -102,17 +102,17 @@ def main():
         "(benchmark embutido no app: `composeApp/src/commonMain/kotlin/com/fastpilot/ui/perf/LoadBenchmark.kt`).",
         "",
         "**Metodologia.** Cada tela é aberta criando o seu ViewModel, como faz a navegação, e o tempo vai até o "
-        "estado que exibe o conteúdo (renderização do quadro não incluída). *Sem cache*: banco local (SQLDelight) "
-        "e cache HTTP da plataforma limpos antes da medição; *com cache*: a mesma tela logo em seguida, com o banco "
+        "estado que exibe o conteúdo (renderização do quadro não incluída). *Sem cache*: banco local (SQLDelight), "
+        "cache HTTP da plataforma e, desde a rodada 4, o calendário e a classificação guardados em memória limpos antes da medição; *com cache*: a mesma tela logo em seguida, com o banco "
         "preenchido (a sessão medida já terminou: o app guarda pilotos, voltas, stints, posições finais, intervalos, "
         "telemetria e posições na pista da volta, rádio, clima, direção de prova, pit stops, ultrapassagens e a "
         "classificação; só os áudios de rádio não entram). *Polling*: o modo ao vivo do Dashboard simulado em "
         "segundo plano, direto na API (posições e intervalos a cada 4 s, direção de prova a cada 10 s, pit stops e "
         "ultrapassagens a cada 15 s, clima a cada 60 s). "
-        "Pausa antes de cada medição (15 s nas rodadas 1–2, 20 s na 3) para respeitar a cota grátis da OpenF1 "
+        "Pausa antes de cada medição (15 s nas rodadas 1–2, 20 s nas rodadas 3 e 4) para respeitar a cota grátis da OpenF1 "
         "(3 requisições/s e 30/min). Desde a rodada 3 o cliente espaça as requisições (uma a cada 400 ms, no máximo "
         "29 em 61 s) em vez de receber 429; respostas 429 que ainda ocorram são repetidas após 2, 4, 8, 16 e 16 s. Sessão: a corrida mais recente no dia da medição "
-        "(GP de Singapura 2026), a mesma que as telas escolhem por padrão. Valores em segundos: mediana "
+        "(rodada 4, 06/11/2026: GP do México 2026), a mesma que as telas escolhem por padrão. Valores em segundos: mediana "
         "(média ± desvio padrão), apenas medições bem-sucedidas; n = sucessos/tentativas.",
         "",
         "¹ Tempo a partir da ação do usuário (selecionar piloto / os dois pilotos). "

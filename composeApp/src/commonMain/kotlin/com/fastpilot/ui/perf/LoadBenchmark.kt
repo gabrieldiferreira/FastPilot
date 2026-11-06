@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.fastpilot.data.polling.LivePollingManager
 import com.fastpilot.data.repository.SessionRepository
+import com.fastpilot.data.repository.StandingsRepository
 import com.fastpilot.data.repository.defaultSession
 import com.fastpilot.data.repository.getRecentSessions
 import com.fastpilot.db.FastPilotDB
@@ -235,6 +236,9 @@ class LoadBenchmark(
                 if (cache == "cold") {
                     db?.fastPilotDBQueries?.clearAll()
                     clearPlatformHttpCache()
+                    // The calendar and the standings are also kept in memory for the whole run
+                    koin.get<SessionRepository>().clearMemory()
+                    koin.get<StandingsRepository>().clearMemory()
                 }
                 _progress.value = "${if (polling) "Com" else "Sem"} polling • execução $run • ${screen.name} ($cache)"
                 delay(config.cooldown)

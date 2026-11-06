@@ -33,6 +33,9 @@ class StandingsRepository(
     private val memory = mutableMapOf<Int, Pair<Standings, Long>>()
     private val memoryMutex = Mutex()
 
+    /** Forgets the standings kept in memory (the benchmark's loads without cache). */
+    suspend fun clearMemory() = memoryMutex.withLock { memory.clear() }
+
     /**
      * The cached standings right away, then fresh ones when the cache is missing, stale or
      * [forceRefresh]: Jolpica can take 20 s or more to answer, so the table never waits for it
