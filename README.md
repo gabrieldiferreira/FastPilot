@@ -2,7 +2,7 @@
 
   # 🏎️ FastPilot
 
-  **A Kotlin Multiplatform app for live and historical Formula 1 data — Android, iOS and Web from one codebase.**
+  **Aplicativo em Kotlin Multiplatform para dados de Fórmula 1 ao vivo e históricos: Android, iOS e Web com um só código.**
 
   [![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org/) 
   [![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-000000?style=for-the-badge&logo=android&logoColor=white)](https://www.jetbrains.com/lp/compose-multiplatform/)
@@ -12,128 +12,134 @@
 
 <br/>
 
-## 📖 Overview
+## 📖 Visão geral
 
-**FastPilot** is a cross-platform application built with **Kotlin Multiplatform (KMP)** and **Compose Multiplatform**, developed as a Final Course Project (TCC). It consumes the public [OpenF1](https://openf1.org) and [Jolpica (Ergast)](https://github.com/jolpica/jolpica-f1) APIs and computes race metrics locally — clean pace, tyre degradation, theoretical best lap, driver duels and lap delta — in plain, unit-tested Kotlin.
+O **FastPilot** é um aplicativo multiplataforma feito com **Kotlin Multiplatform (KMP)** e **Compose Multiplatform**, desenvolvido como Trabalho de Conclusão de Curso (TCC) em Sistemas de Informação na UNISINOS. Ele consome as APIs públicas [OpenF1](https://openf1.org) e [Jolpica (Ergast)](https://github.com/jolpica/jolpica-f1) e calcula as métricas de corrida no próprio aparelho (ritmo limpo, degradação de pneu, volta teórica, duelo entre pilotos e delta na volta) em Kotlin puro, com testes de unidade.
 
-Both the business logic **and the UI** are shared: every screen is written once in Compose Multiplatform and runs on Android, iOS (simulator/device) and the browser (Kotlin/Wasm). The only platform-specific code is the entry point of each app, the HTTP engine, the SQLite driver, the audio player, where the chosen language is saved and how the time zone is read. Measured with `cloc`, **96.1% of the code of the Android + iOS + Web apps is shared** (see [`metrics/shared_code.md`](metrics/shared_code.md)).
+A lógica de negócio **e as telas** são compartilhadas: cada tela é escrita uma vez em Compose Multiplatform e roda no Android, no iOS e no navegador (Kotlin/Wasm). O código específico de cada plataforma se limita ao ponto de entrada do app, ao motor HTTP, ao driver do SQLite, ao player de áudio, à conexão com o login do Google, ao lugar onde o idioma escolhido é salvo e à leitura do fuso horário. Medido com o `cloc`, **90,9% do código dos apps Android + iOS + Web é compartilhado** (ver [`metrics/shared_code.md`](metrics/shared_code.md)).
 
-The app speaks **Brazilian Portuguese, American English and Spanish** (picked with flags on the login screen) and shows every time in the user's time zone.
+O app fala **português do Brasil, inglês americano e espanhol** (escolhidos pelas bandeiras na tela de login) e mostra todos os horários no fuso do usuário. O login é com a conta Google (Firebase Authentication) ou como convidado.
+
+- **Web:** https://fastpilot.vercel.app
+- **Android:** publicado na Google Play.
+- **Versão avaliada no TCC II:** tag `tcc2-avaliacao` (commit `980e90d`).
 
 ---
 
-## ✨ Features
+## ✨ Funcionalidades
 
-Seven tabs, all shared across platforms:
+Sete abas, todas compartilhadas entre as plataformas:
 
-| Tab | What it shows |
+| Aba | O que mostra |
 |---|---|
-| **Dashboard** | Positions with interval and gap (races and sprints) or best lap and gap to the fastest (practice and qualifying, split into **Q1/Q2/Q3**, laps deleted by race control left out); pit stops and overtakes with their lap; race control messages; opens the live session (or the latest race) and polls OpenF1 while it is live. |
-| **Telemetria** | Speed, RPM, gear and throttle traces for a driver, plus a **theoretical best lap** card (best S1 + S2 + S3, compared with the best real lap). |
-| **Estratégia** | Stint timeline per driver with compound colours, **tyre degradation** (s/lap per stint) and a **clean pace** ranking (median of clean laps, gap to the leader, σ). |
-| **Duelo** | Head-to-head between two drivers and the **lap delta** on their fastest laps, aligned by position on track. |
-| **Rádio** | Team radio recordings for the session; new messages every 15 s while it is live. |
-| **Clima** | Air/track temperature, wind, humidity and rain; refreshed every 60 s while live. |
-| **Tabela** | Driver and constructor championship standings (Jolpica), cached for 7 days (1 hour for the current season). |
+| **Painel** | Posições com intervalo e diferença para o líder (corridas e sprints) ou melhor volta e diferença para o mais rápido (treinos e classificação, separada em **Q1/Q2/Q3**, sem as voltas apagadas pela direção de prova); pit stops e ultrapassagens com a volta; mensagens da direção de prova; abre a sessão ao vivo (ou a corrida mais recente) e consulta a OpenF1 periodicamente enquanto ela está ao vivo. |
+| **Telemetria** | Gráficos de velocidade, rotação, marcha e acelerador de um piloto, mais o card de **volta teórica** (melhor S1 + S2 + S3, comparada com a melhor volta real). |
+| **Estratégia** | Linha do tempo dos stints de cada piloto com as cores dos compostos, **degradação de pneu** (s/volta por stint) e ranking de **ritmo limpo** (mediana das voltas limpas, diferença para o líder, σ). |
+| **Duelo** | Comparação entre dois pilotos e o **delta na volta** das voltas mais rápidas, alinhado pela posição na pista. |
+| **Rádio** | Gravações do rádio das equipes na sessão; mensagens novas a cada 15 s enquanto está ao vivo. |
+| **Clima** | Temperatura do ar e da pista, vento, umidade e chuva; atualizado a cada 60 s ao vivo. |
+| **Classificação** | Campeonato de pilotos e de construtores (Jolpica), em cache por 7 dias (1 hora para a temporada atual). |
 
-Every tab shares the **session picker**: year, Grand Prix (with its round number) and one chip per event of the weekend (FP1–FP3, Sprint Qualifying, Sprint, Qualifying, Race).
+Todas as abas usam o mesmo **seletor de sessão**: ano, Grande Prêmio (com o número da etapa) e um botão por evento do fim de semana (TL1–TL3, Classificação Sprint, Sprint, Classificação, Corrida).
 
-Clean pace and tyre degradation discard laps that are not representative (lap 1, in/out laps, laps under SC/VSC/red flag, the lap a driver retires on) using `LapFilters`, matched against `/race_control` by timestamp.
+O ritmo limpo e a degradação de pneu descartam as voltas que não são representativas (volta 1, voltas de entrada e saída do box, voltas sob SC/VSC/bandeira vermelha, a volta do abandono) com o `LapFilters`, cruzando com o `/race_control` pelo horário.
 
 ---
 
-## 📸 Gallery
+## 📸 Galeria
 
 <div align="center">
   <table>
     <tr>
-      <td align="center"><b>Splash Screen</b></td>
+      <td align="center"><b>Abertura</b></td>
       <td align="center"><b>Login</b></td>
-      <td align="center"><b>Dashboard</b></td>
-      <td align="center"><b>Live Telemetry</b></td>
+      <td align="center"><b>Painel</b></td>
+      <td align="center"><b>Telemetria</b></td>
     </tr>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/b5691e0c-40c7-418e-afec-c03395807ff9" alt="Dashboard" width="250"/></td>
-      <td><img src="https://github.com/user-attachments/assets/2d51373a-af64-4718-94ef-4eb9df1199bc" alt="Dashboard" width="250"/></td>
-      <td><img src="https://github.com/user-attachments/assets/e3e9f1ba-11f5-4e2b-be1a-128b03d8e8a6" alt="Dashboard" width="250"/></td>
-      <td><img src="https://github.com/user-attachments/assets/3ca2053c-bdc3-4589-bcde-e7c64e60d736" alt="Telemetry" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/b5691e0c-40c7-418e-afec-c03395807ff9" alt="Abertura" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/2d51373a-af64-4718-94ef-4eb9df1199bc" alt="Login" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/e3e9f1ba-11f5-4e2b-be1a-128b03d8e8a6" alt="Painel" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/3ca2053c-bdc3-4589-bcde-e7c64e60d736" alt="Telemetria" width="250"/></td>
     </tr>
     <tr>
-      <td align="center"><b>Driver Duel</b></td>
-      <td align="center"><b>Strategy</b></td>
-      <td align="center"><b>Team Radio</b></td>
-      <td align="center"><b>Weather</b></td>
+      <td align="center"><b>Duelo</b></td>
+      <td align="center"><b>Estratégia</b></td>
+      <td align="center"><b>Rádio</b></td>
+      <td align="center"><b>Clima</b></td>
     </tr>
     <tr>
-      <td><img src="https://github.com/user-attachments/assets/1e0a3075-8b02-4026-ae96-e6403c986724" alt="Driver Duels" width="250"/></td>
-      <td><img src="https://github.com/user-attachments/assets/7d3c8e46-8319-4bc1-a8c8-5fb720001ff0" alt="Weather and Strategy" width="250"/></td>
-      <td><img src="https://github.com/user-attachments/assets/a50e3587-8fcc-4d5d-87b3-79e408b607df" alt="Team Radio" width="250"/></td>
-      <td><img src="https://github.com/user-attachments/assets/1ebe2c89-da0b-4db6-ab51-ea6bf11aad51" alt="Splash/Auth" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/1e0a3075-8b02-4026-ae96-e6403c986724" alt="Duelo" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/7d3c8e46-8319-4bc1-a8c8-5fb720001ff0" alt="Estratégia" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/a50e3587-8fcc-4d5d-87b3-79e408b607df" alt="Rádio" width="250"/></td>
+      <td><img src="https://github.com/user-attachments/assets/1ebe2c89-da0b-4db6-ab51-ea6bf11aad51" alt="Clima" width="250"/></td>
     </tr>
   </table>
 </div>
 
 ---
 
-## 🛠️ Architecture
+## 🛠️ Arquitetura
 
 ```
 FastPilot/
-├── shared/          # data + domain (Kotlin Multiplatform library)
+├── shared/          # dados + domínio (biblioteca Kotlin Multiplatform)
 │   └── src/
-│       ├── commonMain/      # API clients, repositories, SQLDelight schema, use cases (metrics)
-│       ├── androidMain/     # OkHttp engine, Android SQLite driver
-│       ├── iosMain/         # Darwin engine, native SQLite driver
-│       ├── wasmJsMain/      # JS fetch engine (no local database on Web)
-│       ├── desktopMain/     # CIO engine, JDBC SQLite driver
-│       ├── commonTest/      # use case, repository and network tests
-│       └── desktopTest/     # schema migration, race fixtures, metrics export harness
-├── composeApp/      # presentation: Compose Multiplatform screens, ViewModels, navigation, DI
+│       ├── commonMain/      # clientes das APIs, repositórios, esquema SQLDelight, casos de uso (métricas)
+│       ├── androidMain/     # motor OkHttp, driver SQLite do Android
+│       ├── iosMain/         # motor Darwin, driver SQLite nativo
+│       ├── wasmJsMain/      # motor fetch do JS (sem banco local na Web)
+│       ├── desktopMain/     # motor CIO, driver SQLite JDBC
+│       ├── commonTest/      # testes de casos de uso, repositórios e rede
+│       └── desktopTest/     # migração do esquema, corridas gravadas, exportação das métricas
+├── composeApp/      # apresentação: telas em Compose Multiplatform, ViewModels, navegação, injeção de dependências
 │   └── src/
-│       ├── commonMain/      # all 7 screens + login/splash, Voyager tabs, Koin modules
-│       └── androidMain | iosMain | wasmJsMain | desktopMain   # app entry points only
-├── iosApp/          # Xcode project (generated by XcodeGen) hosting ComposeUIViewController
-├── fixtures/        # recorded OpenF1/Jolpica responses for 5 races
-├── scripts/         # evaluation scripts (shared code, FastF1 comparison, performance, Vercel)
-└── metrics/         # generated evaluation results
+│       ├── commonMain/      # as 7 telas + login/abertura, abas do Voyager, módulos do Koin
+│       └── androidMain | iosMain | wasmJsMain | desktopMain   # pontos de entrada e login de cada plataforma
+├── iosApp/          # projeto Xcode (gerado pelo XcodeGen) que hospeda o ComposeUIViewController
+├── api/             # funções da Vercel (proxy da OpenF1 ao vivo e da Jolpica)
+├── fixtures/        # respostas gravadas da OpenF1/Jolpica de 7 corridas
+├── scripts/         # scripts de avaliação (código compartilhado, comparação com a FastF1, desempenho, Vercel)
+└── metrics/         # resultados da avaliação gerados pelos scripts
 ```
 
-The project follows Clean Architecture: `shared` holds the data layer (Ktor clients for OpenF1 and Jolpica, cache-first repositories backed by SQLDelight) and the domain layer (use cases, pure Kotlin); `composeApp` holds the presentation layer (one ViewModel per screen exposing `StateFlow` UI state).
+O projeto segue a Clean Architecture: o `shared` tem a camada de dados (clientes Ktor da OpenF1 e da Jolpica, repositórios que leem primeiro o cache do SQLDelight) e a camada de domínio (casos de uso em Kotlin puro); o `composeApp` tem a camada de apresentação (um ViewModel por tela, que expõe o estado da tela em `StateFlow`).
 
-**Offline cache.** On Android, iOS and Desktop, repositories read from SQLite first and only hit the network on a miss. Data downloaded after a session ended — drivers, laps, stints, final positions and gaps, race control, weather, team radio list, pit stops, overtakes and each lap's raw telemetry and track positions — never expires and is never downloaded again, so a race opened once works offline on every screen; race data is deleted 30 days after it was downloaded. Live sessions are never cached. SQLDelight has no synchronous driver for the browser, so on **Web the app runs without the local cache** and every load goes to the network.
+**Cache para uso sem internet.** No Android, no iOS e no Desktop, os repositórios leem primeiro o SQLite e só vão à rede quando o dado não está lá. Os dados baixados depois que a sessão terminou (pilotos, voltas, stints, posições e intervalos finais, direção de prova, clima, lista do rádio, pit stops, ultrapassagens e a telemetria e as posições na pista de cada volta) não expiram e não são baixados de novo, então uma corrida aberta uma vez funciona sem internet em todas as telas; os dados de corrida são apagados 30 dias depois de baixados. Sessões ao vivo nunca vão para o cache. O SQLDelight não tem driver síncrono para o navegador, então **na Web o app roda sem cache local** e todo carregamento vai à rede.
 
-**Networking.** OpenF1's free tier allows 3 requests per second **and** 30 in any 60 s (measured). The shared `HttpClient` spaces requests to it (one every 400 ms, at most 29 per 61 s) so the app waits for its turn instead of getting 429s; live sessions go through the Sponsor proxy and are not limited. It retries 429/5xx responses with exponential backoff (2, 4, 8, 16, 16 s) and counts requests and rate-limited responses for the performance benchmark. The calendar of every season comes in a single request (`year>=2023`).
+**Rede.** O plano grátis da OpenF1 permite 3 requisições por segundo **e** 30 em qualquer janela de 60 s (medido). O `HttpClient` compartilhado espaça as requisições (uma a cada 400 ms, no máximo 29 em 61 s), para o app esperar a sua vez em vez de receber erro 429; as sessões ao vivo passam pelo proxy do plano patrocinador e não são limitadas. Respostas 429/5xx são repetidas com espera crescente (2, 4, 8, 16 e 16 s), e as requisições são contadas para o benchmark de desempenho. O calendário de todas as temporadas vem em uma só requisição (`year>=2023`).
 
-**Languages.** Typed string packages (`composeApp/.../ui/i18n`: `PtBrStrings`, `EnUsStrings`, `EsStrings`) implement one `Strings` interface, so a text missing in any language does not compile; switching language recomposes the app at once and the choice is saved per platform. API texts are translated too: session, country and circuit names, and the FIA **race control messages**, by rules over their closed set of formats (99.9% of 12,372 real messages; a message with any unknown part stays in English).
+**Idiomas.** Pacotes de textos tipados (`composeApp/.../ui/i18n`: `PtBrStrings`, `EnUsStrings`, `EsStrings`) implementam a mesma interface `Strings`, então um texto que falte em algum idioma não compila; trocar o idioma recompõe o app na hora, e a escolha fica salva em cada plataforma. Os textos das APIs também são traduzidos: nomes de sessões, países e circuitos e as **mensagens da direção de prova** da FIA, por regras sobre o conjunto fechado de formatos (99,9% de 12.372 mensagens reais; uma mensagem com alguma parte desconhecida fica em inglês).
 
-**Times.** API timestamps are UTC and times written inside race control messages are the circuit's local time; both are shown in the user's time zone (system zone; browser zone on Web), using the session's `gmt_offset` for the latter.
+**Horários.** Os horários das APIs vêm em UTC, e os horários escritos dentro das mensagens da direção de prova estão no horário local do circuito; os dois são mostrados no fuso do usuário (fuso do sistema; na Web, do navegador), usando o `gmt_offset` da sessão para o segundo caso.
 
-**Web routes.** Each screen has its own path in the app language — `/painel`, `/telemetria`, `/estrategia`, `/duelo`, `/radio`, `/clima`, `/classificacao`, `/entrar` in Portuguese; `/dashboard`, `/telemetry`, `/strategy`, `/duel`, `/radio`, `/weather`, `/standings`, `/login` in English; `/panel`, `/telemetria`, `/estrategia`, `/duelo`, `/radio`, `/clima`, `/clasificacion`, `/acceder` in Spanish — kept with the browser History API: links open a screen directly (a path in any language works), reload keeps it, back/forward switch screens, and changing language rewrites the address without a new history entry. `vercel.json` and `scripts/serve_web.py` serve `index.html` for these paths (a test checks that both list them all).
+**Endereços na Web.** Cada tela tem o seu endereço no idioma do app: `/painel`, `/telemetria`, `/estrategia`, `/duelo`, `/radio`, `/clima`, `/classificacao`, `/entrar` em português; `/dashboard`, `/telemetry`, `/strategy`, `/duel`, `/radio`, `/weather`, `/standings`, `/login` em inglês; `/panel`, `/telemetria`, `/estrategia`, `/duelo`, `/radio`, `/clima`, `/clasificacion`, `/acceder` em espanhol. Eles usam a History API do navegador: um link abre a tela direto (um endereço em qualquer idioma funciona), recarregar mantém a tela, voltar/avançar troca de tela, e trocar o idioma reescreve o endereço sem criar uma nova entrada no histórico. O `vercel.json` e o `scripts/serve_web.py` respondem o `index.html` para esses endereços (um teste confere que os dois listam todos).
 
-### Core technologies
+### Tecnologias principais
 
-| Library | Version | Use |
+| Biblioteca | Versão | Uso |
 |---|---|---|
-| [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) | 2.1.0 | Targets: `androidTarget`, `iosX64`/`iosArm64`/`iosSimulatorArm64`, `wasmJs`, `jvm("desktop")` |
-| [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/) | 1.7.3 | Shared UI on all platforms |
-| [Ktor Client](https://ktor.io/) | 3.0.3 | HTTP (OkHttp / Darwin / JS / CIO engines) |
-| [SQLDelight](https://cashapp.github.io/sqldelight/) | 2.1.0 | Local cache (schema v4 with migrations) |
-| [Koin](https://insert-koin.io/) | 4.0.1 | Dependency injection |
-| [Voyager](https://voyager.adriel.cafe/) | 1.1.0-beta03 | Tab navigation |
+| [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html) | 2.1.0 | Alvos: `androidTarget`, `iosX64`/`iosArm64`/`iosSimulatorArm64`, `wasmJs`, `jvm("desktop")` |
+| [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/) | 1.7.3 | Telas compartilhadas em todas as plataformas |
+| [Ktor Client](https://ktor.io/) | 3.0.3 | HTTP (motores OkHttp / Darwin / JS / CIO) |
+| [SQLDelight](https://cashapp.github.io/sqldelight/) | 2.1.0 | Cache local (esquema v4 com migrações) |
+| [Koin](https://insert-koin.io/) | 4.0.1 | Injeção de dependências |
+| [Voyager](https://voyager.adriel.cafe/) | 1.1.0-beta03 | Navegação por abas |
+| [Firebase Authentication](https://firebase.google.com/docs/auth) | BoM 33.7.0 | Login com Google (Android, iOS e Web) |
 
-### Data sources
-* **[OpenF1 API](https://api.openf1.org/v1)** — sessions, laps, stints, car data, location, positions, intervals, race control, team radio, weather.
-* **[Jolpica Ergast API](https://api.jolpi.ca/ergast/f1/)** — championship standings.
+### Fontes de dados
+* **[OpenF1 API](https://api.openf1.org/v1)**: sessões, voltas, stints, dados do carro, posição na pista, posições, intervalos, direção de prova, rádio das equipes, clima.
+* **[Jolpica Ergast API](https://api.jolpi.ca/ergast/f1/)**: classificação do campeonato.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Como rodar
 
-### Prerequisites
+### Pré-requisitos
 * JDK 17
-* Android SDK (compileSdk 35, minSdk 26) — for Android only
-* Xcode and [XcodeGen](https://github.com/yonaskolb/XcodeGen) — for iOS only (macOS)
-* Google Chrome — for the Web tests
+* Android SDK (compileSdk 36, minSdk 26): só para o Android
+* Xcode e [XcodeGen](https://github.com/yonaskolb/XcodeGen): só para o iOS (macOS)
+* Google Chrome: para os testes da Web
 
 ```bash
 git clone https://github.com/gabrieldiferreira/FastPilot.git
@@ -141,29 +147,29 @@ cd FastPilot
 ```
 
 ### Android
-Run the `composeApp` configuration in Android Studio, or:
+Rode a configuração `composeApp` no Android Studio, ou:
 ```bash
 ./gradlew :composeApp:installDebug
 ```
 
 ### iOS
-The Xcode project is generated from `iosApp/project.yml`; a build phase runs `./gradlew :composeApp:embedAndSignAppleFrameworkForXcode`, so no CocoaPods are needed.
+O projeto Xcode é gerado a partir do `iosApp/project.yml`; uma etapa do build roda `./gradlew :composeApp:embedAndSignAppleFrameworkForXcode`, então não é preciso CocoaPods.
 ```bash
-cd iosApp && xcodegen generate   # only after editing project.yml
-open iosApp.xcodeproj            # pick an iPhone simulator and Run
+cd iosApp && xcodegen generate   # só depois de editar o project.yml
+open iosApp.xcodeproj            # escolha um simulador de iPhone e rode
 ```
 
 ### Web (Kotlin/Wasm)
 ```bash
-./gradlew :composeApp:wasmJsBrowserDevelopmentRun        # dev server with reload
-./gradlew :composeApp:wasmJsBrowserDistribution          # production build
-python3 scripts/serve_web.py 8080                       # serves it; screen paths (/telemetry...) answer index.html
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun        # servidor de desenvolvimento com recarga
+./gradlew :composeApp:wasmJsBrowserDistribution          # build de produção
+python3 scripts/serve_web.py 8080                       # serve o build; os endereços das telas (/telemetria...) respondem o index.html
 ```
-Requires a browser with WasmGC (current Chrome, Firefox, Safari 18.2+).
+Requer um navegador com WasmGC (Chrome e Firefox atuais, Safari 18.2+).
 
-**Deploy on Vercel:** `vercel.json` runs `scripts/vercel_build.sh`, which downloads a JDK 17 (the Vercel image has none), builds the Wasm distribution and serves `composeApp/build/dist/wasmJs/productionExecutable`. Build options live in `.env` (no secrets).
+**Publicação na Vercel:** o `vercel.json` roda o `scripts/vercel_build.sh`, que baixa um JDK 17 (a imagem da Vercel não tem), compila a versão Wasm e publica `composeApp/build/dist/wasmJs/productionExecutable`. As opções de build ficam no `.env` (sem segredos).
 
-**Live data:** OpenF1 serves real-time data only to paid *Sponsor* accounts. `api/openf1.mjs` is a Vercel function that holds the account (`OPENF1_USERNAME` / `OPENF1_PASSWORD`, set as sensitive environment variables in the Vercel dashboard), adds the access token and forwards requests at `/openf1/v1/<endpoint>`, caching answers for 4 s at the CDN. Set `OPENF1_PROXY_URL` in `shared/.../network/OpenF1Proxy.kt` to `https://<your-deployment>/openf1/v1`: the app then sends live-session requests through the proxy, while historical data still goes straight to OpenF1.
+**Dados ao vivo:** a OpenF1 só entrega dados em tempo real para contas pagas (*Sponsor*). O `api/openf1.mjs` é uma função da Vercel que guarda a conta (`OPENF1_USERNAME` / `OPENF1_PASSWORD`, cadastradas como variáveis de ambiente sensíveis no painel da Vercel), acrescenta o token de acesso e repassa as requisições em `/openf1/v1/<endpoint>`, com cache de 4 s na CDN. Para ativar, preencha `OPENF1_PROXY_URL` em `shared/.../network/OpenF1Proxy.kt` com `https://<seu-deploy>/openf1/v1`: o app passa a mandar as requisições das sessões ao vivo pelo proxy, e os dados históricos continuam indo direto à OpenF1. **O modo ao vivo foi implementado, mas não foi testado durante uma sessão ao vivo**, porque depende da assinatura do plano pago.
 
 ### Desktop (JVM)
 ```bash
@@ -172,83 +178,90 @@ Requires a browser with WasmGC (current Chrome, Firefox, Safari 18.2+).
 
 ---
 
-## 🧪 Tests
+## 🧪 Testes
 
 ```bash
 ./gradlew :shared:desktopTest :composeApp:desktopTest     # JVM
-./gradlew :shared:iosSimulatorArm64Test                    # iOS simulator
+./gradlew :shared:iosSimulatorArm64Test                    # simulador iOS
 CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
   ./gradlew :shared:wasmJsBrowserTest :composeApp:wasmJsBrowserTest   # Web
 ```
 
-Tests cover the metric use cases, `LapFilters`, repositories, the HTTP retry policy, the SQLDelight migration, the recorded race fixtures and the ViewModels (Ktor `MockEngine` running on the test dispatcher).
+Os testes cobrem os casos de uso das métricas, o `LapFilters`, os repositórios, a política de repetição do HTTP, a migração do SQLDelight, as corridas gravadas e os ViewModels (`MockEngine` do Ktor rodando no dispatcher de teste).
 
 ---
 
-## 📊 Evaluation (TCC II)
+## 📊 Avaliação (TCC II)
 
-All results are generated by scripts in `scripts/` and written to `metrics/`.
+Todos os resultados são gerados pelos scripts em `scripts/` e gravados em `metrics/`. Medição de 06/11/2026, na versão da tag `tcc2-avaliacao`.
 
-### Shared code
+> **Sobre os scripts de avaliação:** os scripts em `scripts/` (medição do código compartilhado, comparação com a FastF1 e com a Jolpica, benchmark de desempenho e build da Vercel) foram criados com o uso de inteligência artificial (Claude, da Anthropic): o autor pediu os scripts à IA, rodou-os e conferiu os resultados abaixo.
+
+### Código compartilhado
 ```bash
-python3 scripts/measure_shared_code.py      # needs cloc → metrics/shared_code.md
+python3 scripts/measure_shared_code.py      # requer cloc → metrics/shared_code.md
 ```
-| Scope | % shared |
+| Escopo | % compartilhado |
 |---|---:|
-| Android + iOS + Web apps | **96.1%** |
-| Android app | 98.4% |
-| iOS app | 98.6% |
-| Web app | 99.0% |
+| Apps Android + iOS + Web | **90,9%** |
+| App Android | 97,6% |
+| App iOS | 96,8% |
+| App Web | 95,9% |
 
-Tests, generated code and build scripts are excluded; the methodology is in the script header.
+Em 14/10/2026 o compartilhado era 96,1%; caiu porque a conexão com o login do Google precisou de código próprio no iOS (Swift) e na Web (HTML). A meta do TCC era 75%. Testes, código gerado e scripts de build ficam fora da conta; a metodologia está no cabeçalho do script.
 
-### Accuracy vs. FastF1
-FastPilot's metrics are compared with the same metrics computed by the [FastF1](https://docs.fastf1.dev/) Python library on five races (Bahrain 2023, Belgium 2023, Singapore 2023, Monaco 2024, São Paulo 2024), using the recorded responses in `fixtures/`.
+### Concordância com a FastF1
+As métricas do FastPilot são comparadas com as mesmas métricas calculadas pela biblioteca Python [FastF1](https://docs.fastf1.dev/) em cinco corridas (Bahrein 2023, Bélgica 2023, Singapura 2023, Mônaco 2024, São Paulo 2024), usando as respostas gravadas em `fixtures/`.
 ```bash
-python3 scripts/fetch_fixtures.py                     # record API responses (already in the repo)
-./gradlew :shared:exportMetrics                       # FastPilot results → metrics/comparison/fastpilot/
-python3 scripts/fastf1_reference.py                   # FastF1 results    → metrics/comparison/fastf1/
+python3 scripts/fetch_fixtures.py                     # grava as respostas das APIs (já estão no repositório)
+./gradlew :shared:exportMetrics                       # resultados do FastPilot → metrics/comparison/fastpilot/
+python3 scripts/fastf1_reference.py                   # resultados da FastF1    → metrics/comparison/fastf1/
 python3 scripts/compare_metrics.py                    # → metrics/comparison/README.md
 ```
-| Metric | Error (target MAPE ≤ 5%) |
+| Métrica | Erro (meta: MAPE ≤ 5%) |
 |---|---|
-| Clean pace (mean / median) | MAPE 0.00% (n = 91) |
-| Theoretical best lap | MAPE 0.00% (n = 91) |
-| Best lap | MAPE 0.00% (n = 91) |
-| Tyre degradation | MAE 0.006 s/lap, same sign in 221/221 stints |
-| Lap delta | curve MAE ≈ 0.1 s, identical final gap (15 pairs) |
+| Ritmo limpo (média / mediana) | MAPE 0,00% (n = 91) |
+| Volta teórica | MAPE 0,00% (n = 91) |
+| Melhor volta | MAPE 0,00% (n = 91) |
+| Degradação de pneu | MAE 0,006 s/volta, mesmo sinal em 221 de 221 stints |
+| Delta na volta | MAE da curva 0,103 s, diferença final idêntica (15 pares) |
 
-Details, the bugs this comparison uncovered and the remaining limitations: [`metrics/comparison/README.md`](metrics/comparison/README.md) and [`metrics/comparison/NOTAS.md`](metrics/comparison/NOTAS.md).
+Em duas corridas de validação que não participaram dos ajustes dos filtros (Japão 2023 e Las Vegas 2024), os resultados se mantiveram: MAPE 0,00% e degradação com o mesmo sinal em 106 de 106 stints ([`metrics/comparison/holdout.md`](metrics/comparison/holdout.md)). Os tempos de volta também foram conferidos com a Jolpica: 7.007 voltas iguais nas sete corridas, sem contar a volta 1 ([`metrics/comparison/jolpica_check.md`](metrics/comparison/jolpica_check.md)).
 
-### Performance
-A benchmark built into the app (`composeApp/.../ui/perf/`) opens each screen several times and measures the time from the ViewModel call until content is on screen — with and without the local cache, and with live polling on and off — while a script samples CPU and memory of the app process.
+A concordância mostra que as contas estão certas, mas não que a inclinação dos tempos de volta mede só o desgaste do pneu. Detalhes, os erros que a comparação revelou e as limitações: [`metrics/comparison/README.md`](metrics/comparison/README.md) e [`metrics/comparison/NOTAS.md`](metrics/comparison/NOTAS.md).
+
+### Desempenho
+Um benchmark embutido no app (`composeApp/.../ui/perf/`) abre cada tela várias vezes e mede o tempo desde a criação do ViewModel até o conteúdo estar pronto, com e sem o cache local, enquanto um script mede a CPU e a memória do processo do app.
 ```bash
-./gradlew :composeApp:assembleBenchmark                        # Android release build for measuring
-python3 scripts/perf_run.py android --serial <adb serial>
-python3 scripts/perf_run.py ios --device <simulator UDID>      # Release build in build/ios-perf
-python3 scripts/perf_run.py web                                # headless Chrome
+./gradlew :composeApp:assembleBenchmark                        # build de release do Android para medição
+python3 scripts/perf_run.py android --serial <serial do adb>
+python3 scripts/perf_run.py ios --device <UDID do simulador>   # build Release em build/ios-perf
+python3 scripts/perf_run.py web                                # Chrome sem interface
 python3 scripts/perf_report.py                                 # → metrics/performance/README.md
 ```
-The benchmark can also be started by hand: Android `adb shell am start -n com.fastpilot.app/.MainActivity -e perf "off:5,on:3"`, iOS launch argument `-perf off:5,on:3`, Web `index.html?perf=off:5,on:3`.
+O benchmark também pode ser iniciado à mão: Android `adb shell am start -n com.fastpilot.app/.MainActivity -e perf "off:5,on:3"`, iOS argumento de inicialização `-perf off:5,on:3`, Web `index.html?perf=off:5,on:3`.
 
-Latest round (Oct 14 2026, 2026 Singapore GP, 5 runs per screen, 150 loads, all successful, no 429 responses), median time without cache → with cache:
+Rodada mais recente (06/11/2026, GP do México 2026, 5 repetições por cenário, 250 carregamentos, todos bem-sucedidos, nenhuma resposta 429). Ambientes: emulador Android 17, simulador iPhone 17 com iOS 26.5 e Chrome 157 sem interface. Mediana sem cache → com cache:
 
-| Screen | Android emulator | iOS simulator | Web (Chrome) |
+| Tela | Emulador Android | Simulador iOS | Web (Chrome) |
 |---|---|---|---|
-| Dashboard | 1.70 s → 0.04 s | 1.07 s → 0.02 s | 0.65 s |
-| Strategy (stints) | 1.19 s → 1.42 s | 1.27 s → 0.46 s | 1.04 s |
-| Duel (comparison) | 3.39 s → 0.04 s | 1.60 s → 0.01 s | 1.80 s |
-| Standings | 0.71 s → 0.01 s | 0.15 s → 0.00 s | 0.18 s |
+| Painel | 3,77 s → 0,02 s | 1,54 s → 0,02 s | 1,08 s |
+| Estratégia (stints) | 2,91 s → 0,01 s | 1,94 s → 0,02 s | 1,47 s |
+| Duelo (abertura) | 2,17 s → 0,01 s | 1,13 s → 0,02 s | 0,72 s |
+| Classificação | 1,23 s → 0,00 s | 0,21 s → 0,00 s | 0,08 s |
 
-With the local cache the median screen loads in 2–3% of the time without it (Web has no local cache). This round measured without live polling: on the free OpenF1 tier (30 requests per minute) polling alone (~46/min) exhausts the quota, so the polling round will run through the Sponsor proxy. Full tables, memory and CPU: [`metrics/performance/README.md`](metrics/performance/README.md).
+Com o cache local, a mediana das telas abre em cerca de 1% do tempo sem cache (a Web não tem cache local). Esta rodada foi medida sem o polling ao vivo: no plano grátis da OpenF1 (30 requisições por minuto), o polling sozinho (~46/min) esgota a cota. Tabelas completas, memória e CPU: [`metrics/performance/README.md`](metrics/performance/README.md).
+
+### Funcionamento sem internet
+Teste no emulador Android (06/11/2026): com o celular em modo avião, as sete telas funcionaram com os dados salvos em cache. O iOS não foi testado sem internet, e a Web não funciona sem internet. Capturas: [`metrics/offline/README.md`](metrics/offline/README.md).
 
 ---
 
-## 📚 Documentation
+## 📚 Documentação
 
-* [`FastPilot_Documentation.md`](FastPilot_Documentation.md) — functional documentation.
-* `TCC_I_FastPilot_GabrielFerreira_v.3.0.pdf` — TCC I (proposal). The UI there was planned as Jetpack Compose + SwiftUI; it ended up fully in Compose Multiplatform, which also brought the Web target with almost no extra code.
+* [`FastPilot_Documentation.md`](FastPilot_Documentation.md): documentação funcional.
+* No TCC I (proposta), as telas foram planejadas em Jetpack Compose + SwiftUI; no fim, ficaram inteiras em Compose Multiplatform, o que também trouxe a versão Web quase sem código a mais.
 
-## 📝 License
+## 📝 Licença
 
-This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
+Este projeto usa a licença [MIT](https://choosealicense.com/licenses/mit/).
