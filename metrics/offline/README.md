@@ -1,31 +1,32 @@
 # Funcionamento sem internet (objetivo específico b do TCC I)
 
-Teste manual em 14/10/2026 no emulador Android (Android 17, `composeApp-debug.apk` do código do commit
-seguinte a `3d8ac08`, com as duas correções abaixo):
+Teste refeito em 06/11/2026 no emulador Android (Android 17, `composeApp-debug.apk` do commit `25c2102`, tag
+`tcc2-avaliacao`). O primeiro teste, de 14/10/2026 (GP de Singapura 2026), está no histórico do git.
 
 1. App instalado do zero (`pm clear`), com internet: idioma Português, entrar como convidado e abrir as 7 telas na
-   corrida padrão (GP de Singapura 2026, a mais recente), escolhendo VER na Telemetria e VER × ANT no Duelo, e
+   corrida padrão (GP do México 2026, a mais recente), escolhendo VER na Telemetria e VER × ANT no Duelo, e
    esperando cada tela terminar de carregar.
 2. Modo avião ligado, Wi-Fi e dados desligados (`ping` → *Network is unreachable*), app fechado (`force-stop`) e
    aberto de novo.
-3. As mesmas telas e escolhas, sem internet. Depois, uma sessão que nunca foi aberta com internet.
+3. As mesmas telas e escolhas, sem internet. Depois, uma sessão que nunca foi aberta com internet (a
+   Classificação do mesmo GP).
 4. Rede do emulador religada.
 
 | Tela | Sem internet | Captura |
 |---|---|---|
 | Seletor de sessões (todas as telas) | ✅ funciona | — |
-| Dashboard | ✅ posições, intervalos e gaps (inclusive "+3 VOLTAS"), direção de prova e eventos com a volta | `2_offline_dashboard.png`, `2b_offline_dashboard_eventos.png` |
+| Dashboard | ✅ posições, intervalos e gaps, direção de prova e eventos com a volta | `2_offline_dashboard.png`, `2b_offline_dashboard_eventos.png` |
 | Telemetria | ✅ voltas, volta teórica e gráficos | `3_offline_telemetria.png` |
 | Estratégia | ✅ stints, degradação e ritmo limpo | `4_offline_estrategia.png`, `4b_offline_estrategia_ritmo.png` |
 | Duelo | ✅ delta acumulado e delta na volta mais rápida | `5_offline_duelo.png` |
-| Rádio | ✅ lista das 32 mensagens; o áudio não toca (fica nos servidores da F1) e o app avisa "Não foi possível tocar o áudio. Verifique sua conexão." | `6_offline_radio.png`, `6b_offline_radio_play.png` |
+| Rádio | ✅ lista das 27 mensagens; o áudio não toca (fica nos servidores da F1) e o app avisa "Não foi possível tocar o áudio. Verifique sua conexão." | `6_offline_radio.png`, `6b_offline_radio_play.png` |
 | Clima | ✅ | `7_offline_clima.png` |
 | Classificação | ✅ | `8_offline_classificacao.png` |
 | Sessão nunca aberta com internet | ✅ mostra o erro em poucos segundos | `9_offline_sessao_nao_aberta.png` |
 
 `1_online_dashboard.png` é o Dashboard com internet, antes do modo avião.
 
-**Comparação com o primeiro teste (mesmo dia, commit `11e4d27`):** antes só Telemetria, Duelo e Classificação
+**Comparação com o teste anterior a 14/10/2026 (commit `11e4d27`):** antes só Telemetria, Duelo e Classificação
 funcionavam sem internet; Dashboard ficava em "Carregando dados…", Estratégia mostrava "Nenhum stint encontrado" e
 Rádio e Clima davam erro de rede. Agora as 7 telas funcionam, porque o cache guarda, para sessões encerradas, as
 posições e intervalos finais, pit stops, ultrapassagens, direção de prova, clima, lista de rádios e as voltas e
