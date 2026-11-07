@@ -195,7 +195,7 @@ Os testes cobrem os casos de uso das métricas, o `LapFilters`, os repositórios
 
 Todos os resultados são gerados pelos scripts em `scripts/` e gravados em `metrics/`. Medição de 06/11/2026, na versão da tag `tcc2-avaliacao`.
 
-> **Sobre os scripts de avaliação:** os scripts em `scripts/` (medição do código compartilhado, comparação com a FastF1 e com a Jolpica, benchmark de desempenho e build da Vercel) foram criados com o uso de inteligência artificial (Claude, da Anthropic): o autor pediu os scripts à IA, rodou-os e conferiu os resultados abaixo.
+> **Sobre o uso de inteligência artificial:** os scripts em `scripts/` (medição do código compartilhado, comparação com a FastF1 e com a Jolpica, benchmark de desempenho e build da Vercel) foram criados com o uso de inteligência artificial (Claude, da Anthropic): o autor pediu os scripts à IA, rodou-os e conferiu os resultados abaixo. A IA também foi usada no desenvolvimento do aplicativo, para estruturar a base inicial do código, que o autor revisou, testou e completou; os commits feitos com esse apoio estão identificados no histórico do repositório (linha `Co-Authored-By`).
 
 ### Código compartilhado
 ```bash
